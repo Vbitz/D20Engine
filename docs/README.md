@@ -1,5 +1,7 @@
 # D20 Engine
 
+[Prototype](./prototype.md)
+
 ## Goals
 
 - Implement D20 based rulesets in an extendable way.
