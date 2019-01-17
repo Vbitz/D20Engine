@@ -18,6 +18,7 @@
         "compile": "tsc -p .",
         "fix": "gts fix",
         "test": "jest",
+        "test:ecs": "npm run compile && node build/src/core/ecs.js",
         "prepare": "npm run compile",
         "pretest": "npm run compile",
         "posttest": "npm run check"
