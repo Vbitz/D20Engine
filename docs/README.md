@@ -23,7 +23,7 @@
 
 ## License
 
-### `/src/` - Main Engine Source Code and `/scripts/base/` - Engine Scripting Code
+### `/src/core/` - Main Engine Source Code
 
 ```
 Copyright 2019 Joshua Scarsbrook
@@ -41,6 +41,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-### `/scripts/d20/` - Game mechanics implementation
+### `/src/d20/` - Game mechanics implementation
 
-The scripts are derivative works from D20 SRDs so are therefore licensed under [Open Game License](scripts/d20/OGLv1.0a.md).
+The scripts are derivative works from D20 SRDs so are therefore licensed under [Open Game License](src/d20/OGLv1.0a.md).

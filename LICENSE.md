@@ -1,4 +1,4 @@
-# `/src/` and `/script/base/` LICENSE
+# `/src/core/` LICENSE
 
 Apache License
 
