@@ -16,6 +16,8 @@ class CreatureRegistry {
 
 export class CreatureRegistryModule extends Core.Module {
   async onCreate(ctx: Core.Context) {
+    // TODO(joshua): Why is this a root handler and not a post-init callback. It
+    // could even be a private member of this class.
     ctx.registerRootHandler(createCreatureRegistry, async (ctx) => {
       const creatureRegistry = new CreatureRegistry();
 
