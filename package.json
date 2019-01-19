@@ -14,7 +14,7 @@
         "typescript": "~3.1.0"
     },
     "scripts": {
-        "doc": "typedoc --out ./docs/typedoc/ --mode modules ./src/",
+        "docs": "typedoc --out ./docs/typedoc/ --mode modules --readme ./docs/README.md ./src/",
         "check": "gts check",
         "clean": "gts clean",
         "compile": "tsc -p .",
