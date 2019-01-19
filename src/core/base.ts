@@ -1,7 +1,7 @@
-import * as core from '.';
+import * as Core from 'core';
 
 export interface GameLike {
-  readonly game: core.Game;
+  readonly game: Core.Game;
 }
 
 type PrimitiveValue = string|boolean|number|null|undefined;

@@ -1,4 +1,4 @@
-import * as core from '.';
+import * as Core from 'core';
 
 export const enum DiceType {
   D4 = 4,
@@ -87,7 +87,7 @@ export class SpecificationCompiler {
 export type CompilerCallback = (_: SpecificationCompiler) => DiceSpecification;
 
 export class DiceGenerator {
-  constructor(private randomProvider: core.Common.RandomFunction) {}
+  constructor(private randomProvider: Core.Common.RandomFunction) {}
 
   execute(spec: DiceSpecification): DiceResults {
     const rolledSpec = this._execute(spec);

@@ -1,0 +1,27 @@
+import * as Core from 'core';
+
+export type CreateCreatureCallback = (ctx: Core.Context) => Core.Entity;
+
+export const registerCreature: (name: string, cb: CreateCreatureCallback) =>
+    void = 'd20.creature_registry.register' as Core.EventDeclaration;
+
+export const createCreatureRegistry: () => void =
+    'd20.creature_registry.create' as Core.EventDeclaration;
+
+class CreatureRegistry {
+  register(name: string, cb: CreateCreatureCallback) {
+    throw new Error('Not Implemented');
+  }
+}
+
+export class CreatureRegistryModule extends Core.Module {
+  async onCreate(ctx: Core.Context) {
+    ctx.registerRootHandler(createCreatureRegistry, async (ctx) => {
+      const creatureRegistry = new CreatureRegistry();
+
+      ctx.registerRootHandler(registerCreature, async (ctx, name, cb) => {
+        creatureRegistry.register(name, cb);
+      });
+    });
+  }
+}

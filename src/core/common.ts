@@ -1,4 +1,4 @@
-import * as core from '.';
+import * as Core from 'core';
 
 export type Bag<T> = {
   [s: string]: T
