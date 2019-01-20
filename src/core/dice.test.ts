@@ -110,4 +110,22 @@ describe('DiceGenerator', () => {
 
     assert.strictEqual(newResults.value, 19);
   });
+
+  test('Parse', () => {
+    const gen = staticGenerator([1 / 6]);
+
+    const results = gen.execute(DiceGenerator.parse('d6'));
+
+    assert.strictEqual(results.value, 1);
+  });
+
+  test('Parse_Complex', () => {
+    const gen =
+        staticGenerator([6 / 10, 5 / 10, 1 / 10, 3 / 10, 2 / 10, 9 / 10]);
+
+    const results =
+        gen.execute(DiceGenerator.parse('drop(2d10,-1)+20+drop(4d10,+2)+10'));
+
+    assert.strictEqual(results.value, 30);
+  });
 });

@@ -1,4 +1,4 @@
 import {Creature} from './component/creature';
-import * as CreatureRegistry from './registry/creature_registry';
+import * as MonsterRegistry from './registry/monster_registry';
 
-export {Creature, CreatureRegistry};
+export {Creature, MonsterRegistry};

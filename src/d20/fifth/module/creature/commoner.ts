@@ -12,7 +12,7 @@ function createCommoner(ctx: Core.Context) {
 export class Commoner extends Core.Module {
   async onCreate(ctx: Core.Context) {
     ctx.callGlobalEvent(
-        Fifth.CreatureRegistry.registerCreature, 'd20.creature.npc.commoner',
+        Fifth.MonsterRegistry.registerMonster, 'd20.creature.npc.commoner',
         createCommoner);
   }
 }

@@ -3,11 +3,15 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "allowJs": true,
+    "declaration": false
   },
   "include": [
     "src/*.ts",
     "src/**/*.ts",
+    "src/*.js",
+    "src/**/*.js",
     "test/*.ts",
     "test/**/*.ts"
   ]

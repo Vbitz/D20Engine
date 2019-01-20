@@ -1,5 +1,7 @@
 import * as Core from 'core';
 
+import * as DiceParser from './dice.parser';
+
 export const enum DiceType {
   D4 = 4,
   D6 = 6,
@@ -104,6 +106,10 @@ export class DiceGenerator {
 
   static compile(cb: CompilerCallback): DiceSpecification {
     return cb(new SpecificationCompiler());
+  }
+
+  static parse(spec: string): DiceSpecification {
+    return DiceParser.parse(spec) as DiceSpecification;
   }
 
   private _execute(spec: DiceSpecification): RolledSpecification {
