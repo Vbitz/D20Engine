@@ -14,8 +14,8 @@ Drop "drop"
     / Roll
 
 Roll "roll"
-	= count:Integer "d" amount:Integer {
-    	return {kind: "roll", count, amount};
+	= count:Integer "d" type:Integer {
+    	return {kind: "roll", count, type};
       }
     / "d" type:Integer {
     	return {kind: "roll", count: 1, type};

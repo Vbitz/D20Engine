@@ -100,6 +100,10 @@ export class DiceGenerator {
     return this.execute(DiceGenerator.compile(cb));
   }
 
+  parseAndExecute(spec: string): DiceResults {
+    return this.execute(DiceGenerator.parse(spec));
+  }
+
   rerollAll(results: DiceResults) {
     return this.execute(results.rolledSpec);
   }
