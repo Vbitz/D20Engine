@@ -1,6 +1,6 @@
 import * as Core from 'core';
 
-export class Context extends Core.Event.EventController {
+export class Context extends Core.AbstractEventController {
   constructor(private game: Core.Game) {
     super();
   }

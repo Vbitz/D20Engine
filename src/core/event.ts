@@ -89,7 +89,7 @@ class EventHandlerList {
  * hierarchy and then the second stage executes callbacks until one is canceled
  * or there are no more to execute.
  */
-export class EventController {
+export class EventControllerImpl implements Core.EventController {
   private handlerList: Map<string, EventHandlerList> = new Map();
 
   /**
@@ -97,8 +97,7 @@ export class EventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  protected _registerHandler<T extends EventSignature>(
-      evt: T, cb: HandlerCallback<T>) {
+  _registerHandler<T extends EventSignature>(evt: T, cb: HandlerCallback<T>) {
     // TODO(joshua): Should this support filters and priorities.
 
     if (typeof (evt) !== 'string') {
@@ -120,7 +119,7 @@ export class EventController {
    * registered.
    * @param evt The event to get handlers for.
    */
-  protected _getHandlers<T extends EventSignature>(evt: T) {
+  _getHandlers<T extends EventSignature>(evt: T) {
     if (typeof (evt) !== 'string') {
       throw new TypeError('evt should be a string');
     }
@@ -143,7 +142,7 @@ export class EventController {
    * @param handlers The list of handlers to try calling.
    * @param args The array of arguments to call the event with.
    */
-  protected _callHandlers<T extends EventSignature>(
+  _callHandlers<T extends EventSignature>(
       ctx: Core.Context, evt: T, handlers: Array<HandlerCallback<T>>,
       args: EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Create HandlerContext

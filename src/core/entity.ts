@@ -1,6 +1,6 @@
 import * as Core from 'core';
 
-export class Entity extends Core.Event.EventController {
+export class Entity extends Core.AbstractEventController {
   /**
    * Warning this method should normally be called from a Context as some
    * registration may not happen.
