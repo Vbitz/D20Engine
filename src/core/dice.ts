@@ -187,6 +187,6 @@ export class DiceGenerator {
   }
 
   private _rollDice(type: DiceType) {
-    return (this.randomProvider() * type) | 0;
+    return ((this.randomProvider() * type) | 0) + 1;
   }
 }
