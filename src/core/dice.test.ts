@@ -111,7 +111,15 @@ describe('DiceGenerator', () => {
     assert.strictEqual(newResults.value, 19);
   });
 
-  test('Parse', () => {
+  test('Parse_Simple', () => {
+    ['d6', 'd12', 'd20', '2d20', 'd6+1', 'd20+d20', 'drop(4d20,-1)',
+     'drop(4d20,+1)']
+        .forEach((spec) => {
+          DiceGenerator.parse(spec);
+        });
+  });
+
+  test('Parse_Execute', () => {
     const gen = staticGenerator([1 / 6]);
 
     const results = gen.execute(DiceGenerator.parse('d6'));
@@ -126,6 +134,25 @@ describe('DiceGenerator', () => {
     const results =
         gen.execute(DiceGenerator.parse('drop(2d10,-1)+20+drop(4d10,+2)+10'));
 
-    assert.strictEqual(results.value, 30);
+    assert.strictEqual(results.value, 39);
+  });
+
+  test('GetComplexity', () => {
+    function getSpecComplexity(spec: string) {
+      return DiceGenerator.getComplexity(DiceGenerator.parse(spec));
+    }
+
+    assert.strictEqual(getSpecComplexity('d6'), 1);
+    assert.strictEqual(getSpecComplexity('d12'), 1);
+    assert.strictEqual(getSpecComplexity('d20'), 1);
+
+    assert.strictEqual(getSpecComplexity('4d6'), 4);
+
+    assert.strictEqual(getSpecComplexity('2d6+2'), 5);
+
+    assert.strictEqual(getSpecComplexity('2d6+2d20'), 6);
+
+    assert.strictEqual(
+        getSpecComplexity('drop(2d10,-1)+20+drop(4d10,+2)+10'), 20);
   });
 });

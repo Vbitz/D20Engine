@@ -152,8 +152,18 @@ export class D20DiscordBot extends DiscordBot {
   async commandRoll(from: MessageFrom, message: string) {
     let spec;
 
+    const specString = message.trim();
+
+    if (specString.length > 100) {
+      await this.reply(
+          from,
+          `Specification length is above threshold: ${specString.length} > ${
+              100}`);
+      return;
+    }
+
     try {
-      spec = Core.Dice.DiceGenerator.parse(message.trim());
+      spec = Core.Dice.DiceGenerator.parse(specString);
     } catch (ex) {
       if (ex instanceof Error) {
         await this.reply(from, `Error: ${ex.message}`);
@@ -161,6 +171,14 @@ export class D20DiscordBot extends DiscordBot {
         await this.reply(from, `Internal Error`);
       }
 
+      return;
+    }
+
+    const complexity = Core.Dice.DiceGenerator.getComplexity(spec);
+
+    if (complexity > 500) {
+      await this.reply(
+          from, `Complexity is above threshold: ${complexity} > ${500}`);
       return;
     }
 

@@ -116,6 +116,22 @@ export class DiceGenerator {
     return DiceParser.parse(spec) as DiceSpecification;
   }
 
+  static getComplexity(spec: DiceSpecification): number {
+    if (spec.kind === 'const') {
+      return 1;
+    } else if (spec.kind === 'drop') {
+      return 2 * DiceGenerator.getComplexity(spec.roll);
+    } else if (spec.kind === 'op') {
+      return 2 +
+          (DiceGenerator.getComplexity(spec.lhs) +
+           DiceGenerator.getComplexity(spec.rhs));
+    } else if (spec.kind === 'roll') {
+      return spec.count;
+    } else {
+      throw new Error('Not Implemented');
+    }
+  }
+
   private _execute(spec: DiceSpecification): RolledSpecification {
     if (spec.kind === 'const') {
       return {kind: spec.kind, value: spec.value};
