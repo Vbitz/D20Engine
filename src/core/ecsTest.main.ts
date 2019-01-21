@@ -18,7 +18,7 @@ class DiceRollModule extends Core.Module {
 
     const entity = ctx.createEntity();
 
-    ctx.registerHandler(entity, diceRollEvent, async (ctx, args) => {
+    ctx.registerEntityHandler(entity, diceRollEvent, async (ctx, args) => {
       console.log('[ENT] Hello, World', args.hello);
 
       return 1;

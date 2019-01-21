@@ -1,4 +1,5 @@
-import {Creature} from './component/creature';
+import * as Combat from './combat';
+import * as Creature from './component/creature';
 import * as MonsterRegistry from './registry/monster_registry';
 
-export {Creature, MonsterRegistry};
+export {Combat, Creature, MonsterRegistry};

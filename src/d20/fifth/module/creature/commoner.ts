@@ -4,14 +4,15 @@ import * as Fifth from 'd20/fifth';
 function createCommoner(ctx: Core.Context) {
   const ent = ctx.createEntity();
 
-  ent.addComponent(new Fifth.Creature());
+  // ent.addComponent(new Fifth.Creature());
 
   return ent;
 }
 
 export class Commoner extends Core.Module {
   async onCreate(ctx: Core.Context) {
-    ctx.callGlobalEvent(
+    // TODO(joshua): There should be a enum containing all NPCs and monsters.
+    ctx.callRootEvent(
         Fifth.MonsterRegistry.registerMonster, 'd20.creature.npc.commoner',
         createCommoner);
   }

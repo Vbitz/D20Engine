@@ -1,6 +1,13 @@
 import * as Core from 'core';
 
 export class Entity extends Core.AbstractEventController {
+  private componentList: Array<Core.Component<Core.ComponentParameters>> = [];
+
+  get components() {
+    // Shallow copy the components array.
+    return [...this.componentList];
+  }
+
   /**
    * Warning this method should normally be called from a Context as some
    * registration may not happen.
@@ -18,8 +25,16 @@ export class Entity extends Core.AbstractEventController {
    * @param evt The event to get handlers for.
    */
   getHandlers<T extends Core.EventSignature>(evt: T) {
-    return this._getHandlers(evt);
+    return this._getHandlers(evt).concat(
+        ...this.componentList.map((comp) => comp.getHandlers(evt)));
   }
 
-  addComponent(comp: Core.Component) {}
+  async addComponent(
+      ctx: Core.Context, comp: Core.Component<Core.ComponentParameters>) {
+    this.componentList.push(comp);
+
+    comp.setOwner(this);
+
+    await comp.onCreate(ctx);
+  }
 }

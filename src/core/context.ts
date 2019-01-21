@@ -1,8 +1,16 @@
 import * as Core from 'core';
 
 export class Context extends Core.AbstractEventController {
-  constructor(private game: Core.Game) {
+  constructor(private game: Core.Game, private parent: Core.Context|null) {
     super();
+  }
+
+  get entity(): Core.Entity {
+    return this._getEntity();
+  }
+
+  get diceGenerator(): Core.Dice.DiceGenerator {
+    return this.game.diceGenerator;
   }
 
   /**
@@ -26,7 +34,7 @@ export class Context extends Core.AbstractEventController {
    */
   registerRootHandler<T extends Core.EventSignature>(
       evt: T, cb: Core.HandlerCallback<T>) {
-    this._registerHandler(evt, cb);
+    this.game.registerHandler(evt, cb);
   }
 
   /**
@@ -36,9 +44,22 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerHandler<T extends Core.EventSignature>(
+  registerEntityHandler<T extends Core.EventSignature>(
       ent: Core.Entity, evt: T, cb: Core.HandlerCallback<T>) {
     ent.registerHandler(evt, cb);
+  }
+
+  /**
+   * Register a handler on a specific component. This should be used instead of
+   * `Component.registerHandler` as future changes may introduce additional
+   * registration steps.
+   * @param evt The event to attach a handler to.
+   * @param cb The callback for the handler.
+   */
+  registerComponentHandler<T extends Core.EventSignature>(
+      comp: Core.Component<Core.ComponentParameters>, evt: T,
+      cb: Core.HandlerCallback<T>) {
+    comp.registerHandler(evt, cb);
   }
 
   /**
@@ -61,15 +82,15 @@ export class Context extends Core.AbstractEventController {
   }
 
   /**
-   * Call a global event.
+   * Call a root event.
    * @param evt The event to call.
    * @param args A list of arguments to call the event with.
    */
-  callGlobalEvent<T extends Core.EventSignature>(
+  callRootEvent<T extends Core.EventSignature>(
       evt: T, ...args: Core.EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Add parent handlers to this list.
 
-    const eventHandlerList = this._getHandlers(evt);
+    const eventHandlerList = this.game.getHandlers(evt);
 
     const eventResult = this._callHandlers(this, evt, eventHandlerList, args);
 
@@ -89,5 +110,22 @@ export class Context extends Core.AbstractEventController {
    */
   cancel<T extends Core.Event.EventReturnType>(value: T) {
     return new Core.Event.EventCancel(value);
+  }
+
+  protected _getEntity(): Core.Entity {
+    throw new Error('Not Implemented');
+  }
+}
+
+export class ModuleContext extends Context {}
+
+export class EntityContext extends Context {
+  constructor(
+      game: Core.Game, parent: Core.Context, private _entity: Core.Entity) {
+    super(game, parent);
+  }
+
+  protected _getEntity() {
+    return this._entity;
   }
 }

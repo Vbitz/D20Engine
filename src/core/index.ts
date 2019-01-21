@@ -1,8 +1,8 @@
 import {Action} from './action';
 import {AbstractEventController, EventController, GameLike, NonNullableValue, Value} from './base';
 import * as Common from './common';
-import {Component} from './component';
-import {Context} from './context';
+import {Component, ComponentParameters} from './component';
+import {Context, EntityContext, ModuleContext} from './context';
 import * as Dice from './dice';
 import {Entity} from './entity';
 import * as Event from './event';
@@ -15,9 +15,11 @@ export {
   Action,
   Common,
   Component,
+  ComponentParameters,
   Context,
   Dice,
   Entity,
+  EntityContext,
   Event,
   EventArgs,
   EventController,
@@ -27,6 +29,7 @@ export {
   GameLike,
   HandlerCallback,
   Module,
+  ModuleContext,
   NonNullableValue,
   Value,
 };
