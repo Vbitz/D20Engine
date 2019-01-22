@@ -116,6 +116,10 @@ export class DiceGenerator {
     return DiceParser.parse(spec) as DiceSpecification;
   }
 
+  static constant(value: number): DiceSpecification {
+    return {kind: 'const', value};
+  }
+
   static getComplexity(spec: DiceSpecification): number {
     if (spec.kind === 'const') {
       return 1;

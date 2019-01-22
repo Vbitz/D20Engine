@@ -78,10 +78,17 @@ export class Encounter extends Core.Component<EncounterParameters> {
     while (this.running) {
       for (const creature of this.creatures) {
         await this.executeTurn(ctx, creature);
-      }
 
-      break;
+        if (this.areAllOpponentsDead()) {
+          this.running = false;
+          break;
+        }
+      }
     }
+  }
+
+  private areAllOpponentsDead() {
+    return this.creatures.filter((creature) => !creature.dead).length < 2;
   }
 
   private getParticipants() {
@@ -96,13 +103,20 @@ export class Encounter extends Core.Component<EncounterParameters> {
   private async executeTurn(ctx: Core.Context, creature: EncounterCreature) {
     // TODO(joshua): Pre-Turn
 
-    const turnAction = ctx.callEvent(creature.entity, Fifth.Creature.doTurn);
+    await ctx.callEvent(creature.entity, Fifth.Creature.doTurn)
+        .addPatch(
+            Fifth.Combat.Encounter.getEncounter,
+            async () => {
+              return ctx.entity;
+            })
+        .call();
 
-    turnAction.addPatch(Fifth.Combat.Encounter.getEncounter, async () => {
-      return ctx.entity;
-    });
+    const isDead =
+        await ctx.callEvent(creature.entity, Fifth.Creature.isDead).call();
 
-    await turnAction.call();
+    if (isDead) {
+      creature.dead = true;
+    }
 
     // TODO(joshua): Post-Turn
   }

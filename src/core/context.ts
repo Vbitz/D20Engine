@@ -1,5 +1,8 @@
 import * as Core from 'core';
 
+// It may be cool to allow explicit creation of context scopes. This could be
+// useful for adding patches in a cleaner way.
+
 export class Context extends Core.AbstractEventController {
   readonly uuid = Core.Common.createUUID();
 

@@ -26,6 +26,12 @@ function simpleTest(values: number[], cb: CompilerCallback) {
 }
 
 describe('DiceGenerator', () => {
+  test('Constant', () => {
+    const gen = staticGenerator([]);
+
+    assert.strictEqual(gen.execute(DiceGenerator.constant(10)).value, 10);
+  });
+
   test('DiceRoll_Simple', () => {
     const gen = staticGenerator([1 / 6]);
     assert.strictEqual(gen.compileAndExecute((_) => _.d(DiceType.D6)).value, 2);
