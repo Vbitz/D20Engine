@@ -35,8 +35,37 @@ export class TestCreature extends Core.Component<TestCreatureParameters> {
   async onCreate(ctx: Core.Context) {
     ctx.registerComponentHandler(
         this, Fifth.Creature.getInitiativeRoll, async (ctx) => {
-          return ctx.diceGenerator.parseAndExecute('d20').value;
+          return Core.Dice.DiceGenerator.parse('d20');
         });
+
+    ctx.registerComponentHandler(this, Fifth.Creature.doTurn, async (ctx) => {
+      const encounter =
+          await ctx.callEvent(ctx.entity, Fifth.Combat.Encounter.getEncounter)
+              .call();
+
+      if (encounter === undefined) {
+        throw new Error('Could not get encounter');
+      }
+
+      const participants =
+          await ctx.callEvent(encounter, Fifth.Combat.Encounter.getParticipants)
+              .call();
+
+      if (participants === undefined) {
+        throw new Error('Could not get participants');
+      }
+
+      const otherParticipants =
+          participants.filter((ent) => ent !== ctx.entity);
+
+      const randomTarget =
+          otherParticipants[(Math.random() * otherParticipants.length) | 0];
+
+      await ctx
+          .callEvent(
+              ctx.entity, Fifth.Creature.doAttack, {target: randomTarget})
+          .call();
+    });
   }
 }
 

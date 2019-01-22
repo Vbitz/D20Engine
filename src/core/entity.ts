@@ -1,6 +1,8 @@
 import * as Core from 'core';
 
 export class Entity extends Core.AbstractEventController {
+  readonly uuid = Core.Common.createUUID();
+
   private componentList: Array<Core.Component<Core.ComponentParameters>> = [];
 
   get components() {

@@ -6,14 +6,10 @@ export interface ComponentParameters {
 
 export abstract class Component<T extends ComponentParameters> extends
     Core.AbstractEventController {
-  private _owner: Core.Entity|undefined = undefined;
+  private owner: Core.Entity|undefined = undefined;
 
   constructor(readonly parameters: ComponentParameters) {
     super();
-  }
-
-  get owner() {
-    return this._owner || Core.Common.expect();
   }
 
   /**
@@ -37,7 +33,7 @@ export abstract class Component<T extends ComponentParameters> extends
   }
 
   setOwner(owner: Core.Entity) {
-    this._owner = owner;
+    this.owner = owner;
   }
 
   abstract async onCreate(ctx: Core.Context): Promise<void>;

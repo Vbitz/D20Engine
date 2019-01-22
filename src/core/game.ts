@@ -3,6 +3,8 @@ import * as Core from 'core';
 export class Game extends Core.AbstractEventController {
   private context = new Core.Context(this, null);
   private _diceGenerator = new Core.Dice.DiceGenerator(this.random.bind(this));
+  private entityList = new Set<Core.Entity>();
+  private moduleList = new Set<Core.Module>();
 
   get diceGenerator() {
     return this._diceGenerator;
@@ -10,6 +12,14 @@ export class Game extends Core.AbstractEventController {
 
   random() {
     return Math.random();
+  }
+
+  createEntity(ctx: Core.Context) {
+    const newEntity = new Core.Entity();
+
+    this.entityList.add(newEntity);
+
+    return newEntity;
   }
 
   /**
@@ -38,6 +48,8 @@ export class Game extends Core.AbstractEventController {
    */
   async registerModule(mod: Core.Module) {
     const moduleContext = new Core.ModuleContext(this, this.context);
+    this.context.addChildContext(moduleContext);
     await mod.onCreate(moduleContext);
+    this.moduleList.add(mod);
   }
 }

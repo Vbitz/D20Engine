@@ -6,7 +6,7 @@ const diceRollEvent: (args: {hello: 'world'|'test'}) => number =
 
 class DiceRollModule extends Core.Module {
   async onCreate(ctx: Core.Context) {
-    ctx.registerGlobalHandler(diceRollEvent, async (ctx, args) => {
+    ctx.registerRootHandler(diceRollEvent, async (ctx, args) => {
       console.log('[GLOBAL] Hello, World', args.hello);
 
       if (args.hello === 'world') {

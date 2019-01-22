@@ -1,6 +1,10 @@
 import * as Core from 'core';
 
 export class Context extends Core.AbstractEventController {
+  readonly uuid = Core.Common.createUUID();
+
+  private children = new Set<Context>();
+
   constructor(private game: Core.Game, private parent: Core.Context|null) {
     super();
   }
@@ -14,15 +18,12 @@ export class Context extends Core.AbstractEventController {
   }
 
   /**
-   * Register a "global" handler on this context. This will override handlers on
+   * Register a patch handler on this context. This will override handlers on
    * individual entities.
-   * This method may be refactored into the patching system attached to
-   * `Actions`.
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerGlobalHandler<T extends Core.EventSignature>(
-      evt: T, cb: Core.HandlerCallback<T>) {
+  addPatch<T extends Core.EventSignature>(evt: T, cb: Core.HandlerCallback<T>) {
     this._registerHandler(evt, cb);
   }
 
@@ -72,11 +73,19 @@ export class Context extends Core.AbstractEventController {
       ent: Core.Entity, evt: T, ...args: Core.EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Add parent handlers to this list.
 
-    let eventHandlerList = this._getHandlers(evt);
+    let eventHandlerList: Array<Core.HandlerCallback<T>> = [];
+
+    if (this.parent !== null) {
+      eventHandlerList = eventHandlerList.concat(this.parent._getHandlers(evt));
+    }
+
+    eventHandlerList = eventHandlerList.concat(this._getHandlers(evt));
 
     eventHandlerList = eventHandlerList.concat(ent.getHandlers(evt));
 
-    const eventResult = this._callHandlers(this, evt, eventHandlerList, args);
+    const ctx = this.getEntityContext(ent);
+
+    const eventResult = this._callHandlers(ctx, evt, eventHandlerList, args);
 
     return eventResult;
   }
@@ -90,9 +99,12 @@ export class Context extends Core.AbstractEventController {
       evt: T, ...args: Core.EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Add parent handlers to this list.
 
+    const rootContext = this.getRootEventContext();
+
     const eventHandlerList = this.game.getHandlers(evt);
 
-    const eventResult = this._callHandlers(this, evt, eventHandlerList, args);
+    const eventResult =
+        this._callHandlers(rootContext, evt, eventHandlerList, args);
 
     return eventResult;
   }
@@ -101,7 +113,11 @@ export class Context extends Core.AbstractEventController {
     /**
      * TODO(joshua): Expand this method.
      */
-    return new Core.Entity();
+    return this.game.createEntity(this);
+  }
+
+  addChildContext(ctx: Context) {
+    this.children.add(ctx);
   }
 
   /**
@@ -114,6 +130,18 @@ export class Context extends Core.AbstractEventController {
 
   protected _getEntity(): Core.Entity {
     throw new Error('Not Implemented');
+  }
+
+  private getRootEventContext(): Core.Context {
+    return this;
+  }
+
+  private getEntityContext(ent: Core.Entity): Core.Context {
+    const newContext = new EntityContext(this.game, this, ent);
+
+    this.addChildContext(newContext);
+
+    return newContext;
   }
 }
 

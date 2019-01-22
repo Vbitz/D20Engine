@@ -9,7 +9,7 @@ export class Action<T extends Core.EventSignature> {
       private dispatch: () => Promise<Core.Event.EventPublicReturnValue<T>>) {}
 
   addPatch<T extends Core.EventSignature>(ev: T, cb: Core.HandlerCallback<T>) {
-    throw new Error('Not Implemented');
+    this.ctx.addPatch(ev, cb);
   }
 
   /**

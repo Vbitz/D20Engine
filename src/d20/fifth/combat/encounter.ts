@@ -13,10 +13,18 @@ export const startEncounter: () => void =
 export const stopEncounter: () => void =
     'd20.fifth.combat.encounter.stop' as Core.EventDeclaration;
 
+export const getEncounter: () => Core.Entity =
+    'd20.fifth.combat.encounter.get' as Core.EventDeclaration;
+
+export const getParticipants: () => Core.Entity[] =
+    `d20.fifth.combat.encounter.getParticipants` as Core.EventDeclaration;
+
 export interface EncounterParameters extends Core.ComponentParameters {}
 
 class EncounterCreature {
   initiative: number|undefined = undefined;
+
+  dead = false;
 
   constructor(readonly entity: Core.Entity) {}
 }
@@ -39,6 +47,10 @@ export class Encounter extends Core.Component<EncounterParameters> {
     ctx.registerComponentHandler(this, stopEncounter, async (ctx) => {
       this.running = false;
     });
+
+    ctx.registerComponentHandler(this, getParticipants, async (ctx) => {
+      return this.getParticipants();
+    });
   }
 
   private async start(ctx: Core.Context) {
@@ -49,9 +61,13 @@ export class Encounter extends Core.Component<EncounterParameters> {
           await ctx.callEvent(creature.entity, Fifth.Creature.getInitiativeRoll)
               .call();
 
-      creature.initiative = initiativeRoll;
+      if (initiativeRoll === undefined) {
+        throw new Error('Entity did not respond with an initiative roll.');
+      }
 
-      console.log(creature.initiative);
+      const rollResults = ctx.diceGenerator.execute(initiativeRoll);
+
+      creature.initiative = rollResults.value;
     }
 
     // Sort the turn order and start running turns for creatures.
@@ -59,27 +75,50 @@ export class Encounter extends Core.Component<EncounterParameters> {
 
     this.running = true;
 
-    // while (this.running) {
-    // }
+    while (this.running) {
+      for (const creature of this.creatures) {
+        await this.executeTurn(ctx, creature);
+      }
+
+      break;
+    }
+  }
+
+  private getParticipants() {
+    return [...this.creatures].map((creature) => creature.entity);
   }
 
   private sortCreatures() {
     this.creatures = this.creatures.sort(
         (a, b) => (a.initiative || 0) - (b.initiative || 0));
   }
+
+  private async executeTurn(ctx: Core.Context, creature: EncounterCreature) {
+    // TODO(joshua): Pre-Turn
+
+    const turnAction = ctx.callEvent(creature.entity, Fifth.Creature.doTurn);
+
+    turnAction.addPatch(Fifth.Combat.Encounter.getEncounter, async () => {
+      return ctx.entity;
+    });
+
+    await turnAction.call();
+
+    // TODO(joshua): Post-Turn
+  }
 }
 
 export class EncounterModule extends Core.Module {
   async onCreate(ctx: Core.Context) {
     ctx.registerRootHandler(createEncounter, async (ctx) => {
-      return this.createEncounter(ctx);
+      return await this.createEncounter(ctx);
     });
   }
 
-  private createEncounter(ctx: Core.Context) {
+  private async createEncounter(ctx: Core.Context) {
     const ent = ctx.createEntity();
 
-    ent.addComponent(ctx, new Encounter({}));
+    await ent.addComponent(ctx, new Encounter({}));
 
     return ent;
   }
