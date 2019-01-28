@@ -100,8 +100,12 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_core_dice_.dicegenerator.html#_rolldice" class="tsd-kind-icon">_roll<wbr>Dice</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_dice_.dicegenerator.html#compileandexecute" class="tsd-kind-icon">compile<wbr>And<wbr>Execute</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_dice_.dicegenerator.html#execute" class="tsd-kind-icon">execute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_dice_.dicegenerator.html#parseandexecute" class="tsd-kind-icon">parse<wbr>And<wbr>Execute</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_dice_.dicegenerator.html#rerollall" class="tsd-kind-icon">reroll<wbr>All</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_core_dice_.dicegenerator.html#compile" class="tsd-kind-icon">compile</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_core_dice_.dicegenerator.html#constant" class="tsd-kind-icon">constant</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_core_dice_.dicegenerator.html#getcomplexity" class="tsd-kind-icon">get<wbr>Complexity</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_core_dice_.dicegenerator.html#parse" class="tsd-kind-icon">parse</a></li>
 							</ul>
 						</section>
 					</div>
@@ -119,7 +123,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L89">core/dice.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L91">core/dice.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">random<wbr>Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Core.Common.RandomFunction</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L90">core/dice.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L92">core/dice.ts:92</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -158,7 +162,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L109">core/dice.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L139">core/dice.ts:139</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -181,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L163">core/dice.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L193">core/dice.ts:193</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -204,7 +208,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L97">core/dice.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L99">core/dice.ts:99</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -227,13 +231,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L92">core/dice.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L94">core/dice.ts:94</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>spec: <a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_core_dice_.diceresults.html" class="tsd-signature-type">DiceResults</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseandexecute" class="tsd-anchor"></a>
+					<h3>parse<wbr>And<wbr>Execute</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>And<wbr>Execute<span class="tsd-signature-symbol">(</span>spec<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_dice_.diceresults.html" class="tsd-signature-type">DiceResults</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L103">core/dice.ts:103</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spec: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_core_dice_.diceresults.html" class="tsd-signature-type">DiceResults</a></h4>
@@ -250,7 +277,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L101">core/dice.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L107">core/dice.ts:107</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -273,13 +300,82 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/dice.ts#L105">core/dice.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L111">core/dice.ts:111</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>cb: <a href="../modules/_core_dice_.html#compilercallback" class="tsd-signature-type">CompilerCallback</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="constant" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> constant</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">constant<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L119">core/dice.ts:119</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="getcomplexity" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Complexity</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Complexity<span class="tsd-signature-symbol">(</span>spec<span class="tsd-signature-symbol">: </span><a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L123">core/dice.ts:123</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spec: <a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="parse" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> parse</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">parse<span class="tsd-signature-symbol">(</span>spec<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/dice.ts#L115">core/dice.ts:115</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>spec: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../modules/_core_dice_.html#dicespecification" class="tsd-signature-type">DiceSpecification</a></h4>
@@ -294,59 +390,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_action_.html">"core/action"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_base_.html">"core/base"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_common_.html">"core/common"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_component_.html">"core/component"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_context_.html">"core/context"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_core_dice_.html">"core/dice"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_dice_test_.html">"core/dice.test"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_ecstest_main_.html">"core/ecs<wbr>Test.main"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_entity_.html">"core/entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_event_.html">"core/event"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_game_.html">"core/game"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_index_.html">"core/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_module_.html">"core/module"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_component_creature_.html">"d20/fifth/component/creature"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_index_.html">"d20/fifth/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_module_creature_commoner_.html">"d20/fifth/module/creature/commoner"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_registry_creature_registry_.html">"d20/fifth/registry/creature_<wbr>registry"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_main_.html">"main"</a>
 					</li>
 				</ul>
 			</nav>
@@ -379,10 +424,22 @@
 								<a href="_core_dice_.dicegenerator.html#execute" class="tsd-kind-icon">execute</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_core_dice_.dicegenerator.html#parseandexecute" class="tsd-kind-icon">parse<wbr>And<wbr>Execute</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_core_dice_.dicegenerator.html#rerollall" class="tsd-kind-icon">reroll<wbr>All</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_core_dice_.dicegenerator.html#compile" class="tsd-kind-icon">compile</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_core_dice_.dicegenerator.html#constant" class="tsd-kind-icon">constant</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_core_dice_.dicegenerator.html#getcomplexity" class="tsd-kind-icon">get<wbr>Complexity</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_core_dice_.dicegenerator.html#parse" class="tsd-kind-icon">parse</a>
 							</li>
 						</ul>
 					</li>

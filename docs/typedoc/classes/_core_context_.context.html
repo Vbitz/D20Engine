@@ -73,10 +73,18 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_core_event_.eventcontroller.html" class="tsd-signature-type">EventController</a>
+						<a href="_core_base_.abstracteventcontroller.html" class="tsd-signature-type">AbstractEventController</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">Context</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="_core_context_.modulecontext.html" class="tsd-signature-type">ModuleContext</a>
+									</li>
+									<li>
+										<a href="_core_context_.entitycontext.html" class="tsd-signature-type">EntityContext</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -92,24 +100,39 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_core_context_.context.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_core_context_.context.html#children" class="tsd-kind-icon">children</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_core_context_.context.html#game" class="tsd-kind-icon">game</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_core_context_.context.html#parent" class="tsd-kind-icon">parent</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_context_.context.html#uuid" class="tsd-kind-icon">uuid</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_core_context_.context.html#dicegenerator" class="tsd-kind-icon">dice<wbr>Generator</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_core_context_.context.html#entity" class="tsd-kind-icon">entity</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected"><a href="_core_context_.context.html#_callhandlers" class="tsd-kind-icon">_call<wbr>Handlers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_core_context_.context.html#_getentity" class="tsd-kind-icon">_get<wbr>Entity</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected"><a href="_core_context_.context.html#_gethandlers" class="tsd-kind-icon">_get<wbr>Handlers</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected"><a href="_core_context_.context.html#_registerhandler" class="tsd-kind-icon">_register<wbr>Handler</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_context_.context.html#addchildcontext" class="tsd-kind-icon">add<wbr>Child<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#addpatch" class="tsd-kind-icon">add<wbr>Patch</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#callevent" class="tsd-kind-icon">call<wbr>Event</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#callglobalevent" class="tsd-kind-icon">call<wbr>Global<wbr>Event</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#callrootevent" class="tsd-kind-icon">call<wbr>Root<wbr>Event</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#cancel" class="tsd-kind-icon">cancel</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_context_.context.html#createentity" class="tsd-kind-icon">create<wbr>Entity</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#registerglobalhandler" class="tsd-kind-icon">register<wbr>Global<wbr>Handler</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#registerhandler" class="tsd-kind-icon">register<wbr>Handler</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_core_context_.context.html#getentitycontext" class="tsd-kind-icon">get<wbr>Entity<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_core_context_.context.html#getrooteventcontext" class="tsd-kind-icon">get<wbr>Root<wbr>Event<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#registercomponenthandler" class="tsd-kind-icon">register<wbr>Component<wbr>Handler</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#registerentityhandler" class="tsd-kind-icon">register<wbr>Entity<wbr>Handler</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_core_context_.context.html#registerroothandler" class="tsd-kind-icon">register<wbr>Root<wbr>Handler</a></li>
 							</ul>
 						</section>
@@ -122,13 +145,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Context<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="_core_game_.game.html" class="tsd-signature-type">Game</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Context<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="_core_game_.game.html" class="tsd-signature-type">Game</a>, parent<span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L3">core/context.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L9">core/context.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,23 +159,93 @@
 								<li>
 									<h5>game: <a href="_core_game_.game.html" class="tsd-signature-type">Game</a></h5>
 								</li>
+								<li>
+									<h5>parent: <a href="_core_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_core_context_.context.html" class="tsd-signature-type">Context</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="children" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> children</h3>
+					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Set&lt;Context&gt;()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L9">core/context.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="game" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> game</h3>
 					<div class="tsd-signature tsd-kind-icon">game<span class="tsd-signature-symbol">:</span> <a href="_core_game_.game.html" class="tsd-signature-type">Game</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L4">core/context.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L11">core/context.ts:11</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="parent" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> parent</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <a href="_core_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L11">core/context.ts:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="uuid" class="tsd-anchor"></a>
+					<h3>uuid</h3>
+					<div class="tsd-signature tsd-kind-icon">uuid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;Core.Common.createUUID()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L7">core/context.ts:7</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="dicegenerator" class="tsd-anchor"></a>
+					<h3>dice<wbr>Generator</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> diceGenerator<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_dice_.dicegenerator.html" class="tsd-signature-type">DiceGenerator</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L19">core/context.ts:19</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_core_dice_.dicegenerator.html" class="tsd-signature-type">DiceGenerator</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="entity" class="tsd-anchor"></a>
+					<h3>entity</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> entity<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L15">core/context.ts:15</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -161,14 +254,14 @@
 					<a name="_callhandlers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _call<wbr>Handlers</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_call<wbr>Handlers&lt;T&gt;<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handlers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_core_event_.html#handlercallback" class="tsd-signature-type">HandlerCallback</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, args<span class="tsd-signature-symbol">: </span><a href="../modules/_core_event_.html#eventargs" class="tsd-signature-type">EventArgs</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_action_.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">_call<wbr>Handlers&lt;T&gt;<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handlers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.Event.EventArgs</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_action_.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_core_event_.eventcontroller.html">EventController</a>.<a href="_core_event_.eventcontroller.html#_callhandlers">_callHandlers</a></p>
+								<p>Inherited from <a href="_core_base_.abstracteventcontroller.html">AbstractEventController</a>.<a href="_core_base_.abstracteventcontroller.html#_callhandlers">_callHandlers</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/event.ts#L146">core/event.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/base.ts#L63">core/base.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -180,7 +273,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/_core_event_.html#eventsignature" class="tsd-signature-type">EventSignature</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventSignature</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -198,13 +291,13 @@
 									</div>
 								</li>
 								<li>
-									<h5>handlers: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_core_event_.html#handlercallback" class="tsd-signature-type">HandlerCallback</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handlers: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The list of handlers to try calling.</p>
 									</div>
 								</li>
 								<li>
-									<h5>args: <a href="../modules/_core_event_.html#eventargs" class="tsd-signature-type">EventArgs</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>args: <span class="tsd-signature-type">Core.Event.EventArgs</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The array of arguments to call the event with.</p>
 									</div>
@@ -214,18 +307,35 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-					<a name="_gethandlers" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _get<wbr>Handlers</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_get<wbr>Handlers&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="_getentity" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _get<wbr>Entity</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_get<wbr>Entity<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_core_event_.eventcontroller.html">EventController</a>.<a href="_core_event_.eventcontroller.html#_gethandlers">_getHandlers</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/event.ts#L123">core/event.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L134">core/context.ts:134</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
+					<a name="_gethandlers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _get<wbr>Handlers</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_get<wbr>Handlers&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_core_base_.abstracteventcontroller.html">AbstractEventController</a>.<a href="_core_base_.abstracteventcontroller.html#_gethandlers">_getHandlers</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/base.ts#L50">core/base.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -237,7 +347,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/_core_event_.html#eventsignature" class="tsd-signature-type">EventSignature</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventSignature</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -249,7 +359,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -257,14 +367,14 @@
 					<a name="_registerhandler" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _register<wbr>Handler</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_register<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><a href="../modules/_core_event_.html#handlercallback" class="tsd-signature-type">HandlerCallback</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_register<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_core_event_.eventcontroller.html">EventController</a>.<a href="_core_event_.eventcontroller.html#_registerhandler">_registerHandler</a></p>
+								<p>Inherited from <a href="_core_base_.abstracteventcontroller.html">AbstractEventController</a>.<a href="_core_base_.abstracteventcontroller.html#_registerhandler">_registerHandler</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/event.ts#L100">core/event.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/base.ts#L40">core/base.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -275,7 +385,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/_core_event_.html#eventsignature" class="tsd-signature-type">EventSignature</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventSignature</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -287,7 +397,74 @@
 									</div>
 								</li>
 								<li>
-									<h5>cb: <a href="../modules/_core_event_.html#handlercallback" class="tsd-signature-type">HandlerCallback</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>cb: <span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback for the handler.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addchildcontext" class="tsd-anchor"></a>
+					<h3>add<wbr>Child<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Child<wbr>Context<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L122">core/context.ts:122</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ctx: <a href="_core_context_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="addpatch" class="tsd-anchor"></a>
+					<h3>add<wbr>Patch</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Patch&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L29">core/context.ts:29</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Register a patch handler on this context. This will override handlers on
+									individual entities.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventSignature</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>evt: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event to attach a handler to.</p>
+									</div>
+								</li>
+								<li>
+									<h5>cb: <span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The callback for the handler.</p>
 									</div>
@@ -307,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L50">core/context.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L75">core/context.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -347,21 +524,21 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="callglobalevent" class="tsd-anchor"></a>
-					<h3>call<wbr>Global<wbr>Event</h3>
+					<a name="callrootevent" class="tsd-anchor"></a>
+					<h3>call<wbr>Root<wbr>Event</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">call<wbr>Global<wbr>Event&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventArgs</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_action_.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">call<wbr>Root<wbr>Event&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.EventArgs</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_action_.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L68">core/context.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L101">core/context.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Call a global event.</p>
+									<p>Call a root event.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -399,7 +576,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L90">core/context.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L130">core/context.ts:130</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -436,32 +613,71 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L79">core/context.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L115">core/context.ts:115</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="registerglobalhandler" class="tsd-anchor"></a>
-					<h3>register<wbr>Global<wbr>Handler</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Global<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="getentitycontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Entity<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Entity<wbr>Context<span class="tsd-signature-symbol">(</span>ent<span class="tsd-signature-symbol">: </span><a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L16">core/context.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L142">core/context.ts:142</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ent: <a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_core_context_.context.html" class="tsd-signature-type">Context</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="getrooteventcontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Root<wbr>Event<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Root<wbr>Event<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_context_.context.html" class="tsd-signature-type">Context</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L138">core/context.ts:138</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_core_context_.context.html" class="tsd-signature-type">Context</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="registercomponenthandler" class="tsd-anchor"></a>
+					<h3>register<wbr>Component<wbr>Handler</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Component<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>comp<span class="tsd-signature-symbol">: </span><a href="_core_component_.component.html" class="tsd-signature-type">Component</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_component_.componentparameters.html" class="tsd-signature-type">ComponentParameters</a><span class="tsd-signature-symbol">&gt;</span>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L63">core/context.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Register a &quot;global&quot; handler on this context. This will override handlers on
-										individual entities.
-										This method may be refactored into the patching system attached to
-									<code>Actions</code>.</p>
+									<p>Register a handler on a specific component. This should be used instead of
+										<code>Component.registerHandler</code> as future changes may introduce additional
+									registration steps.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -472,6 +688,9 @@
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>comp: <a href="_core_component_.component.html" class="tsd-signature-type">Component</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_component_.componentparameters.html" class="tsd-signature-type">ComponentParameters</a><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
 								<li>
 									<h5>evt: <span class="tsd-signature-type">T</span></h5>
 									<div class="tsd-comment tsd-typography">
@@ -490,16 +709,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="registerhandler" class="tsd-anchor"></a>
-					<h3>register<wbr>Handler</h3>
+					<a name="registerentityhandler" class="tsd-anchor"></a>
+					<h3>register<wbr>Entity<wbr>Handler</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>ent<span class="tsd-signature-symbol">: </span><a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Entity<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>ent<span class="tsd-signature-symbol">: </span><a href="_core_entity_.entity.html" class="tsd-signature-type">Entity</a>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Core.HandlerCallback</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L39">core/context.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L51">core/context.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -547,7 +766,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/8736cdc/src/core/context.ts#L27">core/context.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/Vbitz/D20Engine/blob/c0a74b7/src/core/context.ts#L39">core/context.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -589,59 +808,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_action_.html">"core/action"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_base_.html">"core/base"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_common_.html">"core/common"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_component_.html">"core/component"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_core_context_.html">"core/context"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_dice_.html">"core/dice"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_dice_test_.html">"core/dice.test"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_ecstest_main_.html">"core/ecs<wbr>Test.main"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_entity_.html">"core/entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_event_.html">"core/event"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_game_.html">"core/game"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_index_.html">"core/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_core_module_.html">"core/module"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_component_creature_.html">"d20/fifth/component/creature"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_index_.html">"d20/fifth/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_module_creature_commoner_.html">"d20/fifth/module/creature/commoner"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_d20_fifth_registry_creature_registry_.html">"d20/fifth/registry/creature_<wbr>registry"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_main_.html">"main"</a>
 					</li>
 				</ul>
 			</nav>
@@ -656,10 +824,28 @@
 								<a href="_core_context_.context.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_core_context_.context.html#children" class="tsd-kind-icon">children</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_core_context_.context.html#game" class="tsd-kind-icon">game</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_core_context_.context.html#parent" class="tsd-kind-icon">parent</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_core_context_.context.html#uuid" class="tsd-kind-icon">uuid</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="_core_context_.context.html#dicegenerator" class="tsd-kind-icon">dice<wbr>Generator</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="_core_context_.context.html#entity" class="tsd-kind-icon">entity</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
 								<a href="_core_context_.context.html#_callhandlers" class="tsd-kind-icon">_call<wbr>Handlers</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_core_context_.context.html#_getentity" class="tsd-kind-icon">_get<wbr>Entity</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
 								<a href="_core_context_.context.html#_gethandlers" class="tsd-kind-icon">_get<wbr>Handlers</a>
@@ -667,11 +853,17 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
 								<a href="_core_context_.context.html#_registerhandler" class="tsd-kind-icon">_register<wbr>Handler</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_core_context_.context.html#addchildcontext" class="tsd-kind-icon">add<wbr>Child<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="_core_context_.context.html#addpatch" class="tsd-kind-icon">add<wbr>Patch</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_core_context_.context.html#callevent" class="tsd-kind-icon">call<wbr>Event</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="_core_context_.context.html#callglobalevent" class="tsd-kind-icon">call<wbr>Global<wbr>Event</a>
+								<a href="_core_context_.context.html#callrootevent" class="tsd-kind-icon">call<wbr>Root<wbr>Event</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_core_context_.context.html#cancel" class="tsd-kind-icon">cancel</a>
@@ -679,11 +871,17 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_core_context_.context.html#createentity" class="tsd-kind-icon">create<wbr>Entity</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="_core_context_.context.html#registerglobalhandler" class="tsd-kind-icon">register<wbr>Global<wbr>Handler</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_core_context_.context.html#getentitycontext" class="tsd-kind-icon">get<wbr>Entity<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_core_context_.context.html#getrooteventcontext" class="tsd-kind-icon">get<wbr>Root<wbr>Event<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="_core_context_.context.html#registerhandler" class="tsd-kind-icon">register<wbr>Handler</a>
+								<a href="_core_context_.context.html#registercomponenthandler" class="tsd-kind-icon">register<wbr>Component<wbr>Handler</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="_core_context_.context.html#registerentityhandler" class="tsd-kind-icon">register<wbr>Entity<wbr>Handler</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_core_context_.context.html#registerroothandler" class="tsd-kind-icon">register<wbr>Root<wbr>Handler</a>
@@ -692,6 +890,12 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_core_context_.entitycontext.html" class="tsd-kind-icon">Entity<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_core_context_.modulecontext.html" class="tsd-kind-icon">Module<wbr>Context</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
