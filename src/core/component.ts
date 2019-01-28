@@ -1,14 +1,12 @@
 import * as Core from 'core';
 
-export interface ComponentParameters {
-  [s: string]: Core.Value;
-}
+export interface ComponentParameters {}
 
 export abstract class Component<T extends ComponentParameters> extends
     Core.AbstractEventController {
   private owner: Core.Entity|undefined = undefined;
 
-  constructor(readonly parameters: ComponentParameters) {
+  constructor(readonly parameters: T) {
     super();
   }
 

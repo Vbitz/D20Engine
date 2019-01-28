@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import * as Fifth from 'd20/fifth';
 
 export const getInitiativeRoll: () => Core.DiceSpecification =
     'd20.fifth.component.creature.getInitiativeRoll' as Core.EventDeclaration;
@@ -27,7 +28,23 @@ export interface DamageArguments {
 export const doDamage: (args: DamageArguments) => Core.Dice.DiceResults =
     `d20.fifth.component.creature.doDamage` as Core.EventDeclaration;
 
-export interface CreatureParameters extends Core.ComponentParameters {}
+export interface CreatureParameters extends Core.ComponentParameters {
+  size: Fifth.Size;
+  type: Fifth.CreatureType;
+
+  armorClass: number;
+  hitPointsRoll: string;
+  speed: number;
+
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+
+  passivePerception: number;
+}
 
 export class Creature extends Core.Component<CreatureParameters> {
   async onCreate(ctx: Core.Context) {

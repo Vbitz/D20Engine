@@ -4,16 +4,59 @@ import * as Fifth from 'd20/fifth';
 function createCommoner(ctx: Core.Context) {
   const ent = ctx.createEntity();
 
-  // ent.addComponent(new Fifth.Creature());
+  // I'm not really sure how Creature and Monster are going to split
+  // up at this stage. I assume players will inherit Creature but not
+  // Monster. Although that being said players will override most of
+  // these items with their own Component that calculates these values
+  // dynamically.
+  ent.addComponent(ctx, new Fifth.Creature.Creature({
+    size: Fifth.Size.Medium,
+    type: Fifth.CreatureType.Humanoid,
+
+    armorClass: 10,
+    hitPointsRoll: '1d8',
+    speed: 30,
+
+    strength: 10,
+    dexterity: 10,
+    constitution: 10,
+    intelligence: 10,
+    wisdom: 10,
+    charisma: 10,
+
+    passivePerception: 10
+  }));
+
+  ent.addComponent(
+      ctx, new Fifth.Monster.Monster({challenge: Fifth.Challenge.Zero}));
+
+  const clubAction = 'club';
+
+  ent.addComponent(ctx, new Fifth.MeleeAttackAction.MeleeAttackAction({
+    name: clubAction,
+    hitBonus: 2,
+    reach: 5,
+    // I don't define target count here. After reviewing the SRD it seems
+    // like there is always 1 target and special cases will have different
+    // components.
+    damageRoll: '1d4',
+    damageType: Fifth.DamageType.Bludgeoning
+  }));
+
+  ent.addComponent(
+      ctx, new Fifth.BasicMonsterAI.BasicMonsterAI({action: [clubAction]}));
 
   return ent;
 }
 
 export class Commoner extends Core.Module {
-  async onCreate(ctx: Core.Context) {
-    // TODO(joshua): There should be a enum containing all NPCs and monsters.
+  async onCreate(ctx: Core.Context): Promise<void> {
+    // I could implement a mechanism where Modules are required here.
+
+    // While I could implement this a handler a single registry makes sense
+    // as it simplifies the event system.
     ctx.callRootEvent(
-        Fifth.MonsterRegistry.registerMonster, 'd20.creature.npc.commoner',
+        Fifth.MonsterRegistry.registerMonster, Fifth.NPCInstance.Commoner,
         createCommoner);
   }
 }
