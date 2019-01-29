@@ -9,16 +9,30 @@ export const getDamageRoll: () => Core.DiceSpecification =
     `d20.fifth.component.meleeAttackAction.getDamageRoll` as
     Core.EventDeclaration;
 
-export interface MeleeAttackActionParameters extends Core.ComponentParameters {
+export class MeleeAttackActionParameters extends Core.ComponentParameters {
   name: string;
   hitBonus: number;
   reach: number;
   damageRoll: string;
   damageType: Fifth.DamageType;
+
+  constructor() {
+    super();
+
+    this.name = '';
+    this.hitBonus = 2;
+    this.reach = 5;
+    this.damageRoll = 'd4';
+    this.damageType = Fifth.DamageType.Bludgeoning;
+  }
 }
 
 export class MeleeAttackAction extends
     Core.Component<MeleeAttackActionParameters> {
+  constructor() {
+    super(new MeleeAttackActionParameters());
+  }
+
   async onCreate(ctx: Core.Context) {
     throw new Error('Method not implemented.');
   }

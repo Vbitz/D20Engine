@@ -126,9 +126,9 @@ export class DiceGenerator {
     } else if (spec.kind === 'drop') {
       return 2 * DiceGenerator.getComplexity(spec.roll);
     } else if (spec.kind === 'op') {
-      return 2 +
-          (DiceGenerator.getComplexity(spec.lhs) +
-           DiceGenerator.getComplexity(spec.rhs));
+      return 2
+          + (DiceGenerator.getComplexity(spec.lhs)
+             + DiceGenerator.getComplexity(spec.rhs));
     } else if (spec.kind === 'roll') {
       return spec.count;
     } else {

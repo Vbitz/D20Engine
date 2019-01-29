@@ -69,8 +69,8 @@ export class DiscordBot {
 
     this.bot.on('ready', () => {
       console.log(
-          'Successfully connected: ' + this.bot.username + ' - (' +
-          this.bot.id + ')');
+          'Successfully connected: ' + this.bot.username + ' - (' + this.bot.id
+          + ')');
     });
 
     this.bot.on('message', async (user, userID, channelID, message, evt) => {

@@ -27,6 +27,7 @@
         "posttest": "npm run check"
     },
     "dependencies": {
-        "discord.io": "izy521/discord.io"
+        "discord.io": "izy521/discord.io",
+        "reflect-metadata": "^0.1.13"
     }
 }

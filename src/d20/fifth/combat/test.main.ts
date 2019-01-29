@@ -4,17 +4,16 @@ import * as Fifth from 'd20/fifth';
 export class EncounterTestModule extends Core.Module {
   async onCreate(ctx: Core.Context) {
     const encounter =
-        await (
-            ctx.callRootEvent(Fifth.Combat.Encounter.createEncounter).call()) ||
-        Core.Common.expect();
+        await (ctx.callRootEvent(Fifth.Combat.Encounter.createEncounter).call())
+        || Core.Common.expect();
 
     const testCreature1 = ctx.createEntity();
 
-    await testCreature1.addComponent(ctx, new TestCreature({}));
+    await testCreature1.addComponent(ctx, new TestCreature());
 
     const testCreature2 = ctx.createEntity();
 
-    await testCreature2.addComponent(ctx, new TestCreature({}));
+    await testCreature2.addComponent(ctx, new TestCreature());
 
     await ctx
         .callEvent(encounter, Fifth.Combat.Encounter.addCreature, testCreature1)
@@ -29,13 +28,17 @@ export class EncounterTestModule extends Core.Module {
   }
 }
 
-export interface TestCreatureParameters extends Core.ComponentParameters {}
+export class TestCreatureParameters extends Core.ComponentParameters {}
 
 export class TestCreature extends Core.Component<TestCreatureParameters> {
   private weapon: Core.Entity|undefined = undefined;
 
   private maxHitPoints = 10;
   private currentHitPoints = 10;
+
+  constructor() {
+    super(new TestCreatureParameters());
+  }
 
   async onCreate(ctx: Core.Context) {
     this.weapon = this.createMeleeWeapon(ctx);
@@ -113,8 +116,8 @@ export class TestCreature extends Core.Component<TestCreatureParameters> {
                   .execute(
                       await ctx
                           .callEvent(ctx.entity, Fifth.Creature.getHitPoints)
-                          .call() ||
-                      Core.DiceGenerator.constant(0))
+                          .call()
+                      || Core.DiceGenerator.constant(0))
                   .value,
               'hit=', combatResults.hit, 'defense=',
               combatResults.defenseResult ? combatResults.defenseResult.value :
@@ -140,15 +143,19 @@ export class TestCreature extends Core.Component<TestCreatureParameters> {
   private createMeleeWeapon(ctx: Core.Context) {
     const ent = ctx.createEntity();
 
-    ent.addComponent(ctx, new TestWeapon({}));
+    ent.addComponent(ctx, new TestWeapon());
 
     return ent;
   }
 }
 
-export interface TestWeaponParameters extends Core.ComponentParameters {}
+export class TestWeaponParameters extends Core.ComponentParameters {}
 
 export class TestWeapon extends Core.Component<TestWeaponParameters> {
+  constructor() {
+    super(new TestWeaponParameters());
+  }
+
   async onCreate(ctx: Core.Context) {
     ctx.registerComponentHandler(
         this, Fifth.MeleeAttackAction.getAttackRoll, async (ctx) => {

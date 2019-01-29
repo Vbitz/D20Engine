@@ -39,8 +39,8 @@ module.exports = /*
 
             for (i = 0; i < expectation.parts.length; i++) {
               escapedParts += expectation.parts[i] instanceof Array ?
-                  classEscape(expectation.parts[i][0]) + '-' +
-                      classEscape(expectation.parts[i][1]) :
+                  classEscape(expectation.parts[i][0]) + '-'
+                      + classEscape(expectation.parts[i][1]) :
                   classEscape(expectation.parts[i]);
             }
 
@@ -131,8 +131,8 @@ module.exports = /*
               return descriptions[0] + ' or ' + descriptions[1];
 
             default:
-              return descriptions.slice(0, -1).join(', ') + ', or ' +
-                  descriptions[descriptions.length - 1];
+              return descriptions.slice(0, -1).join(', ') + ', or '
+                  + descriptions[descriptions.length - 1];
           }
         }
 
@@ -140,8 +140,8 @@ module.exports = /*
           return found ? '"' + literalEscape(found) + '"' : 'end of input';
         }
 
-        return 'Expected ' + describeExpected(expected) + ' but ' +
-            describeFound(found) + ' found.';
+        return 'Expected ' + describeExpected(expected) + ' but '
+            + describeFound(found) + ' found.';
       };
 
       function peg$parse(input, options) {

@@ -19,7 +19,7 @@ export const getEncounter: () => Core.Entity =
 export const getParticipants: () => Core.Entity[] =
     `d20.fifth.combat.encounter.getParticipants` as Core.EventDeclaration;
 
-export interface EncounterParameters extends Core.ComponentParameters {}
+export class EncounterParameters extends Core.ComponentParameters {}
 
 class EncounterCreature {
   initiative: number|undefined = undefined;
@@ -33,6 +33,10 @@ export class Encounter extends Core.Component<EncounterParameters> {
   private creatures: EncounterCreature[] = [];
 
   private running = false;
+
+  constructor() {
+    super(new EncounterParameters());
+  }
 
   async onCreate(ctx: Core.Context) {
     ctx.registerComponentHandler(this, addCreature, async (ctx, entity) => {
@@ -132,7 +136,7 @@ export class EncounterModule extends Core.Module {
   private async createEncounter(ctx: Core.Context) {
     const ent = ctx.createEntity();
 
-    await ent.addComponent(ctx, new Encounter({}));
+    await ent.addComponent(ctx, new Encounter());
 
     return ent;
   }

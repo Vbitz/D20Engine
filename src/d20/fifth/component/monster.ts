@@ -4,11 +4,21 @@ import * as Fifth from 'd20/fifth';
 export const getChallenge: () => Fifth.Challenge =
     'd20.fifth.component.monster.getChallenge' as Core.EventDeclaration;
 
-export interface MonsterParameters extends Core.ComponentParameters {
+export class MonsterParameters extends Core.ComponentParameters {
   challenge: Fifth.Challenge;
+
+  constructor() {
+    super();
+
+    this.challenge = Fifth.Challenge.Zero;
+  }
 }
 
 export class Monster extends Core.Component<MonsterParameters> {
+  constructor() {
+    super(new MonsterParameters());
+  }
+
   async onCreate(ctx: Core.Context): Promise<void> {
     throw new Error('Method not implemented.');
   }

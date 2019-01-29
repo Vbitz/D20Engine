@@ -9,7 +9,7 @@ function createCommoner(ctx: Core.Context) {
   // Monster. Although that being said players will override most of
   // these items with their own Component that calculates these values
   // dynamically.
-  ent.addComponent(ctx, new Fifth.Creature.Creature({
+  ent.addComponent(ctx, new Fifth.Creature.Creature().load({
     size: Fifth.Size.Medium,
     type: Fifth.CreatureType.Humanoid,
 
@@ -28,11 +28,11 @@ function createCommoner(ctx: Core.Context) {
   }));
 
   ent.addComponent(
-      ctx, new Fifth.Monster.Monster({challenge: Fifth.Challenge.Zero}));
+      ctx, new Fifth.Monster.Monster().load({challenge: Fifth.Challenge.Zero}));
 
   const clubAction = 'club';
 
-  ent.addComponent(ctx, new Fifth.MeleeAttackAction.MeleeAttackAction({
+  ent.addComponent(ctx, new Fifth.MeleeAttackAction.MeleeAttackAction().load({
     name: clubAction,
     hitBonus: 2,
     reach: 5,
@@ -44,7 +44,8 @@ function createCommoner(ctx: Core.Context) {
   }));
 
   ent.addComponent(
-      ctx, new Fifth.BasicMonsterAI.BasicMonsterAI({action: [clubAction]}));
+      ctx,
+      new Fifth.BasicMonsterAI.BasicMonsterAI().load({action: [clubAction]}));
 
   return ent;
 }

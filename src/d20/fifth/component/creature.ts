@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import {publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
 export const getInitiativeRoll: () => Core.DiceSpecification =
@@ -28,25 +29,50 @@ export interface DamageArguments {
 export const doDamage: (args: DamageArguments) => Core.Dice.DiceResults =
     `d20.fifth.component.creature.doDamage` as Core.EventDeclaration;
 
-export interface CreatureParameters extends Core.ComponentParameters {
-  size: Fifth.Size;
-  type: Fifth.CreatureType;
+export class CreatureParameters extends Core.ComponentParameters {
+  @publicField size: Fifth.Size;
+  @publicField type: Fifth.CreatureType;
 
-  armorClass: number;
-  hitPointsRoll: string;
-  speed: number;
+  @publicField armorClass: number;
+  @publicField hitPointsRoll: string;
+  @publicField speed: number;
 
-  strength: number;
-  dexterity: number;
-  constitution: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
+  @publicField strength: number;
+  @publicField dexterity: number;
+  @publicField constitution: number;
+  @publicField intelligence: number;
+  @publicField wisdom: number;
+  @publicField charisma: number;
 
-  passivePerception: number;
+  @publicField passivePerception: number;
+
+  constructor() {
+    super();
+
+    this.size = Fifth.Size.Medium;
+    this.type = Fifth.CreatureType.Humanoid;
+
+    this.armorClass = 10;
+    this.hitPointsRoll = '2d6';
+
+    this.speed = 30;
+
+    this.strength = 10;
+    this.dexterity = 10;
+    this.constitution = 10;
+    this.intelligence = 10;
+    this.wisdom = 10;
+    this.charisma = 10;
+
+    this.passivePerception = 10;
+  }
 }
 
 export class Creature extends Core.Component<CreatureParameters> {
+  constructor() {
+    super(new CreatureParameters());
+  }
+
   async onCreate(ctx: Core.Context) {
     throw new Error('Method not implemented.');
   }
