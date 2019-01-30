@@ -1,3 +1,3 @@
 export enum Challenge {
-  Zero
+  Zero = 'd20.fifth.challenge.zero'
 }

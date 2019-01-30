@@ -1,3 +1,3 @@
 export enum DamageType {
-  Bludgeoning
+  Bludgeoning = 'd20.fifth.damageType.bludgeoning'
 }

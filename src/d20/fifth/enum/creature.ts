@@ -1,7 +1,7 @@
 export enum Size {
-  Medium
+  Medium = 'd20.fifth.size.medium'
 }
 
 export enum CreatureType {
-  Humanoid
+  Humanoid = 'd20.fifth.creatureSize.humanoid'
 }

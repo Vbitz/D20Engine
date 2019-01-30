@@ -1,7 +1,6 @@
 import * as Core from 'core';
 import * as Discord from 'discord.io';
-
-import * as config from './config.json';
+import {readFileSync} from 'fs';
 
 export interface DiscordBotConfig {
   token: string;
@@ -202,6 +201,7 @@ export class D20DiscordBot extends DiscordBot {
 }
 
 export async function botMain(args: string[]) {
+  const config = JSON.parse(readFileSync(__dirname + '/config.json', 'utf8'));
   const discordBot = new D20DiscordBot(config);
 
   if (args[0] === 'auth') {

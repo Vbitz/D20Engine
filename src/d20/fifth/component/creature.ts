@@ -1,5 +1,5 @@
 import * as Core from 'core';
-import {publicField} from 'core/component';
+import {publicDiceRollField, publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
 export const getInitiativeRoll: () => Core.DiceSpecification =
@@ -30,11 +30,11 @@ export const doDamage: (args: DamageArguments) => Core.Dice.DiceResults =
     `d20.fifth.component.creature.doDamage` as Core.EventDeclaration;
 
 export class CreatureParameters extends Core.ComponentParameters {
-  @publicField size: Fifth.Size;
-  @publicField type: Fifth.CreatureType;
+  @publicEnumField(Fifth.Size) size: Fifth.Size;
+  @publicEnumField(Fifth.CreatureType) type: Fifth.CreatureType;
 
   @publicField armorClass: number;
-  @publicField hitPointsRoll: string;
+  @publicDiceRollField hitPointsRoll: string;
   @publicField speed: number;
 
   @publicField strength: number;
