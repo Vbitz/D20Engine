@@ -1,5 +1,5 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
+  "extends": "../../../node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
@@ -8,21 +8,20 @@
     "declaration": false,
     "target": "es2015",
     "lib": [
+      "dom",
+      "dom.iterable",
       "es2015"
     ],
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "jsxFactory": "createElement"
   },
   "include": [
-    "src/*.ts",
-    "src/**/*.ts",
-    "src/*.js",
-    "src/**/*.js",
-    "test/*.ts",
-    "test/**/*.ts"
+    "**/*.ts",
+    "../frontendCommon/**/*.ts"
   ],
   "exclude": [
     "node_modules/**/*",
-    "src/frontend/**/*"
   ]
 }

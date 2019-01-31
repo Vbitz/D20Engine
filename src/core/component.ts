@@ -2,30 +2,7 @@ import 'reflect-metadata';
 
 import * as Core from 'core';
 
-export enum PublicFieldType {
-  String,
-  Boolean,
-  Number,
-  Enum,
-  DiceRoll
-}
-
-export interface PublicBasicFieldDescription {
-  type: PublicFieldType.String|PublicFieldType.Number|PublicFieldType.Boolean;
-}
-
-export interface PublicEnumFieldDescription {
-  type: PublicFieldType.Enum;
-
-  members: Core.Common.Bag<string|number>;
-}
-
-export interface PublicDiceRollFieldDescription {
-  type: PublicFieldType.DiceRoll;
-}
-
-export type PublicFieldDescription =
-    PublicBasicFieldDescription|PublicEnumFieldDescription|PublicDiceRollFieldDescription;
+import {ComponentSpecification, PublicFieldDescription, PublicFieldType} from './frontendCommon/renderer';
 
 interface ComponentPublicFields {
   __publicFields?: Map<string, PublicFieldDescription>;
@@ -67,6 +44,7 @@ function attachField<T extends ComponentParameters>(
   fieldsObject.__publicFields.set(key, type);
 }
 
+// TODO(joshua): This should support better documentation.
 export function publicField<T extends ComponentParameters>(
     target: T, propertyKey: string) {
   // target is a lie and doesn't really exist.
@@ -122,6 +100,10 @@ export class ComponentParameters {
     } else {
       return [];
     }
+  }
+
+  getRendererSpecification(): ComponentSpecification {
+    return {name: this.constructor.name, fields: this.getPublicFields()};
   }
 }
 
