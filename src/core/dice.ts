@@ -1,3 +1,12 @@
+/**
+ * Dice Generator
+ *
+ * # Language 2.0
+ * - `adv(d20)` and `dis(d20)` for advantage and disadvantage.
+ * - Macros. Maybe?
+ * - `repeat(d20, 6)` Like a for loop. Useful for random characters.
+ */
+
 import * as Core from 'core';
 
 import * as DiceParser from './dice.parser';
