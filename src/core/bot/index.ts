@@ -5,6 +5,8 @@ import {readFileSync} from 'fs';
 export interface DiscordBotConfig {
   token: string;
   oauth2_client_id: string;
+  prefix: string;
+  channelLock: string;
 }
 
 const PERMISSIONS_INT = 2048;
@@ -86,14 +88,23 @@ export class DiscordBot {
   }
 
   private async onMessage(
-      user: string, userID: string, channelID: string, message: string) {
-    if (channelID !== '536475760479698946') {  // vbitz#botspam
+      user: string, userID: string, channelID: string, _message: string) {
+    if (channelID !== this.config.channelLock) {  // vbitz#botspam
       return;
     }
 
     const from = {user, userID, channelID} as MessageFrom;
 
-    const commandRegex = /\!([a-zA-Z0-9_]+)(.*)/;
+    if (!_message.startsWith(this.config.prefix)) {
+      // Not something sent to the bot.
+      return;
+    }
+
+    const message = _message.substr(this.config.prefix.length);
+
+    console.log(message);
+
+    const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
 
     const commandResults = commandRegex.exec(message);
 
@@ -185,17 +196,18 @@ export class D20DiscordBot extends DiscordBot {
 
     const results = this.diceGenerator.execute(spec);
 
-    await this.reply(from, `Result: ${results.value}`);
+    await this.reply(
+        from, `Result: ${Core.Dice.DiceGenerator.explain(results)}`);
   }
 
   async commandRandChar(from: MessageFrom, message: string) {
     await this.reply(from, `
-**Strength**:     ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
-**Dexterity**:    ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
-**Constitution**: ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
-**Intelligence**: ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
-**Wisdom**:       ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
-**Charisma**:     ${this.diceGenerator.parseAndExecute('drop(4d6,-1)').value}
+**Strength**:     ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
+**Dexterity**:    ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
+**Constitution**: ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
+**Intelligence**: ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
+**Wisdom**:       ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
+**Charisma**:     ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
     `.trim());
   }
 }

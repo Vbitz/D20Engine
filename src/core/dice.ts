@@ -115,6 +115,10 @@ export class DiceGenerator {
     return this.execute(DiceGenerator.parse(spec));
   }
 
+  parseAndExplain(spec: string): string {
+    return DiceGenerator.explain(this.parseAndExecute(spec));
+  }
+
   rerollAll(results: DiceResults) {
     return this.execute(results.rolledSpec);
   }
@@ -157,13 +161,13 @@ export class DiceGenerator {
 
   private static _explain(spec: RolledSpecification): string {
     if (spec.kind === 'roll') {
-      const roll = spec.rolls.slice().sort();
-      return `{${roll.slice(0, roll.length - 2).join(',')},**${
+      const roll = spec.rolls.slice().sort((a, b) => a - b);
+      return `{${roll.slice(0, roll.length - 1).join(',')},**${
           roll[roll.length - 1]}**}`;
     } else if (spec.kind === 'op') {
       return `${this._explain(spec.lhs)} ${spec.op} ${this._explain(spec.rhs)}`;
     } else if (spec.kind === 'drop') {
-      const arr = spec.roll.rolls.slice().sort();
+      const arr = spec.roll.rolls.slice().sort((a, b) => a - b);
 
       console.log(arr.join(','));
 
