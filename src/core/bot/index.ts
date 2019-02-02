@@ -71,6 +71,14 @@ export class DiscordBot {
       await this.reply(from, ret, ReplyTarget.User);
     });
 
+    this.addCommand(
+        'source', 'https://github.com/Vbitz/D20Engine', async (from, msg) => {
+          await this.reply(
+              from,
+              'Source is available at: https://github.com/Vbitz/D20Engine',
+              ReplyTarget.User);
+        });
+
     this.exitPromise = new Promise((res, rej) => {
       this.exitCallback = () => {
         res();
