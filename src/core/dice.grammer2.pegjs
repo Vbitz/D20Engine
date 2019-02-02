@@ -1,33 +1,27 @@
 DiceRoll = Operation
 
 Operation "op"
-	= head:Repeat _ tail:(op:("+"/"-") _ rhs:Repeat)* {
+	= head:Function _ tail:(op:("+"/"-") _ rhs:Function)* {
     	return tail.reduce((prev, next) => {
         	return {kind: "op", lhs: prev, op: next[0], rhs: next[2]};
         }, head);
     }
     
-Repeat "repeat"
-	= "repeat(" op:Operation "," _ count:Integer ")" {
-    	return {kind: "repeat", op, count};
-    }
-    / Drop
-
-Drop "drop"
-	= "drop(" roll:Roll "," _ type:("+"/"-") count:Integer ")" {
-    	return {kind: "drop", roll, type: type == "+" ? "high" : "low", count};
-    }
-    / Func
-    
-Func "adv/dis"
-	= name:FunctionName "(" roll:Roll ")" {
-    	return {kind: "func", name, roll};
-    }
-    / Roll
+Function "function"
+	= name:FunctionName "(" head:Operation tail:("," _ Operation)* ")" {
+    	return {
+        	kind: "function",
+            name,
+            args: [head, ...tail.map((a) => a[2])]
+        };
+    } / Roll
     
 FunctionName
 	= "adv"
     / "dis"
+    / "repeat"
+    / "drop"
+    / Macro
 
 Roll "roll"
 	= count:Integer "d" type:Integer {
@@ -48,7 +42,16 @@ Macro "macro"
 	= "$" id:Identifier {
     	return {kind: "macro", id};
     }
-    / Const
+    / Offset
+    
+OffsetType
+	= "+"
+    / "-"
+    
+Offset "offset"
+	= type:OffsetType value:Integer {
+    	return {kind: "offset", type, value}
+    } / Const
      
 Const "const"
 	= value:Integer {
