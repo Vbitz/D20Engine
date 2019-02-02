@@ -26,10 +26,20 @@ class PermissionDeniedError extends Error {
   }
 }
 
+interface Command {
+  helpText: string;
+  callback: CommandCallback;
+}
+
+enum ReplyTarget {
+  Channel,
+  User
+}
+
 export class DiscordBot {
   private bot: Discord.Client;
 
-  private commands: Map<string, CommandCallback> = new Map();
+  private commands: Map<string, Command> = new Map();
 
   private exitPromise: Promise<void>;
   private exitCallback: () => void = () => {};
@@ -37,16 +47,28 @@ export class DiscordBot {
   constructor(private config: DiscordBotConfig) {
     this.bot = new Discord.Client({token: config.token, autorun: false});
 
-    this.addCommand('ping', async (from, msg) => {
+    this.addCommand('ping', 'PONG!', async (from, msg) => {
       await this.reply(from, 'PONG!');
     });
 
-    this.addCommand('restart', async (from, msg) => {
-      this.validateAdmin(from);
+    this.addCommand(
+        'restart', '[BOT_ADMIN] Restart and update the bot.',
+        async (from, msg) => {
+          this.validateAdmin(from);
 
-      await this.reply(from, 'Restarting Now');
+          await this.reply(from, 'Restarting Now');
 
-      this.exitCallback();
+          this.exitCallback();
+        });
+
+    this.addCommand('help', 'This command...', async (from, msg) => {
+      let ret = '**D20Engine Help: **\n';
+
+      for (const [name, command] of this.commands.entries()) {
+        ret += `${this.config.prefix}${name}: ${command.helpText}\n`;
+      }
+
+      await this.reply(from, ret, ReplyTarget.User);
     });
 
     this.exitPromise = new Promise((res, rej) => {
@@ -56,8 +78,8 @@ export class DiscordBot {
     });
   }
 
-  addCommand(name: string, cb: CommandCallback) {
-    this.commands.set(name, cb);
+  addCommand(name: string, helpText: string, cb: CommandCallback) {
+    this.commands.set(name, {helpText, callback: cb});
   }
 
   authURL() {
@@ -123,28 +145,63 @@ export class DiscordBot {
     }
 
     try {
-      await this.commands.get(commandName)!.call(this, from, rest);
+      await this.commands.get(commandName)!.callback.call(this, from, rest);
     } catch (ex) {
       if (ex instanceof PermissionDeniedError) {
-        await this.reply(from, `Permission Denied - ${ex.subMessage}!!`);
+        await this.reply(from, `Command not found: ${commandName}`);
+        return;
       } else {
         await this.reply(from, 'Internal Error!');
       }
     }
   }
-
-  protected reply(from: MessageFrom, message: string): Promise<void> {
+  protected reply(
+      from: MessageFrom, message: string,
+      target = ReplyTarget.Channel): Promise<void> {
     return new Promise((res, rej) => {
-      console.log('>', from.channelID, message);
-      this.bot.sendMessage({to: from.channelID, message}, () => {
-        res();
-      });
+      console.log('>', from.userID, message);
+
+      const bot = this.bot;
+
+      const generator = this.paginateMessage(message);
+
+      function callback() {
+        const next = generator.next();
+
+        if (next.done) {
+          res();
+        } else {
+          if (target === ReplyTarget.Channel) {
+            bot.sendMessage(
+                {to: from.channelID, message: next.value}, callback);
+          } else if (target === ReplyTarget.User) {
+            bot.sendMessage({to: from.userID, message: next.value}, callback);
+          }
+        }
+      }
+
+      callback();
     });
   }
 
   protected validateAdmin(from: MessageFrom) {
     if (from.userID !== '125800047173566464') {  // Vbitz
       throw new PermissionDeniedError('This requires admin privileges.');
+    }
+  }
+
+  /**
+   * Implementation from:
+   * https://stackoverflow.com/questions/49205298/sending-2-different-messages-if-message-exceeds-2000-characters
+   * Thanks @Zizzeren#2687 for the suggestion.
+   * @param message The message to split up.
+   */
+  private * paginateMessage(message: string): IterableIterator<string> {
+    // TODO(joshua): Improve the splitting point.
+
+    for (let i = 0; i < message.length; i += 2000) {
+      const toSend = message.substring(i, Math.min(message.length, i + 2000));
+      yield toSend;
     }
   }
 }
@@ -155,8 +212,11 @@ export class D20DiscordBot extends DiscordBot {
   constructor(config: DiscordBotConfig) {
     super(config);
 
-    this.addCommand('roll', this.commandRoll);
-    this.addCommand('randchar', this.commandRandChar);
+    this.addCommand(
+        'roll', 'Rolls arbitrary dice. Try `roll drop(4d6,-1)`.',
+        this.commandRoll);
+    this.addCommand(
+        'randchar', 'Rolls a random character', this.commandRandChar);
   }
 
   async commandRoll(from: MessageFrom, message: string) {

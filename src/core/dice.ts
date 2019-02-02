@@ -176,7 +176,7 @@ export class DiceGenerator {
       console.log(finalDice);
 
       if (spec.type === 'low') {
-        const keptDice = arr.slice(spec.count, finalDice + 1);
+        const keptDice = arr.slice(spec.count);
         const droppedDice = arr.slice(0, spec.count);
 
         return `{~~${droppedDice.join('~~,~~')}~~,${
