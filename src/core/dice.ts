@@ -46,9 +46,20 @@ export interface ResultValue extends BaseDiceSpec {
 
 export type RolledDice = DiceRoll&{rolls: number[]}&ResultValue;
 
-export type RolledDiceOp = DiceRollOp&ResultValue;
+export type RolledDiceOp = {
+  kind: 'op',
+  op: '+'|'-',
+  lhs: RolledSpecification,
+  rhs: RolledSpecification
+}&ResultValue;
 
-export type RolledDiceDrop = DiceRollDrop&ResultValue;
+export type RolledDiceDrop = {
+  kind: 'drop',
+  roll: RolledDice,
+  type: 'low'|'high',
+  /** Drop `count` low or high dice */
+  count: number
+}&ResultValue;
 
 export type DiceSpecification =
     DiceRoll|DiceRollOp|DiceRollConstant|DiceRollDrop;
@@ -133,6 +144,53 @@ export class DiceGenerator {
       return spec.count;
     } else {
       throw new Error('Not Implemented');
+    }
+  }
+
+  /**
+   * Returns a string in Markdown format.
+   * @param results
+   */
+  static explain(results: DiceResults): string {
+    return `${this._explain(results.rolledSpec)} = **${results.value}**`;
+  }
+
+  private static _explain(spec: RolledSpecification): string {
+    if (spec.kind === 'roll') {
+      const roll = spec.rolls.slice().sort();
+      return `{${roll.slice(0, roll.length - 2).join(',')},**${
+          roll[roll.length - 1]}**}`;
+    } else if (spec.kind === 'op') {
+      return `${this._explain(spec.lhs)} ${spec.op} ${this._explain(spec.rhs)}`;
+    } else if (spec.kind === 'drop') {
+      const arr = spec.roll.rolls.slice().sort();
+
+      console.log(arr.join(','));
+
+      const finalDice = arr.length - spec.count;
+
+      console.log(finalDice);
+
+      if (spec.type === 'low') {
+        const keptDice = arr.slice(spec.count, finalDice + 1);
+        const droppedDice = arr.slice(0, spec.count);
+
+        return `{~~${droppedDice.join('~~,~~')}~~,${
+            keptDice.slice(0, keptDice.length - 1).join(',')},**${
+            keptDice[keptDice.length - 1]}**}`;
+      } else if (spec.type === 'high') {
+        const keptDice = arr.slice(0, finalDice);
+        const droppedDice = arr.slice(finalDice);
+
+        return `{${keptDice.slice(0, keptDice.length - 1).join(',')},**${
+            keptDice[keptDice.length - 1]}**,~~${droppedDice.join('~~,~~')}~~}`;
+      }
+
+      return Core.Common.expect();
+    } else if (spec.kind === 'const') {
+      return spec.value.toString(10);
+    } else {
+      return Core.Common.expect();
     }
   }
 

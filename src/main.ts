@@ -5,16 +5,19 @@ import {ecsTestMain} from 'core/ecsTest.main';
 import {botMain} from 'core/bot';
 import {combatTestMain} from 'd20/fifth/combat/test.main';
 import {frontendGeneratorTest} from 'tools/frontendGeneratorTest';
+import {diceMain} from 'core/dice.main';
 
 async function main(args: string[]) {
   if (args[0] === 'test:ecs') {
     return await ecsTestMain(args.slice(1));
-  } else if (args[0] === 'bot') {
-    return await botMain(args.slice(1));
   } else if (args[0] === 'test:combat') {
     return await combatTestMain(args.slice(1));
   } else if (args[0] === 'test:frontend') {
     return await frontendGeneratorTest(args.slice(1));
+  } else if (args[0] === 'bot') {
+    return await botMain(args.slice(1));
+  } else if (args[0] === 'dice') {
+    return await diceMain(args.slice(1));
   } else {
     throw new Error('Invalid Entry Point');
   }
