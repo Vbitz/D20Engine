@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import {publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
 export const getAttackRoll: () => Core.DiceSpecification =
@@ -10,11 +11,11 @@ export const getDamageRoll: () => Core.DiceSpecification =
     Core.EventDeclaration;
 
 export class MeleeAttackActionParameters extends Core.ComponentParameters {
-  name: string;
-  hitBonus: number;
-  reach: number;
-  damageRoll: string;
-  damageType: Fifth.DamageType;
+  @publicField name: string;
+  @publicField hitBonus: number;
+  @publicField reach: number;
+  @publicField damageRoll: string;
+  @publicEnumField(Fifth.DamageType) damageType: Fifth.DamageType;
 
   constructor() {
     super();
