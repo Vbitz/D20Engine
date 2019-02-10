@@ -22,6 +22,7 @@
         "fix": "gts fix",
         "test": "jest",
         "main": "npm run compile && node build/src/main.js",
+        "repl": "npm run compile && node build/src/main.js repl",
         "frontend": "parcel src/core/frontend/index.html",
         "test:ecs": "npm run compile && node build/src/main.js test:ecs",
         "prepare": "npm run compile",

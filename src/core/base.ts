@@ -1,5 +1,16 @@
 import * as Core from 'core';
 
+
+import {exists as _exists} from 'fs';
+import * as path from 'path';
+import {promisify} from 'util';
+
+const exists = promisify(_exists);
+
+const CONFIG_FILENAME = 'd20Engine.config.json';
+
+const SAVE_DIRECTORY = 'save';
+
 export interface GameLike {
   readonly game: Core.Game;
 }
@@ -65,4 +76,20 @@ export class AbstractEventController {
       args: Core.Event.EventArgs<T>): Core.Action<T> {
     return this.eventController._callHandlers(ctx, evt, handlers, args);
   }
+}
+
+async function getRootPath(dirname: string): Promise<string> {
+  // TODO(joshua): Handle if CONFIG_FILENAME does not exist up the tree.
+
+  if (await exists(path.join(dirname, CONFIG_FILENAME))) {
+    return dirname;
+  } else {
+    return await getRootPath(await path.resolve(dirname, '..'));
+  }
+}
+
+export async function getSavePath(): Promise<string> {
+  const rootPath = await getRootPath(__dirname);
+
+  return path.join(rootPath, SAVE_DIRECTORY);
 }

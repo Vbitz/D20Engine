@@ -1,5 +1,5 @@
 import {Action} from './action';
-import {AbstractEventController, EventController, GameLike, NonNullableValue, Value} from './base';
+import {AbstractEventController, EventController, GameLike, getSavePath, NonNullableValue, Value} from './base';
 import * as Common from './common';
 import {Component, ComponentParameters} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
@@ -30,6 +30,7 @@ export {
   EventSignature,
   Game,
   GameLike,
+  getSavePath,
   HandlerCallback,
   Module,
   ModuleContext,
