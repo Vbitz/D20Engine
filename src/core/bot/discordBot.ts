@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import * as shlex from 'core/third_party/shlex';
 import * as Discord from 'discord.io';
 import {EventEmitter} from 'events';
 
@@ -97,6 +98,7 @@ export class CommandHandler {
       if (ex instanceof PermissionDeniedError) {
         return false;
       } else {
+        await owner.reportError(ex);
         await owner.reply(from, 'Internal Error!');
         return undefined;
       }
@@ -254,6 +256,10 @@ export class Bot extends CommandHandler {
         this.config.oauth2_client_id}&scope=bot&permissions=${PERMISSIONS_INT}`;
   }
 
+  async reportError(ex: Error) {
+    console.error(ex);
+  }
+
   async run() {
     this.backend.on('message', ({from, message}) => {
       this.onMessage(from, message);
@@ -315,8 +321,26 @@ export class Bot extends CommandHandler {
   }
 }
 
+export class D20RPCContext extends Core.RPC.Context {
+  constructor(private bot: D20Bot, private from: MessageFrom) {
+    super();
+  }
+
+  async reply(text: string): Promise<void> {
+    return await this.bot.reply(this.from, text);
+  }
+
+  getUserID(): string {
+    return this.from.getUserId();
+  }
+}
+
 export class D20Bot extends Bot {
   private diceGenerator = new Core.Dice.DiceGenerator(() => Math.random());
+
+  private game = new Core.Game();
+
+  private rpcServer: Core.RPC.Server|null = null;
 
   constructor(config: DiscordBotConfig, backend: BotBackend) {
     super(config, backend);
@@ -326,6 +350,8 @@ export class D20Bot extends Bot {
         this.commandRoll);
     this.addCommand(
         'randchar', 'Rolls a random character', this.commandRandChar);
+    this.addCommand(
+        'pf', '(BETA) Pathfinder Character Tracker', this.commandPf);
   }
 
   async commandRoll(from: MessageFrom, message: string) {
@@ -378,5 +404,23 @@ export class D20Bot extends Bot {
 **Wisdom**:       ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
 **Charisma**:     ${this.diceGenerator.parseAndExplain('drop(4d6,-1)')}
     `.trim());
+  }
+
+  async commandPf(from: MessageFrom, message: string) {
+    if (this.rpcServer === null) {
+      const PF = await import('d20/pf');
+
+      this.rpcServer = await this.game.contextCall(async (ctx) => {
+        const controllerEntity = ctx.createEntity();
+
+        controllerEntity.addComponent(ctx, new PF.Controller());
+
+        return this.game.createRPCServer(controllerEntity);
+      });
+    }
+
+    const chain = shlex.split(message);
+
+    await this.rpcServer.execute(new D20RPCContext(this, from), chain);
   }
 }

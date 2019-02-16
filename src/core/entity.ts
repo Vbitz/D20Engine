@@ -31,6 +31,30 @@ export class Entity extends Core.AbstractEventController {
         ...this.componentList.map((comp) => comp.getHandlers(evt)));
   }
 
+  async executeRPC(
+      ctx: Core.Context, rpcCtx: Core.RPC.Context,
+      chain: Core.Value[]): Promise<void> {
+    if (this.hasRPCMarshal(chain)) {
+      return await this._executeRPC(ctx, rpcCtx, chain);
+    }
+
+    for (const component of this.componentList) {
+      if (component.hasRPCMarshal(chain)) {
+        return await component.executeRPC(ctx, rpcCtx, chain);
+      }
+    }
+
+    throw new Core.RPC.MarshalNotFoundError('');
+  }
+
+  addRPCMarshal(name: string, marshalCallback: Core.RPC.MarshalCallback) {
+    return this._addRPCMarshal(name, marshalCallback);
+  }
+
+  hasRPCMarshal(chain: Core.Value[]) {
+    return this._hasRPCMarshal(chain);
+  }
+
   async addComponent(
       ctx: Core.Context, comp: Core.Component<Core.ComponentParameters>) {
     this.componentList.push(comp);

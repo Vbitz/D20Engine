@@ -147,6 +147,20 @@ export abstract class Component<T extends ComponentParameters> extends
     return this._getHandlers(evt);
   }
 
+  async executeRPC(
+      ctx: Core.Context, rpcCtx: Core.RPC.Context,
+      chain: Core.Value[]): Promise<void> {
+    return await this._executeRPC(ctx, rpcCtx, chain);
+  }
+
+  addRPCMarshal(name: string, MarshalCallback: Core.RPC.MarshalCallback) {
+    return this._addRPCMarshal(name, MarshalCallback);
+  }
+
+  hasRPCMarshal(chain: Core.Value[]) {
+    return this._hasRPCMarshal(chain);
+  }
+
   setOwner(owner: Core.Entity) {
     this.owner = owner;
   }

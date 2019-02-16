@@ -42,6 +42,7 @@ export interface EventController {
 
 export class AbstractEventController {
   private eventController = new Core.Event.EventControllerImpl();
+  private rpcController = new Core.RPC.ControllerImpl();
 
   /**
    * Register a new handler for an event.
@@ -75,6 +76,21 @@ export class AbstractEventController {
       ctx: Core.Context, evt: T, handlers: Array<Core.HandlerCallback<T>>,
       args: Core.Event.EventArgs<T>): Core.Action<T> {
     return this.eventController._callHandlers(ctx, evt, handlers, args);
+  }
+
+  protected async _executeRPC(
+      ctx: Core.Context, rpcCtx: Core.RPC.Context,
+      chain: Core.Value[]): Promise<void> {
+    return await this.rpcController.execute(ctx, rpcCtx, chain);
+  }
+
+  protected _addRPCMarshal(
+      name: string, MarshalCallback: Core.RPC.MarshalCallback) {
+    return this.rpcController.addMarshal(name, MarshalCallback);
+  }
+
+  protected _hasRPCMarshal(chain: Core.Value[]) {
+    return this.rpcController.hasMarshal(chain);
   }
 }
 

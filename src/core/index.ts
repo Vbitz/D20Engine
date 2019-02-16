@@ -10,8 +10,10 @@ import * as Event from './event';
 import {EventArgs, EventDeclaration, EventSignature, HandlerCallback} from './event';
 import {Game} from './game';
 import {Module} from './module';
+import * as RPC from "./rpc";
 
 export {
+  RPC,
   AbstractEventController,
   Action,
   Common,

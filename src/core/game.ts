@@ -22,6 +22,11 @@ export class Game extends Core.AbstractEventController {
     return newEntity;
   }
 
+  createRPCServer(root: Core.Entity) {
+    return new Core.RPC.Server(
+        this, root, new Core.Context(this, this.context));
+  }
+
   /**
    * Warning this method should normally be called from a Context as some
    * registration may not happen.
@@ -42,14 +47,27 @@ export class Game extends Core.AbstractEventController {
     return this._getHandlers(evt);
   }
 
+  // This method is a bit of a high level cheat to create a context and make a
+  // call inside it. Normally this is suposed to be done inside a module as they
+  // persist in the game state. The context this function creates is insteed
+  // transient.
+  async contextCall<T>(cb: (ctx: Core.Context) => Promise<T>) {
+    const newContext = new Core.Context(this, this.context);
+
+    return await cb(newContext);
+  }
+
   /**
    * Register and initialize a module within this `Game` instance.
    * @param mod The module to register.
    */
   async registerModule(mod: Core.Module) {
     const moduleContext = new Core.ModuleContext(this, this.context);
+
     this.context.addChildContext(moduleContext);
+
     await mod.onCreate(moduleContext);
+
     this.moduleList.add(mod);
   }
 }
