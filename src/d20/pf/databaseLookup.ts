@@ -250,6 +250,45 @@ interface MagicItem {
   Scaling: string;
 }
 
+interface Feat {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  prerequisites: string;
+  prerequisite_feats: string;
+  benefit: string;
+  normal: string;
+  special: string;
+  source: string;
+  fulltext: string;
+  teamwork: string;
+  critical: string;
+  grit: string;
+  style: string;
+  performance: string;
+  racial: string;
+  companion_familiar: string;
+  race_name: string;
+  note: string;
+  goal: string;
+  completion_benefit: string;
+  multiples: string;
+  suggested_traits: string;
+  prerequisite_skills: string;
+  panache: string;
+  betrayal: string;
+  targeting: string;
+  esoteric: string;
+  stare: string;
+  weapon_mastery: string;
+  item_mastery: string;
+  armor_mastery: string;
+  shield_mastery: string;
+  blood_hex: string;
+  trick: string;
+}
+
 enum RenderType {
   List,
   Short,
@@ -297,6 +336,11 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
           this.handleRPC.bind(
               this, {name: 'monsters', nameColumn: 'Name'},
               this.renderMonster));
+
+      this.addRPCMarshal(
+          'feat',
+          this.handleRPC.bind(
+              this, {name: 'feats', nameColumn: 'name'}, this.renderFeat));
     } catch (err) {
       console.error(
           '[d20.pf.DatabaseLookup] Database not Available. Not registering commands.');
@@ -359,7 +403,7 @@ ${reply}
     } else if (type === RenderType.Short) {
       return `**${monster.Name}**
 ${monster.Alignment} ${monster.Size} ${monster.Type} ${monster.SubType}
-**Init** ${monster.Init} | **Senses** ${monster.Senses}
+**CR** ${monster.CR} | **Init** ${monster.Init} | **Senses** ${monster.Senses}
 
 **AC** ${monster.AC}
 **HP** ${monster.HP} ${monster.HD}
@@ -376,6 +420,8 @@ ${monster.AbilityScores}
 **Feats** ${monster.Feats}
 **Skills** ${monster.Skills}
 **Languages** ${monster.Languages}
+
+**Source** ${monster.Source}
 
 **Use \`d20 pf lookup monster get "${
           monster.Name}" -full\` for full details.**`;
@@ -398,6 +444,8 @@ ${monster.AbilityScores}
 
 **Construction Requirements** ${magicItem.Requirements} | **Cost** ${
           magicItem.Cost}
+
+**Source** ${magicItem.Source}
 
 **Use \`d20 pf lookup magicItem get "${
           magicItem.Name}" -full\` for full details.**`;
@@ -428,7 +476,29 @@ ${monster.AbilityScores}
 
 **Description** ${spell.short_description}
 
+**Source** ${spell.source}
+
 **Use \`d20 pf lookup spell get "${spell.name}" -full\` for full details.**`;
+    } else {
+      throw new Error('Not Implemented');
+    }
+  }
+
+  private renderFeat(type: RenderType, feat: Feat): string {
+    if (type === RenderType.List) {
+      return `${feat.name.padEnd(30)} | ${feat.type}`;
+    } else if (type === RenderType.Full) {
+      return this.turndownService.turndown(feat.fulltext);
+    } else if (type === RenderType.Short) {
+      return `**${feat.name}**
+
+**Type** ${feat.type} | **Prerequisites** ${feat.prerequisites}
+
+**Description** ${feat.description}
+
+**Source** ${feat.source}
+
+**Use \`d20 pf lookup feat get "${feat.name}" -full\` for full details.**`;
     } else {
       throw new Error('Not Implemented');
     }

@@ -30,10 +30,14 @@ export class Controller extends Core.Component<ControllerParameters> {
     this.addRPCAlias('findSpell', ['lookup', 'spell', 'search']);
     this.addRPCAlias('findMonster', ['lookup', 'monster', 'search']);
     this.addRPCAlias('findMagicItem', ['lookup', 'magicItem', 'search']);
+    this.addRPCAlias('findItem', ['lookup', 'magicItem', 'search']);
+    this.addRPCAlias('findFeat', ['lookup', 'feat', 'search']);
 
     this.addRPCAlias('getSpell', ['lookup', 'spell', 'get']);
     this.addRPCAlias('getMonster', ['lookup', 'monster', 'get']);
     this.addRPCAlias('getMagicItem', ['lookup', 'magicItem', 'get']);
+    this.addRPCAlias('getItem', ['lookup', 'magicItem', 'get']);
+    this.addRPCAlias('getFeat', ['lookup', 'feat', 'get']);
   }
 
   private async getCharacter(ctx: Core.Context, id: string):
