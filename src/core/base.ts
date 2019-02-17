@@ -116,3 +116,12 @@ export async function getResourcePath(): Promise<string> {
 
   return path.join(rootPath, RESOURCE_DIRECTORY);
 }
+
+export async function getVersion(): Promise<string> {
+  const rootPath = await getRootPath(__dirname);
+
+  // TODO(joshua): This assumes deployments are happening from master.
+  const refHashFile = path.join(rootPath, '.git', 'refs', 'heads', 'master');
+
+  return await Core.Common.readFile(refHashFile, 'utf8');
+}

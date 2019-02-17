@@ -294,6 +294,14 @@ export class Bot extends CommandHandler {
               ReplyTarget.User);
         });
 
+    this.addCommand(
+        'version', 'Print the current version hash.',
+        async function(from, msg) {
+          await this.reply(
+              from, `Current Version: ${await Core.getVersion()}`,
+              ReplyTarget.User);
+        });
+
     this.exitPromise = new Promise((res, rej) => {
       this.exitCallback = () => {
         res();

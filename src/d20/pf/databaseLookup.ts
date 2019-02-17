@@ -276,25 +276,31 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
   }
 
   async onCreate(ctx: Core.Context) {
-    this.db.loadSqlite(path.join(
-        await Core.getResourcePath(), 'restricted', 'pathfinder', 'database',
-        'pathfinder.db'));
+    try {
+      await this.db.loadSqlite(path.join(
+          await Core.getResourcePath(), 'restricted', 'pathfinder', 'database',
+          'pathfinder.db'));
 
-    this.addRPCMarshal(
-        'spell',
-        this.handleRPC.bind(
-            this, {name: 'spells', nameColumn: 'name'}, this.renderSpell));
+      this.addRPCMarshal(
+          'spell',
+          this.handleRPC.bind(
+              this, {name: 'spells', nameColumn: 'name'}, this.renderSpell));
 
-    this.addRPCMarshal(
-        'magicItem',
-        this.handleRPC.bind(
-            this, {name: 'magic_items', nameColumn: 'Name'},
-            this.renderMagicItem));
+      this.addRPCMarshal(
+          'magicItem',
+          this.handleRPC.bind(
+              this, {name: 'magic_items', nameColumn: 'Name'},
+              this.renderMagicItem));
 
-    this.addRPCMarshal(
-        'monster',
-        this.handleRPC.bind(
-            this, {name: 'monsters', nameColumn: 'Name'}, this.renderMonster));
+      this.addRPCMarshal(
+          'monster',
+          this.handleRPC.bind(
+              this, {name: 'monsters', nameColumn: 'Name'},
+              this.renderMonster));
+    } catch (err) {
+      console.error(
+          '[d20.pf.DatabaseLookup] Database not Available. Not registering commands.');
+    }
   }
 
   private async handleRPC(
