@@ -250,7 +250,13 @@ interface MagicItem {
   Scaling: string;
 }
 
-type RenderCallback = (short: boolean, arg: any) => string;
+enum RenderType {
+  List,
+  Short,
+  Full
+}
+
+type RenderCallback = (type: RenderType, arg: any) => string;
 
 export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
   private db = new Core.Database.Database();
@@ -297,7 +303,7 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
     console.log(tableSpec, chain);
 
     if (chain.length < 2) {
-      throw new Error('Usage: get|search <name>');
+      throw new Error('Usage: get <name> -full | search <name>');
     }
 
     const [firstValue, name, ...rest] = chain;
@@ -316,7 +322,11 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
       if (row === undefined) {
         await rpcCtx.reply(`Spell not found: ${nameValue}`);
       } else {
-        await rpcCtx.reply(renderer.call(this, false, row));
+        if (rest.length >= 1 && rest[0] === '-full') {
+          await rpcCtx.reply(renderer.call(this, RenderType.Full, row));
+        } else {
+          await rpcCtx.reply(renderer.call(this, RenderType.Short, row));
+        }
       }
     } else if (firstValue === 'search') {
       const rows = await this.db.search(tableSpec, nameValue);
@@ -324,34 +334,95 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
       let reply = '';
 
       for (const row of rows) {
-        reply += renderer.call(this, true, row) + '\n';
+        reply += renderer.call(this, RenderType.List, row) + '\n';
       }
 
-      await rpcCtx.reply(reply);
+      await rpcCtx.reply(`\`\`\`
+${reply}
+\`\`\``);
     }
   }
 
-  private renderMonster(short: boolean, monster: Monster) {
-    if (short) {
-      return monster.Name;
-    }
+  private renderMonster(type: RenderType, monster: Monster): string {
+    if (type === RenderType.List) {
+      return `${monster.Name.padEnd(30)} | CR ${monster.CR}`;
+    } else if (type === RenderType.Full) {
+      return this.turndownService.turndown(monster.FullText);
+    } else if (type === RenderType.Short) {
+      return `**${monster.Name}**
+${monster.Alignment} ${monster.Size} ${monster.Type} ${monster.SubType}
+**Init** ${monster.Init} | **Senses** ${monster.Senses}
 
-    return this.turndownService.turndown(monster.FullText);
+**AC** ${monster.AC}
+**HP** ${monster.HP} ${monster.HD}
+**Fort** ${monster.Fort} | **Ref** ${monster.Ref} | **Will** ${monster.Will} ${
+          monster.Save_Mods}
+
+**Speed** ${monster.Speed}
+**Melee** ${monster.Melee}
+**Ranged** ${monster.Ranged}
+
+${monster.AbilityScores}
+**Base Atk** ${monster.BaseAtk} | **CMB** ${monster.CMB} | **CMD** ${
+          monster.CMD}
+**Feats** ${monster.Feats}
+**Skills** ${monster.Skills}
+**Languages** ${monster.Languages}
+
+**Use \`d20 pf lookup monster get "${
+          monster.Name}" -full\` for full details.**`;
+    } else {
+      throw new Error('Not Implemented');
+    }
   }
 
-  private renderMagicItem(short: boolean, magicItem: MagicItem) {
-    if (short) {
-      return magicItem.Name;
-    }
+  private renderMagicItem(type: RenderType, magicItem: MagicItem): string {
+    if (type === RenderType.List) {
+      return `${magicItem.Name.padEnd(30)} | CL${
+          magicItem.CL.padEnd(6)} | Price ${magicItem.Price}`;
+    } else if (type === RenderType.Full) {
+      return this.turndownService.turndown(magicItem.FullText);
+    } else if (type === RenderType.Short) {
+      return `**${magicItem.Name}**
 
-    return this.turndownService.turndown(magicItem.FullText);
+**Aura** ${magicItem.Aura} | **CL** ${magicItem.CL} | **Weight** ${
+          magicItem.Weight} | **Price** ${magicItem.Price}
+
+**Construction Requirements** ${magicItem.Requirements} | **Cost** ${
+          magicItem.Cost}
+
+**Use \`d20 pf lookup magicItem get "${
+          magicItem.Name}" -full\` for full details.**`;
+    } else {
+      throw new Error('Not Implemented');
+    }
   }
 
-  private renderSpell(short: boolean, spell: Spell) {
-    if (short) {
-      return spell.name;
-    }
+  private renderSpell(type: RenderType, spell: Spell): string {
+    if (type === RenderType.List) {
+      return `${spell.name.padEnd(30)} | ${spell.school.padEnd(15)} | ${
+          spell.spell_level}`;
+    } else if (type === RenderType.Full) {
+      return this.turndownService.turndown(spell.full_text);
+    } else if (type === RenderType.Short) {
+      return `**${spell.name}**
 
-    return this.turndownService.turndown(spell.full_text);
+**School** ${spell.school} | **Level** ${spell.spell_level} | **Domain** ${
+          spell.domain}
+
+**Casting Time** ${spell.casting_time}
+**Components** ${spell.components}
+
+**Range** ${spell.range} | **Area** ${spell.area}
+**Duration** ${spell.duration}
+**Saving Throw** ${spell.saving_throw} | **Spell Resistance** ${
+          spell.spell_resistence}
+
+**Description** ${spell.short_description}
+
+**Use \`d20 pf lookup spell get "${spell.name}" -full\` for full details.**`;
+    } else {
+      throw new Error('Not Implemented');
+    }
   }
 }

@@ -54,6 +54,7 @@ export class PermissionDeniedError extends Error {
 interface Command {
   helpText: string|undefined;
   callback: CommandCallback;
+  supportsTopLevel: boolean;
 }
 
 export enum ReplyTarget {
@@ -80,8 +81,10 @@ export class CommandHandler {
     });
   }
 
-  addCommand(name: string, helpText: string|undefined, cb: CommandCallback) {
-    this.commands.set(name, {helpText, callback: cb});
+  addCommand(
+      name: string, helpText: string|undefined, cb: CommandCallback,
+      supportsTopLevel = false) {
+    this.commands.set(name, {helpText, callback: cb, supportsTopLevel});
   }
 
   async runCommand(owner: Bot, from: MessageFrom, [_, commandName, rest]: [
@@ -103,6 +106,14 @@ export class CommandHandler {
         return undefined;
       }
     }
+  }
+
+  getCommandSupportsTopLevel(commandName: string) {
+    if (!this.commands.has(commandName)) {
+      return false;
+    }
+
+    return this.commands.get(commandName)!.supportsTopLevel;
   }
 
   protected getSubCommand(name: string): CommandHandler {
@@ -335,32 +346,52 @@ export class Bot extends CommandHandler {
       return;
     }
 
-    // console.log(from, _message);
+    if (_message.startsWith(this.config.prefix)) {
+      const message = _message.substr(this.config.prefix.length);
 
-    if (!_message.startsWith(this.config.prefix)) {
-      // Not something sent to the bot.
-      return;
+      const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
+
+      const commandResults = commandRegex.exec(message);
+
+      if (commandResults === null) {
+        // Not something sent to the bot.
+        return;
+      }
+
+      console.log(
+          '<', `${from.getUsername()}$${from.getUserId()}`, from.getChannelId(),
+          message);
+
+      const result = await this.runCommand(
+          this, from, Array.of(...commandResults) as [string, string, string]);
+    } else {
+      // Support commands that can be executed without the normal prefix.
+
+      // TODO(joshua): This should be set per server.
+
+      const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
+
+      const commandResults = commandRegex.exec(_message);
+
+      if (commandResults === null) {
+        // Not something sent to the bot.
+        return;
+      }
+
+      const [_, name, rest] =
+          Array.of(...commandResults) as [string, string, string];
+
+      if (!this.getCommandSupportsTopLevel(name)) {
+        // Not something sent to the bot.
+        return;
+      }
+
+      console.log(
+          '<', `${from.getUsername()}$${from.getUserId()}`, from.getChannelId(),
+          _message);
+
+      const result = await this.runCommand(this, from, [_, name, rest]);
     }
-
-    const message = _message.substr(this.config.prefix.length);
-
-    // console.log(message);
-
-    const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
-
-    const commandResults = commandRegex.exec(message);
-
-    if (commandResults === null) {
-      // Not something sent to the bot.
-      return;
-    }
-
-    console.log(
-        '<', `${from.getUsername()}$${from.getUserId()}`, from.getChannelId(),
-        message);
-
-    const result = await this.runCommand(
-        this, from, Array.of(...commandResults) as [string, string, string]);
   }
 }
 
@@ -393,7 +424,7 @@ export class D20Bot extends Bot {
         this.commandRoll);
     this.addCommand(
         'randchar', 'Rolls a random character', this.commandRandChar);
-    this.addCommand('pf', '(BETA) Pathfinder Tools', this.commandPf);
+    this.addCommand('pf', '(BETA) Pathfinder Tools', this.commandPf, true);
   }
 
   async init() {

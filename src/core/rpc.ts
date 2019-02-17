@@ -34,7 +34,7 @@ export abstract class Context {
 }
 
 class Marshal {
-  constructor(readonly MarshalCallback: Core.RPC.MarshalCallback) {}
+  constructor(readonly marshalCallback: Core.RPC.MarshalCallback) {}
 }
 
 export class MarshalNotFoundError extends Error {
@@ -48,32 +48,51 @@ export class ControllerImpl {
 
   async execute(
       ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
-    const [firstValue, ...rest] = chain;
-    if (typeof (firstValue) !== 'string') {
+    const [first, ...rest] = chain;
+
+    if (typeof (first) !== 'string') {
       throw new Error('First Chain value is not a string');
     }
 
-    const Marshal = this.marshals.get(firstValue);
+    const firstValue = this.getCommand(first);
 
-    if (Marshal === undefined) {
+    if (firstValue === undefined) {
       throw new MarshalNotFoundError('');
     }
 
-    await Marshal.MarshalCallback(ctx, rpcCtx, rest);
+    const marshal = this.marshals.get(firstValue)!;
+
+    await marshal.marshalCallback(ctx, rpcCtx, rest);
   }
 
   hasMarshal(chain: Core.Value[]): boolean {
-    const [firstValue, ...rest] = chain;
+    const [first, ...rest] = chain;
 
-    if (typeof (firstValue) !== 'string') {
+    if (typeof (first) !== 'string') {
       return false;
     }
 
-    return this.marshals.has(firstValue);
+    const firstValue = this.getCommand(first);
+    if (firstValue === undefined) {
+      return false;
+    } else {
+      return this.marshals.has(firstValue);
+    }
   }
 
   addMarshal(name: string, MarshalCallback: Core.RPC.MarshalCallback): void {
     this.marshals.set(name, new Marshal(MarshalCallback));
+  }
+
+  getCommand(name: string): string|undefined {
+    const result = [...this.marshals].find(
+        ([key, _]) => key.toLowerCase() === name.toLowerCase());
+
+    if (result === undefined) {
+      return undefined;
+    } else {
+      return result[0];
+    }
   }
 }
 

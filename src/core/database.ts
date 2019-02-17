@@ -29,7 +29,8 @@ export class Database {
     }
 
     const row = await this.db.get<T>(
-        `SELECT * from ${tableSpec.name} WHERE ${tableSpec.nameColumn} = ?`,
+        `SELECT * from ${tableSpec.name} WHERE ${
+            tableSpec.nameColumn} = ? COLLATE NOCASE`,
         name);
 
     return row;
@@ -43,7 +44,7 @@ export class Database {
 
     const rows = await this.db.all<T>(
         `SELECT * from ${tableSpec.name} WHERE ${
-            tableSpec.nameColumn} LIKE ? LIMIT ?`,
+            tableSpec.nameColumn} LIKE ? LIMIT ? COLLATE NOCASE`,
         `%${search}%`, limit);
 
     return rows;

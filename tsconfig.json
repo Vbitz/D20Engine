@@ -6,10 +6,10 @@
     "baseUrl": "./src",
     "allowJs": true,
     "declaration": false,
-    "target": "es2015",
+    "target": "es2017",
     "lib": [
       "dom",
-      "es2015"
+      "es2017"
     ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
