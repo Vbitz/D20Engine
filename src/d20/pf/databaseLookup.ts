@@ -1,0 +1,357 @@
+import * as Core from 'core';
+import * as PF from 'd20/pf';
+
+import * as path from 'path';
+import TurndownService from 'turndown';
+
+export class DatabaseLookupParameters extends Core.ComponentParameters {}
+
+interface Monster {
+  Name: string;
+  CR: string;
+  XP: string;
+  Race: string;
+  Class: string;
+  MonsterSource: string;
+  Alignment: string;
+  Size: string;
+  Type: string;
+  SubType: string;
+  Init: string;
+  Senses: string;
+  Aura: string;
+  AC: string;
+  AC_Mods: string;
+  HP: string;
+  HD: string;
+  HP_Mods: string;
+  Saves: string;
+  Fort: string;
+  Ref: string;
+  Will: string;
+  Save_Mods: string;
+  DefensiveAbilities: string;
+  DR: string;
+  Immune: string;
+  Resist: string;
+  SR: string;
+  Weaknesses: string;
+  Speed: string;
+  Speed_Mod: string;
+  Melee: string;
+  Ranged: string;
+  Space: string;
+  Reach: string;
+  SpecialAttacks: string;
+  SpellLikeAbilities: string;
+  SpellsKnown: string;
+  SpellsPrepared: string;
+  SpellDomains: string;
+  AbilityScores: string;
+  AbilityScore_Mods: string;
+  BaseAtk: string;
+  CMB: string;
+  CMD: string;
+  Feats: string;
+  Skills: string;
+  RacialMods: string;
+  Languages: string;
+  SQ: string;
+  Environment: string;
+  Organization: string;
+  Treasure: string;
+  Description_Visual: string;
+  Group: string;
+  Source: string;
+  IsTemplate: string;
+  SpecialAbilities: string;
+  Description: string;
+  FullText: string;
+  Gender: string;
+  Bloodline: string;
+  ProhibitedSchools: string;
+  BeforeCombat: string;
+  DuringCombat: string;
+  Morale: string;
+  Gear: string;
+  OtherGear: string;
+  Vulnerability: string;
+  Note: string;
+  CharacterFlag: string;
+  CompanionFlag: string;
+  Fly: string;
+  Climb: string;
+  Burrow: string;
+  Swim: string;
+  Land: string;
+  TemplatesApplied: string;
+  OffenseNote: string;
+  BaseStatistics: string;
+  ExtractsPrepared: string;
+  AgeCategory: string;
+  DontUseRacialHD: string;
+  VariantParent: string;
+  Mystery: string;
+  ClassArchetypes: string;
+  Patron: string;
+  CompanionFamiliarLink: string;
+  FocusedSchool: string;
+  Traits: string;
+  AlternateNameForm: string;
+  StatisticsNote: string;
+  LinkText: string;
+  id: string;
+  UniqueMonster: string;
+  MR: string;
+  Mythic: string;
+  MT: string;
+}
+
+interface Spell {
+  name: string;
+  school: string;
+  subschool: string;
+  descriptor: string;
+  spell_level: string;
+  casting_time: string;
+  components: string;
+  costly_components: string;
+  range: string;
+  area: string;
+  effect: string;
+  targets: string;
+  duration: string;
+  dismissible: string;
+  shapeable: string;
+  saving_throw: string;
+  spell_resistence: string;
+  description: string;
+  description_formated: string;
+  source: string;
+  full_text: string;
+  verbal: string;
+  somatic: string;
+  material: string;
+  focus: string;
+  divine_focus: string;
+  sor: string;
+  wiz: string;
+  cleric: string;
+  druid: string;
+  ranger: string;
+  bard: string;
+  paladin: string;
+  alchemist: string;
+  summoner: string;
+  witch: string;
+  inquisitor: string;
+  oracle: string;
+  antipaladin: string;
+  magus: string;
+  adept: string;
+  deity: string;
+  SLA_Level: string;
+  domain: string;
+  short_description: string;
+  acid: string;
+  air: string;
+  chaotic: string;
+  cold: string;
+  curse: string;
+  darkness: string;
+  death: string;
+  disease: string;
+  earth: string;
+  electricity: string;
+  emotion: string;
+  evil: string;
+  fear: string;
+  fire: string;
+  force: string;
+  good: string;
+  language_dependent: string;
+  lawful: string;
+  light: string;
+  mind_affecting: string;
+  pain: string;
+  poison: string;
+  shadow: string;
+  sonic: string;
+  water: string;
+  linktext: string;
+  id: string;
+  material_costs: string;
+  bloodline: string;
+  patron: string;
+  mythic_text: string;
+  augmented: string;
+  mythic: string;
+  bloodrager: string;
+  shaman: string;
+  psychic: string;
+  medium: string;
+  mesmerist: string;
+  occultist: string;
+  spiritualist: string;
+  skald: string;
+  investigator: string;
+  hunter: string;
+  haunt_statistics: string;
+  ruse: string;
+  draconic: string;
+  meditative: string;
+  summoner_unchained: string;
+}
+
+interface MagicItem {
+  Name: string;
+  Aura: string;
+  CL: string;
+  Slot: string;
+  Price: string;
+  Weight: string;
+  Description: string;
+  Requirements: string;
+  Cost: string;
+  Group: string;
+  Source: string;
+  AL: string;
+  Int: string;
+  Wis: string;
+  Cha: string;
+  Ego: string;
+  Communication: string;
+  Senses: string;
+  Powers: string;
+  MagicItems: string;
+  FullText: string;
+  Destruction: string;
+  MinorArtifactFlag: string;
+  MajorArtifactFlag: string;
+  Abjuration: string;
+  Conjuration: string;
+  Divination: string;
+  Enchantment: string;
+  Evocation: string;
+  Necromancy: string;
+  Transmutation: string;
+  AuraStrength: string;
+  WeightValue: string;
+  PriceValue: string;
+  CostValue: string;
+  Languages: string;
+  BaseItem: string;
+  LinkText: string;
+  id: string;
+  Mythic: string;
+  LegendaryWeapon: string;
+  Illusion: string;
+  Universal: string;
+  Scaling: string;
+}
+
+type RenderCallback = (short: boolean, arg: any) => string;
+
+export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
+  private db = new Core.Database.Database();
+
+  private turndownService =
+      new TurndownService({bulletListMarker: '-', codeBlockStyle: 'fenced'});
+
+  constructor() {
+    super(new DatabaseLookupParameters());
+
+    // Discord doesn't support heading or rules so disable them in turndown.
+    this.turndownService.addRule('discord', {
+      filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'hr'],
+      replacement: (content) => `${content}\n`
+    })
+  }
+
+  async onCreate(ctx: Core.Context) {
+    this.db.loadSqlite(path.join(
+        await Core.getResourcePath(), 'restricted', 'pathfinder', 'database',
+        'pathfinder.db'));
+
+    this.addRPCMarshal(
+        'spell',
+        this.handleRPC.bind(
+            this, {name: 'spells', nameColumn: 'name'}, this.renderSpell));
+
+    this.addRPCMarshal(
+        'magicItem',
+        this.handleRPC.bind(
+            this, {name: 'magic_items', nameColumn: 'Name'},
+            this.renderMagicItem));
+
+    this.addRPCMarshal(
+        'monster',
+        this.handleRPC.bind(
+            this, {name: 'monsters', nameColumn: 'Name'}, this.renderMonster));
+  }
+
+  private async handleRPC(
+      tableSpec: Core.Database.TableSpecification, renderer: RenderCallback,
+      ctx: Core.Context, rpcCtx: Core.RPC.Context,
+      chain: Core.Value[]): Promise<void> {
+    console.log(tableSpec, chain);
+
+    if (chain.length < 2) {
+      throw new Error('Usage: get|search <name>');
+    }
+
+    const [firstValue, name, ...rest] = chain;
+
+    let nameValue = '';
+
+    if (typeof (name) === 'string') {
+      nameValue = name;
+    } else {
+      throw new Error('Not Implemented');
+    }
+
+    if (firstValue === 'get') {
+      const row = await this.db.get<any>(tableSpec, nameValue);
+
+      if (row === undefined) {
+        await rpcCtx.reply(`Spell not found: ${nameValue}`);
+      } else {
+        await rpcCtx.reply(renderer.call(this, false, row));
+      }
+    } else if (firstValue === 'search') {
+      const rows = await this.db.search(tableSpec, nameValue);
+
+      let reply = '';
+
+      for (const row of rows) {
+        reply += renderer.call(this, true, row) + '\n';
+      }
+
+      await rpcCtx.reply(reply);
+    }
+  }
+
+  private renderMonster(short: boolean, monster: Monster) {
+    if (short) {
+      return monster.Name;
+    }
+
+    return this.turndownService.turndown(monster.FullText);
+  }
+
+  private renderMagicItem(short: boolean, magicItem: MagicItem) {
+    if (short) {
+      return magicItem.Name;
+    }
+
+    return this.turndownService.turndown(magicItem.FullText);
+  }
+
+  private renderSpell(short: boolean, spell: Spell) {
+    if (short) {
+      return spell.name;
+    }
+
+    return this.turndownService.turndown(spell.full_text);
+  }
+}

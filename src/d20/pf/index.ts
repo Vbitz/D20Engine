@@ -1,9 +1,12 @@
 import {CharacterTracker, CharacterTrackerParameters} from './characterTracker';
 import {Controller, ControllerParameters} from './controller';
+import {DatabaseLookup, DatabaseLookupParameters} from './databaseLookup';
 
 export {
   CharacterTracker,
-  CharacterTrackerParameters as CharacterTrackerParameters,
+  CharacterTrackerParameters,
   Controller,
-  ControllerParameters
+  ControllerParameters,
+  DatabaseLookup,
+  DatabaseLookupParameters
 }

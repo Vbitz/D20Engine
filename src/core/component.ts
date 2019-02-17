@@ -157,6 +157,14 @@ export abstract class Component<T extends ComponentParameters> extends
     return this._addRPCMarshal(name, MarshalCallback);
   }
 
+  addRPCAlias(name: string, alias: string[]) {
+    this.addRPCMarshal(name, async (ctx, rpcCtx, chain) => {
+      return await rpcCtx.chainRPC(
+          ctx, this as any as Core.Component<Core.ComponentParameters>,
+          [...alias, ...chain]);
+    });
+  }
+
   hasRPCMarshal(chain: Core.Value[]) {
     return this._hasRPCMarshal(chain);
   }

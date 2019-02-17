@@ -14,6 +14,12 @@ export async function botReplMain(args: string[]) {
         target: DiscordBot.ReplyTarget): Promise<void> {
       console.log('>', message);
     }
+
+    async replyRich(
+        from: DiscordBot.MessageFrom,
+        embed: DiscordBot.DiscordRichMessage): Promise<void> {
+      console.log('>', embed);
+    }
   }
 
   class ReplMessageFrom extends DiscordBot.MessageFrom {
@@ -36,6 +42,8 @@ export async function botReplMain(args: string[]) {
   const bot = new DiscordBot.D20Bot(
       {token: '', oauth2_client_id: '', prefix: 'd20 ', channelLock: ''},
       backend);
+
+  await bot.init();
 
   const server = repl.start({
     prompt: '> ',

@@ -8,10 +8,16 @@
     "declaration": false,
     "target": "es2015",
     "lib": [
+      "dom",
       "es2015"
     ],
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./typings"
+    ],
+    "esModuleInterop": true
   },
   "include": [
     "src/*.ts",

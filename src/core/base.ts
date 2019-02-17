@@ -10,6 +10,7 @@ const exists = promisify(_exists);
 const CONFIG_FILENAME = 'd20Engine.config.json';
 
 const SAVE_DIRECTORY = 'save';
+const RESOURCE_DIRECTORY = 'res';
 
 export interface GameLike {
   readonly game: Core.Game;
@@ -108,4 +109,10 @@ export async function getSavePath(): Promise<string> {
   const rootPath = await getRootPath(__dirname);
 
   return path.join(rootPath, SAVE_DIRECTORY);
+}
+
+export async function getResourcePath(): Promise<string> {
+  const rootPath = await getRootPath(__dirname);
+
+  return path.join(rootPath, RESOURCE_DIRECTORY);
 }

@@ -47,7 +47,12 @@ export class CharacterTracker extends
 
       let hpChangeValue = toNumber(hpChange);
 
-      this.parameters.currentHitPoints += hpChangeValue;
+      this.parameters.currentHitPoints = Math.min(
+          this.parameters.currentHitPoints + hpChangeValue,
+          this.parameters.maxHitPoints);
+
+      await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
+          this.parameters.maxHitPoints}`);
     });
   }
 }

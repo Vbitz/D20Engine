@@ -123,11 +123,27 @@ export abstract class BotBackend extends EventEmitter {
   abstract reply(from: MessageFrom, message: string, target: ReplyTarget):
       Promise<void>;
 
+  // This API will be generalized
+  abstract replyRich(from: MessageFrom, embed: DiscordRichMessage):
+      Promise<void>;
+
   on(id: 'message',
      cb: (evt: {from: MessageFrom, message: string}) => void): this {
     super.on(id, cb);
     return this;
   }
+}
+
+export interface DiscordRichMessage {
+  author?: {icon_url?: string, name: string, url?: string};
+  color?: number;
+  description?: string;
+  fields?: [{name: string, value?: string, inline?: boolean}];
+  thumbnail?: {url: string};
+  title: string;
+  timestamp?: Date;
+  url?: string;
+  footer?: {icon_url?: string, text: string};
 }
 
 export class DiscordBot extends BotBackend {
@@ -170,6 +186,23 @@ export class DiscordBot extends BotBackend {
     });
   }
 
+  replyRich(from: MessageFrom, embed: DiscordRichMessage): Promise<void> {
+    return new Promise((res, rej) => {
+      if (!(from instanceof DiscordMessageFrom)) {
+        rej(new Error('Not implemented'));
+        return;
+      }
+
+      console.log('>', from.getUsername(), embed);
+
+      const bot = this.bot;
+
+      bot.sendMessage({to: from.channelID, embed}, () => {
+        res();
+      });
+    });
+  }
+
   async start() {
     this.bot.connect();
 
@@ -203,8 +236,18 @@ export class DiscordBot extends BotBackend {
   private * paginateMessage(message: string): IterableIterator<string> {
     // TODO(joshua): Improve the splitting point.
 
-    for (let i = 0; i < message.length; i += 2000) {
-      const toSend = message.substring(i, Math.min(message.length, i + 2000));
+    for (let i = 0; i < message.length;) {
+      let toSend = '';
+      const sendString =
+          message.substring(i, Math.min(message.length, i + 2000));
+      if (sendString.lastIndexOf('\n') > 1800) {
+        const lastIndex = sendString.lastIndexOf('\n');
+        toSend = message.substring(i, Math.min(message.length, lastIndex));
+        i += lastIndex;
+      } else {
+        toSend = sendString;
+        i += 2000;
+      }
       yield toSend;
     }
   }
@@ -350,8 +393,19 @@ export class D20Bot extends Bot {
         this.commandRoll);
     this.addCommand(
         'randchar', 'Rolls a random character', this.commandRandChar);
-    this.addCommand(
-        'pf', '(BETA) Pathfinder Character Tracker', this.commandPf);
+    this.addCommand('pf', '(BETA) Pathfinder Tools', this.commandPf);
+  }
+
+  async init() {
+    const PF = await import('d20/pf');
+
+    this.rpcServer = await this.game.contextCall(async (ctx) => {
+      const controllerEntity = ctx.createEntity();
+
+      await controllerEntity.addComponent(ctx, new PF.Controller());
+
+      return this.game.createRPCServer(controllerEntity);
+    });
   }
 
   async commandRoll(from: MessageFrom, message: string) {
@@ -407,20 +461,8 @@ export class D20Bot extends Bot {
   }
 
   async commandPf(from: MessageFrom, message: string) {
-    if (this.rpcServer === null) {
-      const PF = await import('d20/pf');
-
-      this.rpcServer = await this.game.contextCall(async (ctx) => {
-        const controllerEntity = ctx.createEntity();
-
-        controllerEntity.addComponent(ctx, new PF.Controller());
-
-        return this.game.createRPCServer(controllerEntity);
-      });
-    }
-
     const chain = shlex.split(message);
 
-    await this.rpcServer.execute(new D20RPCContext(this, from), chain);
+    await this.rpcServer!.execute(new D20RPCContext(this, from), chain);
   }
 }

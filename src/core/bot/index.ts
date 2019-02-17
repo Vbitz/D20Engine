@@ -7,6 +7,8 @@ export async function botMain(args: string[]) {
   const config = JSON.parse(readFileSync(__dirname + '/config.json', 'utf8'));
   const discordBot = new D20Bot(config, new DiscordBot(config.token));
 
+  await discordBot.init();
+
   // discordBot.addPlugin(new CharacterTracker(discordBot));
 
   if (args[0] === 'auth') {
