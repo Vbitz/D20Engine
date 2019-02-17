@@ -37,7 +37,7 @@ export class CharacterTracker extends
     this.addRPCMarshal('setMaxHp', async (ctx, rpcCtx, chain) => {
       const [newMaxHP, ...rest] = chain;
 
-      let newMaxHPValue = toNumber(newMaxHP);
+      const newMaxHPValue = toNumber(newMaxHP);
 
       this.parameters.maxHitPoints = newMaxHPValue;
     });
@@ -45,7 +45,7 @@ export class CharacterTracker extends
     this.addRPCMarshal('addHp', async (ctx, rpcCtx, chain) => {
       const [hpChange, ...rest] = chain;
 
-      let hpChangeValue = toNumber(hpChange);
+      const hpChangeValue = toNumber(hpChange);
 
       this.parameters.currentHitPoints = Math.min(
           this.parameters.currentHitPoints + hpChangeValue,

@@ -86,8 +86,8 @@ export class AbstractEventController {
   }
 
   protected _addRPCMarshal(
-      name: string, MarshalCallback: Core.RPC.MarshalCallback) {
-    return this.rpcController.addMarshal(name, MarshalCallback);
+      name: string, marshalCallback: Core.RPC.MarshalCallback) {
+    return this.rpcController.addMarshal(name, marshalCallback);
   }
 
   protected _hasRPCMarshal(chain: Core.Value[]) {

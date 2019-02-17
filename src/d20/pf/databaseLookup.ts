@@ -256,6 +256,7 @@ enum RenderType {
   Full
 }
 
+// tslint:disable-next-line:no-any
 type RenderCallback = (type: RenderType, arg: any) => string;
 
 export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
@@ -271,7 +272,7 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
     this.turndownService.addRule('discord', {
       filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'hr'],
       replacement: (content) => `${content}\n`
-    })
+    });
   }
 
   async onCreate(ctx: Core.Context) {
@@ -317,6 +318,7 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
     }
 
     if (firstValue === 'get') {
+      // tslint:disable-next-line:no-any
       const row = await this.db.get<any>(tableSpec, nameValue);
 
       if (row === undefined) {

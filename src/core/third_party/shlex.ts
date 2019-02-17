@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // From: https://github.com/rgov/node-shlex/blob/master/shlex.js
 
@@ -16,9 +16,9 @@ class Shlexer {
   escapedQuotes: string;
   debug: boolean;
 
-  constructor(string: string) {
+  constructor(value: string) {
     this.i = 0;
-    this.string = string;
+    this.string = value;
 
     /**
      * Characters that will be considered whitespace and skipped. Whitespace
@@ -143,7 +143,7 @@ class Shlexer {
       token = (token || '') + char;
     }
   }
-};
+}
 
 
 /**
@@ -154,7 +154,7 @@ class Shlexer {
  */
 export function split(s: string): string[] {
   return Array.from(new Shlexer(s));
-};
+}
 
 /**
  * Escapes a potentially shell-unsafe string using quotes.
@@ -167,10 +167,10 @@ export function quote(s: string): string {
     return '\'\'';
   }
 
-  var unsafeRe = /[^\w@%\-+=:,./]/;
+  const unsafeRe = /[^\w@%\-+=:,./]/;
   if (!unsafeRe.test(s)) {
     return s;
   }
 
   return '\'' + s.replace(/'/g, '\'"\'"\'') + '\'';
-};
+}

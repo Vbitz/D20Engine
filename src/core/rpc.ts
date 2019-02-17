@@ -80,8 +80,8 @@ export class ControllerImpl {
     }
   }
 
-  addMarshal(name: string, MarshalCallback: Core.RPC.MarshalCallback): void {
-    this.marshals.set(name, new Marshal(MarshalCallback));
+  addMarshal(name: string, marshalCallback: Core.RPC.MarshalCallback): void {
+    this.marshals.set(name, new Marshal(marshalCallback));
   }
 
   getCommand(name: string): string|undefined {
