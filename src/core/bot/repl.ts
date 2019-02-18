@@ -23,6 +23,12 @@ export async function botReplMain(args: string[]) {
   }
 
   class ReplMessageFrom extends DiscordBot.MessageFrom {
+    isDirectMessage(): boolean {
+      return false;
+    }
+    isUserInServer(serverID: string): boolean {
+      return true;
+    }
     channelMatches(channelID: string): boolean {
       return true;
     }
@@ -40,7 +46,13 @@ export async function botReplMain(args: string[]) {
   const backend = new ReplBackend();
 
   const bot = new DiscordBot.D20Bot(
-      {token: '', oauth2_client_id: '', prefix: 'd20 ', channelLock: ''},
+      {
+        token: '',
+        oauth2_client_id: '',
+        prefix: 'd20 ',
+        channelLock: '',
+        directMessageLock: ''
+      },
       backend);
 
   await bot.init();

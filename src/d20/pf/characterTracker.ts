@@ -29,30 +29,35 @@ export class CharacterTracker extends
   }
 
   async onCreate(ctx: Core.Context) {
-    this.addRPCMarshal('hp', async (ctx, rpcCtx, chain) => {
-      await rpcCtx.reply(`Current HP: ${this.parameters.currentHitPoints}/${
-          this.parameters.maxHitPoints}`);
-    });
+    this.addRPCMarshal(
+        'hp', ' : Get current hitpoints value.', async (ctx, rpcCtx, chain) => {
+          await rpcCtx.reply(`Current HP: ${this.parameters.currentHitPoints}/${
+              this.parameters.maxHitPoints}`);
+        });
 
-    this.addRPCMarshal('setMaxHp', async (ctx, rpcCtx, chain) => {
-      const [newMaxHP, ...rest] = chain;
+    this.addRPCMarshal(
+        'setMaxHp', '<newValue> : Set a new maximum hitpoints value.',
+        async (ctx, rpcCtx, chain) => {
+          const [newMaxHP, ...rest] = chain;
 
-      const newMaxHPValue = toNumber(newMaxHP);
+          const newMaxHPValue = toNumber(newMaxHP);
 
-      this.parameters.maxHitPoints = newMaxHPValue;
-    });
+          this.parameters.maxHitPoints = newMaxHPValue;
+        });
 
-    this.addRPCMarshal('addHp', async (ctx, rpcCtx, chain) => {
-      const [hpChange, ...rest] = chain;
+    this.addRPCMarshal(
+        'addHp', '<change> : Add or subtract from current HP.',
+        async (ctx, rpcCtx, chain) => {
+          const [hpChange, ...rest] = chain;
 
-      const hpChangeValue = toNumber(hpChange);
+          const hpChangeValue = toNumber(hpChange);
 
-      this.parameters.currentHitPoints = Math.min(
-          this.parameters.currentHitPoints + hpChangeValue,
-          this.parameters.maxHitPoints);
+          this.parameters.currentHitPoints = Math.min(
+              this.parameters.currentHitPoints + hpChangeValue,
+              this.parameters.maxHitPoints);
 
-      await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
-          this.parameters.maxHitPoints}`);
-    });
+          await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
+              this.parameters.maxHitPoints}`);
+        });
   }
 }

@@ -8,6 +8,7 @@ export interface DiscordBotConfig {
   oauth2_client_id: string;
   prefix: string;
   channelLock: string;
+  directMessageLock: string;
 }
 
 const PERMISSIONS_INT = 2048;
@@ -17,10 +18,13 @@ export abstract class MessageFrom {
   abstract getUsername(): string;
   abstract getUserId(): string;
   abstract getChannelId(): string;
+  abstract isDirectMessage(): boolean;
+  abstract isUserInServer(serverID: string): boolean;
 }
 
 export class DiscordMessageFrom extends MessageFrom {
   constructor(
+      private owner: DiscordBot, public directMessage: boolean,
       public user: string, public userID: string, public channelID: string) {
     super();
   }
@@ -39,6 +43,14 @@ export class DiscordMessageFrom extends MessageFrom {
 
   getChannelId(): string {
     return this.channelID;
+  }
+
+  isDirectMessage(): boolean {
+    return this.directMessage;
+  }
+
+  isUserInServer(serverID: string): boolean {
+    return this.owner.isUserInServer(this.userID, serverID);
   }
 }
 
@@ -224,9 +236,12 @@ export class DiscordBot extends BotBackend {
     });
 
     this.bot.on('message', async (user, userID, channelID, message, evt) => {
-      this.emit(
-          'message',
-          {from: new DiscordMessageFrom(user, userID, channelID), message});
+      this.emit('message', {
+        from: new DiscordMessageFrom(
+            this, channelID in this.bot.directMessages, user, userID,
+            channelID),
+        message
+      });
     });
 
     this.bot.on('disconnect', () => {
@@ -236,6 +251,12 @@ export class DiscordBot extends BotBackend {
 
   async stop() {
     this.bot.disconnect();
+  }
+
+  isUserInServer(userID: string, serverID: string) {
+    console.log(serverID, serverID in this.bot.servers);
+    return serverID in this.bot.servers
+        && userID in this.bot.servers[serverID].members;
   }
 
   /**
@@ -350,6 +371,21 @@ export class Bot extends CommandHandler {
   }
 
   private async onMessage(from: MessageFrom, _message: string) {
+    if (from.isDirectMessage()
+        && from.isUserInServer(this.config.directMessageLock)) {
+      const split = this.splitMessage(_message);
+
+      if (split === undefined) {
+        return;
+      }
+
+      const [_, name, rest] = split;
+
+      await this.executeCommand(from, split);
+
+      return;
+    }
+
     if (!from.channelMatches(this.config.channelLock)) {  // vbitz#botspam
       return;
     }
@@ -357,49 +393,59 @@ export class Bot extends CommandHandler {
     if (_message.startsWith(this.config.prefix)) {
       const message = _message.substr(this.config.prefix.length);
 
-      const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
+      const split = this.splitMessage(_message);
 
-      const commandResults = commandRegex.exec(message);
-
-      if (commandResults === null) {
-        // Not something sent to the bot.
+      if (split === undefined) {
         return;
       }
 
-      console.log(
-          '<', `${from.getUsername()}$${from.getUserId()}`, from.getChannelId(),
-          message);
-
-      const result = await this.runCommand(
-          this, from, Array.of(...commandResults) as [string, string, string]);
+      await this.executeCommand(from, split);
     } else {
       // Support commands that can be executed without the normal prefix.
 
       // TODO(joshua): This should be set per server.
 
-      const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
+      const split = this.splitMessage(_message);
 
-      const commandResults = commandRegex.exec(_message);
-
-      if (commandResults === null) {
-        // Not something sent to the bot.
+      if (split === undefined) {
         return;
       }
 
-      const [_, name, rest] =
-          Array.of(...commandResults) as [string, string, string];
+      const [_, name, rest] = split;
 
       if (!this.getCommandSupportsTopLevel(name)) {
         // Not something sent to the bot.
         return;
       }
 
-      console.log(
-          '<', `${from.getUsername()}$${from.getUserId()}`, from.getChannelId(),
-          _message);
-
-      const result = await this.runCommand(this, from, [_, name, rest]);
+      await this.executeCommand(from, split);
     }
+  }
+
+  private splitMessage(message: string): [string, string, string]|undefined {
+    const commandRegex = /([a-zA-Z0-9_]+)(.*)/;
+
+    const commandResults = commandRegex.exec(message);
+
+    if (commandResults === null) {
+      // Not something sent to the bot.
+      return undefined;
+    }
+
+    const [_, name, rest] =
+        Array.of(...commandResults) as [string, string, string];
+
+    return [_, name, rest];
+  }
+
+  private async executeCommand(from: MessageFrom, [_, name, rest]: [
+    string, string, string
+  ]) {
+    console.log(
+        '<', `${from.getUsername()}$${from.getUserId()}`,
+        from.isDirectMessage() ? 'DIRECT' : from.getChannelId(), [name, rest]);
+
+    const result = await this.runCommand(this, from, [_, name, rest]);
   }
 }
 
@@ -409,6 +455,10 @@ export class D20RPCContext extends Core.RPC.Context {
   }
 
   async reply(text: string): Promise<void> {
+    return await this.bot.reply(this.from, text);
+  }
+
+  async replyUser(text: string): Promise<void> {
     return await this.bot.reply(this.from, text);
   }
 
@@ -502,6 +552,16 @@ export class D20Bot extends Bot {
   async commandPf(from: MessageFrom, message: string) {
     const chain = shlex.split(message);
 
-    await this.rpcServer!.execute(new D20RPCContext(this, from), chain);
+    try {
+      await this.rpcServer!.execute(new D20RPCContext(this, from), chain);
+    } catch (err) {
+      if (err instanceof Core.RPC.MarshalNotFoundError) {
+        return;
+      } else if (err instanceof Core.RPC.MarshalUsageError) {
+        await this.reply(from, `Error: ${err.message}`, ReplyTarget.User);
+      } else {
+        this.reportError(err);
+      }
+    }
   }
 }

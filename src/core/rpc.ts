@@ -17,6 +17,7 @@ export abstract class Context {
   }
 
   abstract reply(text: string): Promise<void>;
+  abstract replyUser(text: string): Promise<void>;
 
   abstract getUserID(): string;
 
@@ -34,7 +35,9 @@ export abstract class Context {
 }
 
 class Marshal {
-  constructor(readonly marshalCallback: Core.RPC.MarshalCallback) {}
+  constructor(
+      readonly marshalCallback: Core.RPC.MarshalCallback,
+      readonly helpText: string) {}
 }
 
 export class MarshalNotFoundError extends Error {
@@ -43,11 +46,25 @@ export class MarshalNotFoundError extends Error {
   }
 }
 
+export class MarshalUsageError extends Error {
+  constructor(message: string) {
+    super(`Usage: ${message}`);
+  }
+}
+
 export class ControllerImpl {
   private marshals: Map<string, Marshal> = new Map();
 
   async execute(
       ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
+    if (chain.length === 0) {
+      // If we are at the end of the chain and there is not a special handler
+      // then print help.
+      await this.printHelp(ctx, rpcCtx);
+
+      return;
+    }
+
     const [first, ...rest] = chain;
 
     if (typeof (first) !== 'string') {
@@ -80,8 +97,10 @@ export class ControllerImpl {
     }
   }
 
-  addMarshal(name: string, marshalCallback: Core.RPC.MarshalCallback): void {
-    this.marshals.set(name, new Marshal(marshalCallback));
+  addMarshal(
+      name: string, helpText: string,
+      marshalCallback: Core.RPC.MarshalCallback): void {
+    this.marshals.set(name, new Marshal(marshalCallback, helpText));
   }
 
   getCommand(name: string): string|undefined {
@@ -93,6 +112,14 @@ export class ControllerImpl {
     } else {
       return result[0];
     }
+  }
+
+  private async printHelp(ctx: Core.Context, rpcCtx: Core.RPC.Context) {
+    let ret = ``;
+    for (const [name, marshal] of this.marshals) {
+      ret += `\`${name}\` - ${marshal.helpText}\n`;
+    }
+    await rpcCtx.replyUser(ret);
   }
 }
 

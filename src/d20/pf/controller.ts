@@ -17,27 +17,54 @@ export class Controller extends Core.Component<ControllerParameters> {
 
     await this.databaseLookup.addComponent(ctx, new PF.DatabaseLookup());
 
-    this.addRPCMarshal('ct', async (ctx, rpcCtx, chain) => {
-      const character = await this.getCharacter(ctx, rpcCtx.getUserID());
+    this.addRPCMarshal(
+        'ct', ' : (BETA) Character Tracker', async (ctx, rpcCtx, chain) => {
+          const character = await this.getCharacter(ctx, rpcCtx.getUserID());
 
-      return await rpcCtx.chainRPC(ctx, character, chain);
-    });
+          return await rpcCtx.chainRPC(ctx, character, chain);
+        });
 
-    this.addRPCMarshal('lookup', async (ctx, rpcCtx, chain) => {
-      return await rpcCtx.chainRPC(ctx, this.databaseLookup!, chain);
-    });
+    this.addRPCMarshal(
+        'lookup', ' : Database Lookup', async (ctx, rpcCtx, chain) => {
+          return await rpcCtx.chainRPC(ctx, this.databaseLookup!, chain);
+        });
 
-    this.addRPCAlias('findSpell', ['lookup', 'spell', 'search']);
-    this.addRPCAlias('findMonster', ['lookup', 'monster', 'search']);
-    this.addRPCAlias('findMagicItem', ['lookup', 'magicItem', 'search']);
-    this.addRPCAlias('findItem', ['lookup', 'magicItem', 'search']);
-    this.addRPCAlias('findFeat', ['lookup', 'feat', 'search']);
+    this.addRPCAlias(
+        'findSpell', '<searchTerm> : Search for a spell.',
+        ['lookup', 'spell', 'search']);
+    this.addRPCAlias(
+        'findMonster', '<searchTerm> : Search for a monster.',
+        ['lookup', 'monster', 'search']);
+    this.addRPCAlias(
+        'findMagicItem', '<searchTerm> : Search for a magic item.',
+        ['lookup', 'magicItem', 'search']);
+    this.addRPCAlias(
+        'findItem', '<searchTerm> : Search for a magic item.',
+        ['lookup', 'magicItem', 'search']);
+    this.addRPCAlias(
+        'findFeat', '<searchTerm> : Search for a feat.',
+        ['lookup', 'feat', 'search']);
 
-    this.addRPCAlias('getSpell', ['lookup', 'spell', 'get']);
-    this.addRPCAlias('getMonster', ['lookup', 'monster', 'get']);
-    this.addRPCAlias('getMagicItem', ['lookup', 'magicItem', 'get']);
-    this.addRPCAlias('getItem', ['lookup', 'magicItem', 'get']);
-    this.addRPCAlias('getFeat', ['lookup', 'feat', 'get']);
+    this.addRPCAlias(
+        'getSpell',
+        '<name> -full : Get details on a spell. Pass -full for complete details.',
+        ['lookup', 'spell', 'get']);
+    this.addRPCAlias(
+        'getMonster',
+        '<name> -full : Get details on a monster. Pass -full for complete details.',
+        ['lookup', 'monster', 'get']);
+    this.addRPCAlias(
+        'getMagicItem',
+        '<name> -full : Get details on a magic item. Pass -full for complete details.',
+        ['lookup', 'magicItem', 'get']);
+    this.addRPCAlias(
+        'getItem',
+        '<name> -full : Get details on a magic item. Pass -full for complete details.',
+        ['lookup', 'magicItem', 'get']);
+    this.addRPCAlias(
+        'getFeat',
+        '<name> -full : Get details on a feat. Pass -full for complete details.',
+        ['lookup', 'feat', 'get']);
   }
 
   private async getCharacter(ctx: Core.Context, id: string):

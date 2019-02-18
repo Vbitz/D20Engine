@@ -153,12 +153,14 @@ export abstract class Component<T extends ComponentParameters> extends
     return await this._executeRPC(ctx, rpcCtx, chain);
   }
 
-  addRPCMarshal(name: string, marshalCallback: Core.RPC.MarshalCallback) {
-    return this._addRPCMarshal(name, marshalCallback);
+  addRPCMarshal(
+      name: string, helpText: string,
+      marshalCallback: Core.RPC.MarshalCallback) {
+    return this._addRPCMarshal(name, helpText, marshalCallback);
   }
 
-  addRPCAlias(name: string, alias: string[]) {
-    this.addRPCMarshal(name, async (ctx, rpcCtx, chain) => {
+  addRPCAlias(name: string, helpText: string, alias: string[]) {
+    this.addRPCMarshal(name, helpText, async (ctx, rpcCtx, chain) => {
       return await rpcCtx.chainRPC(
           // tslint:disable-next-line:no-any
           ctx, this as any as Core.Component<Core.ComponentParameters>,

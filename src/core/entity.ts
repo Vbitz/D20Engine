@@ -34,6 +34,17 @@ export class Entity extends Core.AbstractEventController {
   async executeRPC(
       ctx: Core.Context, rpcCtx: Core.RPC.Context,
       chain: Core.Value[]): Promise<void> {
+    if (chain.length === 0) {
+      // Empty chains invoke the help command.
+      await this._executeRPC(ctx, rpcCtx, chain);
+
+      for (const component of this.componentList) {
+        await component.executeRPC(ctx, rpcCtx, chain);
+      }
+
+      return;
+    }
+
     if (this.hasRPCMarshal(chain)) {
       return await this._executeRPC(ctx, rpcCtx, chain);
     }
@@ -47,8 +58,10 @@ export class Entity extends Core.AbstractEventController {
     throw new Core.RPC.MarshalNotFoundError('');
   }
 
-  addRPCMarshal(name: string, marshalCallback: Core.RPC.MarshalCallback) {
-    return this._addRPCMarshal(name, marshalCallback);
+  addRPCMarshal(
+      name: string, helpText: string,
+      marshalCallback: Core.RPC.MarshalCallback) {
+    return this._addRPCMarshal(name, helpText, marshalCallback);
   }
 
   hasRPCMarshal(chain: Core.Value[]) {

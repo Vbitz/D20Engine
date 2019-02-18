@@ -321,24 +321,25 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
           'pathfinder.db'));
 
       this.addRPCMarshal(
-          'spell',
+          'spell', 'get <name> -full | search <name> : Search for a spell.',
           this.handleRPC.bind(
               this, {name: 'spells', nameColumn: 'name'}, this.renderSpell));
 
       this.addRPCMarshal(
           'magicItem',
+          'get <name> -full | search <name> : Search for a magic item.',
           this.handleRPC.bind(
               this, {name: 'magic_items', nameColumn: 'Name'},
               this.renderMagicItem));
 
       this.addRPCMarshal(
-          'monster',
+          'monster', 'get <name> -full | search <name> : Search for a monster.',
           this.handleRPC.bind(
               this, {name: 'monsters', nameColumn: 'Name'},
               this.renderMonster));
 
       this.addRPCMarshal(
-          'feat',
+          'feat', 'get <name> -full | search <name> : Search for a feat.',
           this.handleRPC.bind(
               this, {name: 'feats', nameColumn: 'name'}, this.renderFeat));
     } catch (err) {
@@ -354,7 +355,7 @@ export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
     console.log(tableSpec, chain);
 
     if (chain.length < 2) {
-      throw new Error('Usage: get <name> -full | search <name>');
+      throw new Core.RPC.MarshalUsageError('get <name> -full | search <name>');
     }
 
     const [firstValue, name, ...rest] = chain;
