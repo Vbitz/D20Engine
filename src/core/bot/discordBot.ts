@@ -14,6 +14,8 @@ export interface DiscordBotConfig {
 const PERMISSIONS_INT = 2048;
 
 export abstract class MessageFrom {
+  prefix = '';
+
   abstract channelMatches(channelID: string): boolean;
   abstract getUsername(): string;
   abstract getUserId(): string;
@@ -86,7 +88,7 @@ export class CommandHandler {
           continue;
         }
 
-        ret += `${this.config.prefix}${name}: ${command.helpText}\n`;
+        ret += `${from.prefix}${name}: ${command.helpText}\n`;
       }
 
       await this.reply(from, ret, ReplyTarget.User);
@@ -381,6 +383,8 @@ export class Bot extends CommandHandler {
 
       const [_, name, rest] = split;
 
+      from.prefix = '';
+
       await this.executeCommand(from, split);
 
       return;
@@ -398,6 +402,8 @@ export class Bot extends CommandHandler {
       if (split === undefined) {
         return;
       }
+
+      from.prefix = this.config.prefix;
 
       await this.executeCommand(from, split);
     } else {
@@ -417,6 +423,8 @@ export class Bot extends CommandHandler {
         // Not something sent to the bot.
         return;
       }
+
+      from.prefix = '';
 
       await this.executeCommand(from, split);
     }
