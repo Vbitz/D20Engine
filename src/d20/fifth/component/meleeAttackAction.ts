@@ -2,13 +2,9 @@ import * as Core from 'core';
 import {publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
-export const getAttackRoll: () => Core.DiceSpecification =
-    `d20.fifth.component.meleeAttackAction.getAttackRoll` as
-    Core.EventDeclaration;
+export const getAttackRoll = new Core.Event<() => Core.DiceSpecification>();
 
-export const getDamageRoll: () => Core.DiceSpecification =
-    `d20.fifth.component.meleeAttackAction.getDamageRoll` as
-    Core.EventDeclaration;
+export const getDamageRoll = new Core.Event<() => Core.DiceSpecification>();
 
 export class MeleeAttackActionParameters extends Core.ComponentParameters {
   @publicField name: string;

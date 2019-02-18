@@ -133,7 +133,7 @@ export abstract class Component<T extends ComponentParameters> extends
    * @param evt
    * @param cb The callback to be executed for the handler.
    */
-  registerHandler<T extends Core.EventSignature>(
+  registerHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>) {
     this._registerHandler(evt, cb);
   }
@@ -143,7 +143,7 @@ export abstract class Component<T extends ComponentParameters> extends
    * by `Context`.
    * @param evt The event to get handlers for.
    */
-  getHandlers<T extends Core.EventSignature>(evt: T) {
+  getHandlers<T extends Core.EventDeclaration>(evt: T) {
     return this._getHandlers(evt);
   }
 

@@ -16,7 +16,7 @@ export class Entity extends Core.AbstractEventController {
    * @param evt
    * @param cb The callback to be executed for the handler.
    */
-  registerHandler<T extends Core.EventSignature>(
+  registerHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>) {
     this._registerHandler(evt, cb);
   }
@@ -26,7 +26,7 @@ export class Entity extends Core.AbstractEventController {
    * by `Context`.
    * @param evt The event to get handlers for.
    */
-  getHandlers<T extends Core.EventSignature>(evt: T) {
+  getHandlers<T extends Core.EventDeclaration>(evt: T) {
     return this._getHandlers(evt).concat(
         ...this.componentList.map((comp) => comp.getHandlers(evt)));
   }

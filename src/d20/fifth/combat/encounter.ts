@@ -1,23 +1,17 @@
 import * as Core from 'core';
 import * as Fifth from 'd20/fifth';
 
-export const createEncounter: () => Core.Entity =
-    'd20.fifth.combat.encounter.create' as Core.EventDeclaration;
+export const createEncounter = new Core.Event<() => Core.Entity>();
 
-export const addCreature: (entity: Core.Entity) => void =
-    'd20.fifth.combat.encounter.addCreature' as Core.EventDeclaration;
+export const addCreature = new Core.Event<(entity: Core.Entity) => void>();
 
-export const startEncounter: () => void =
-    'd20.fifth.combat.encounter.start' as Core.EventDeclaration;
+export const startEncounter = new Core.Event<() => void>();
 
-export const stopEncounter: () => void =
-    'd20.fifth.combat.encounter.stop' as Core.EventDeclaration;
+export const stopEncounter = new Core.Event<() => void>();
 
-export const getEncounter: () => Core.Entity =
-    'd20.fifth.combat.encounter.get' as Core.EventDeclaration;
+export const getEncounter = new Core.Event<() => Core.Entity>();
 
-export const getParticipants: () => Core.Entity[] =
-    `d20.fifth.combat.encounter.getParticipants` as Core.EventDeclaration;
+export const getParticipants = new Core.Event<() => Core.Entity[]>();
 
 export class EncounterParameters extends Core.ComponentParameters {}
 

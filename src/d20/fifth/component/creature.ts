@@ -2,23 +2,17 @@ import * as Core from 'core';
 import {publicDiceRollField, publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
-export const getInitiativeRoll: () => Core.DiceSpecification =
-    'd20.fifth.component.creature.getInitiativeRoll' as Core.EventDeclaration;
+export const getInitiativeRoll = new Core.Event<() => Core.DiceSpecification>();
 
-export const getArmorClass: () => Core.DiceSpecification =
-    `d20.fifth.component.creature.getArmorClass` as Core.EventDeclaration;
+export const getArmorClass = new Core.Event<() => Core.DiceSpecification>();
 
-export const getHitPoints: () => Core.DiceSpecification =
-    `d20.fifth.component.creature.getHitPoints` as Core.EventDeclaration;
+export const getHitPoints = new Core.Event<() => Core.DiceSpecification>();
 
-export const isDead: () => boolean =
-    `d20.fifth.component.creature.isDead` as Core.EventDeclaration;
+export const isDead = new Core.Event<() => boolean>();
 
-export const doTurn: () => void =
-    `d20.fifth.component.creature.doTurn` as Core.EventDeclaration;
+export const doTurn = new Core.Event<() => void>();
 
-export const doAttack: (args: {target: Core.Entity}) => void =
-    `d20.fifth.component.creature.doAttack` as Core.EventDeclaration;
+export const doAttack = new Core.Event<(args: {target: Core.Entity}) => void>();
 
 export interface DamageArguments {
   source: Core.Entity;
@@ -26,8 +20,8 @@ export interface DamageArguments {
   amount: Core.DiceSpecification;
 }
 
-export const doDamage: (args: DamageArguments) => Core.Dice.DiceResults =
-    `d20.fifth.component.creature.doDamage` as Core.EventDeclaration;
+export const doDamage =
+    new Core.Event<(args: DamageArguments) => Core.Dice.DiceResults>();
 
 export class CreatureParameters extends Core.ComponentParameters {
   @publicEnumField(Fifth.Size) size: Fifth.Size;

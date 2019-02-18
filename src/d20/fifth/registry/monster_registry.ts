@@ -2,11 +2,10 @@ import * as Core from 'core';
 
 export type CreateMonsterCallback = (ctx: Core.Context) => Core.Entity;
 
-export const registerMonster: (name: string, cb: CreateMonsterCallback) =>
-    void = 'd20.creature_registry.register' as Core.EventDeclaration;
+export const registerMonster =
+    new Core.Event<(name: string, cb: CreateMonsterCallback) => void>();
 
-export const createMonster: (name: string) => Core.Entity =
-    'd20.creature_registry.create' as Core.EventDeclaration;
+export const createMonster = new Core.Event<(name: string) => Core.Entity>();
 
 export class CreatureRegistryModule extends Core.Module {
   register(name: string, cb: CreateMonsterCallback) {

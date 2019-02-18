@@ -26,7 +26,8 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  addPatch<T extends Core.EventSignature>(evt: T, cb: Core.HandlerCallback<T>) {
+  addPatch<T extends Core.EventDeclaration>(
+      evt: T, cb: Core.HandlerCallback<T>) {
     this._registerHandler(evt, cb);
   }
 
@@ -36,7 +37,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerRootHandler<T extends Core.EventSignature>(
+  registerRootHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>) {
     this.game.registerHandler(evt, cb);
   }
@@ -48,7 +49,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerEntityHandler<T extends Core.EventSignature>(
+  registerEntityHandler<T extends Core.EventDeclaration>(
       ent: Core.Entity, evt: T, cb: Core.HandlerCallback<T>) {
     ent.registerHandler(evt, cb);
   }
@@ -60,7 +61,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerComponentHandler<T extends Core.EventSignature>(
+  registerComponentHandler<T extends Core.EventDeclaration>(
       comp: Core.Component<Core.ComponentParameters>, evt: T,
       cb: Core.HandlerCallback<T>) {
     comp.registerHandler(evt, cb);
@@ -72,7 +73,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to call.
    * @param args A list of arguments to call the event with.
    */
-  callEvent<T extends Core.EventSignature>(
+  callEvent<T extends Core.EventDeclaration>(
       ent: Core.Entity, evt: T, ...args: Core.EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Add parent handlers to this list.
 
@@ -98,7 +99,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to call.
    * @param args A list of arguments to call the event with.
    */
-  callRootEvent<T extends Core.EventSignature>(
+  callRootEvent<T extends Core.EventDeclaration>(
       evt: T, ...args: Core.EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Add parent handlers to this list.
 
@@ -127,8 +128,8 @@ export class Context extends Core.AbstractEventController {
    * Cancel a handler by returning this value.
    * @param value The value to return from the event.
    */
-  cancel<T extends Core.Event.EventReturnType>(value: T) {
-    return new Core.Event.EventCancel(value);
+  cancel<T extends Core.EventReturnType>(value: T) {
+    return new Core.EventCancel(value);
   }
 
   protected _getEntity(): Core.Entity {

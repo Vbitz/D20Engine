@@ -21,11 +21,10 @@ export interface CombatResults {
   damageResult?: Core.Dice.DiceResults;
 }
 
-export const runCombat: (args: CombatArguments) => CombatResults =
-    'd20.fifth.combat.runCombat' as Core.EventDeclaration;
+export const runCombat =
+    new Core.Event<(args: CombatArguments) => CombatResults>();
 
-export const getCurrentCombatAction: () => CombatAction =
-    `d20.fifth.combat.getCurrentCombatAction` as Core.EventDeclaration;
+export const getCurrentCombatAction = new Core.Event<() => CombatAction>();
 
 export class CombatAction {
   constructor(readonly args: CombatArguments) {}

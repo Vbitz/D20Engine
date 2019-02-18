@@ -30,19 +30,19 @@ export type NonNullableValue =
 export type Value = JSONObject<PrimitiveValue>|PrimitiveValue;
 
 export interface EventController {
-  _registerHandler<T extends Core.EventSignature>(
+  _registerHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>): void;
 
-  _getHandlers<T extends Core.EventSignature>(evt: T):
+  _getHandlers<T extends Core.EventDeclaration>(evt: T):
       Array<Core.HandlerCallback<T>>;
 
-  _callHandlers<T extends Core.EventSignature>(
+  _callHandlers<T extends Core.EventDeclaration>(
       ctx: Core.Context, evt: T, handlers: Array<Core.HandlerCallback<T>>,
-      args: Core.Event.EventArgs<T>): Core.Action<T>;
+      args: Core.EventArgs<T>): Core.Action<T>;
 }
 
 export class AbstractEventController {
-  private eventController = new Core.Event.EventControllerImpl();
+  private eventController = new Core.EventControllerImpl();
   private rpcController = new Core.RPC.ControllerImpl();
 
   /**
@@ -50,7 +50,7 @@ export class AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  protected _registerHandler<T extends Core.EventSignature>(
+  protected _registerHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>): void {
     this.eventController._registerHandler(evt, cb);
   }
@@ -60,7 +60,7 @@ export class AbstractEventController {
    * registered.
    * @param evt The event to get handlers for.
    */
-  protected _getHandlers<T extends Core.EventSignature>(evt: T):
+  protected _getHandlers<T extends Core.EventDeclaration>(evt: T):
       Array<Core.HandlerCallback<T>> {
     return this.eventController._getHandlers(evt);
   }
@@ -73,9 +73,9 @@ export class AbstractEventController {
    * @param handlers The list of handlers to try calling.
    * @param args The array of arguments to call the event with.
    */
-  protected _callHandlers<T extends Core.EventSignature>(
+  protected _callHandlers<T extends Core.EventDeclaration>(
       ctx: Core.Context, evt: T, handlers: Array<Core.HandlerCallback<T>>,
-      args: Core.Event.EventArgs<T>): Core.Action<T> {
+      args: Core.EventArgs<T>): Core.Action<T> {
     return this.eventController._callHandlers(ctx, evt, handlers, args);
   }
 

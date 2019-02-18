@@ -1,3 +1,5 @@
+// TODO(joshua): The exported items here need to be refactored.
+
 import {Action} from './action';
 import {AbstractEventController, EventController, GameLike, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
 import * as Common from './common';
@@ -7,8 +9,7 @@ import * as Database from './database';
 import * as Dice from './dice';
 import {DiceGenerator, DiceSpecification} from './dice';
 import {Entity} from './entity';
-import * as Event from './event';
-import {EventArgs, EventDeclaration, EventSignature, HandlerCallback} from './event';
+import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback} from './event';
 import {Game} from './game';
 import {Module} from './module';
 import * as RPC from './rpc';
@@ -28,8 +29,12 @@ export {
   EntityContext,
   Event,
   EventArgs,
+  EventCancel,
   EventController,
+  EventControllerImpl,
   EventDeclaration,
+  EventPublicReturnValue,
+  EventReturnType,
   EventSignature,
   Game,
   GameLike,

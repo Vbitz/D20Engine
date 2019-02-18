@@ -1,7 +1,20 @@
 import * as Core from 'core';
 
-// tslint:disable-next-line:no-any
-export type EventDeclaration = any;
+export class Event<T extends EventSignature> {
+  readonly callback?: T;
+
+  readonly id: string|symbol;
+
+  constructor(name?: string) {
+    if (name !== undefined) {
+      this.id = name;
+    } else {
+      this.id = Symbol();
+    }
+  }
+}
+
+export type EventDeclaration = Event<Core.EventSignature>;
 
 // I want to be able to force a serializable value here. The reason `any` works
 // here is it disables type checking.
@@ -16,33 +29,39 @@ export type EventReturnType = any;
  */
 export type EventSignature = (...args: EventArgumentType[]) => EventReturnType;
 
+export type GetEventSignature<T extends EventDeclaration> =
+    Exclude<T['callback'], undefined>;
+
 /**
  *
  * Based on:
  * https://stackoverflow.com/questions/51851677/how-to-get-argument-types-from-function-in-typescript
  */
-export type EventArgs<T extends Function> = T extends(...args: infer A) =>
-                                                         EventReturnType ?
+type EventArgsInternal<T extends Function> = T extends(...args: infer A) =>
+                                                          EventReturnType ?
     A :
     never;
 
+export type EventArgs<T extends EventDeclaration> =
+    EventArgsInternal<GetEventSignature<T>>;
 
-/**
- *
- */
-export type EventReturnValue<T extends EventSignature> =
+
+type EventReturnValueInternal<T extends EventSignature> =
     ReturnType<T>|EventCancel<ReturnType<T>>|undefined;
 
-/**
- *
- */
-export type EventPublicReturnValue<T extends EventSignature> =
+export type EventReturnValue<T extends EventDeclaration> =
+    EventReturnValueInternal<GetEventSignature<T>>;
+
+type EventPublicReturnValueInternal<T extends EventSignature> =
     ReturnType<T>|undefined;
+
+export type EventPublicReturnValue<T extends EventDeclaration> =
+    EventPublicReturnValueInternal<GetEventSignature<T>>;
 
 /**
  *
  */
-export type HandlerCallback<T extends EventSignature> =
+export type HandlerCallback<T extends EventDeclaration> =
     (ctx: Core.Context, ...args: EventArgs<T>) => Promise<EventReturnValue<T>>;
 
 export class EventCancel<T extends EventReturnType> {
@@ -90,22 +109,16 @@ class EventHandlerList {
  * or there are no more to execute.
  */
 export class EventControllerImpl implements Core.EventController {
-  private handlerList: Map<string, EventHandlerList> = new Map();
+  private handlerList: Map<string|symbol, EventHandlerList> = new Map();
 
   /**
    * Register a new handler for an event.
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  _registerHandler<T extends EventSignature>(evt: T, cb: HandlerCallback<T>) {
+  _registerHandler<T extends EventDeclaration>(evt: T, cb: HandlerCallback<T>) {
     // TODO(joshua): Should this support filters and priorities.
-
-    if (typeof (evt) !== 'string') {
-      throw new TypeError('evt should be a string');
-    }
-
-    // Validated using a runtime check.
-    const evtName = evt as string;
+    const evtName = evt.id;
 
     if (!this.handlerList.has(evtName)) {
       this.handlerList.set(evtName, new EventHandlerList());
@@ -119,13 +132,9 @@ export class EventControllerImpl implements Core.EventController {
    * registered.
    * @param evt The event to get handlers for.
    */
-  _getHandlers<T extends EventSignature>(evt: T) {
-    if (typeof (evt) !== 'string') {
-      throw new TypeError('evt should be a string');
-    }
-
+  _getHandlers<T extends EventDeclaration>(evt: T) {
     // Validated using a runtime check.
-    const evtName = evt as string;
+    const evtName = evt.id;
 
     if (!this.handlerList.has(evtName)) {
       return [];
@@ -142,7 +151,7 @@ export class EventControllerImpl implements Core.EventController {
    * @param handlers The list of handlers to try calling.
    * @param args The array of arguments to call the event with.
    */
-  _callHandlers<T extends EventSignature>(
+  _callHandlers<T extends EventDeclaration>(
       ctx: Core.Context, evt: T, handlers: Array<HandlerCallback<T>>,
       args: EventArgs<T>): Core.Action<T> {
     // TODO(joshua): Create HandlerContext
@@ -152,7 +161,7 @@ export class EventControllerImpl implements Core.EventController {
     });
   }
 
-  private async _callHandlersInternal<T extends EventSignature>(
+  private async _callHandlersInternal<T extends EventDeclaration>(
       ctx: Core.Context, handlers: Array<HandlerCallback<T>>,
       args: EventArgs<T>): Promise<EventPublicReturnValue<T>> {
     let ret: EventReturnValue<T> = undefined;

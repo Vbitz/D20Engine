@@ -1,8 +1,8 @@
 import * as Core from 'core';
 
 // Event Description.
-const diceRollEvent: (args: {hello: 'world'|'test'}) => number =
-    'core.diceRollEvent' as Core.Event.EventDeclaration;
+const diceRollEvent =
+    new Core.Event<(args: {hello: 'world'|'test'}) => number>();
 
 class DiceRollModule extends Core.Module {
   async onCreate(ctx: Core.Context) {
