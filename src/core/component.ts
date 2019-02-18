@@ -15,11 +15,6 @@ type SerializableFieldNames<T> = {
 // Get all fields that derive from Core.Value (can be serialized).
 type SerializableFields<T> = Pick<T, SerializableFieldNames<T>>;
 
-// Flag all component fields as optional.
-type ComponentFields<T> = {
-  [s in keyof T]?: T[s]
-};
-
 function getTypeFromConstructor(
     type: NumberConstructor|StringConstructor|BooleanConstructor) {
   if (type === Number) {
@@ -107,21 +102,50 @@ export class ComponentParameters {
   }
 }
 
+/**
+ * Components are stateless objects that contain the business logic for
+ * ComponentParameters. Components can morph the state of ComponentParameters
+ * though calls to setState.
+ */
 export abstract class Component<T extends ComponentParameters> extends
     Core.AbstractEventController {
   private owner: Core.Entity|undefined = undefined;
 
-  constructor(readonly parameters: T) {
+  constructor(private _parameters: T) {
     super();
   }
 
+  // TODO(joshua): No hacking allowed this will freeze parameters in the future.
+  // Looks like adding that will require using a proxy.
+  get parameters(): Readonly<SerializableFields<T>> {
+    return this._parameters;
+  }
+
   /**
-   * Warning: Do not look at implementation. Contains mad science.
-   * @param obj
+   * Generally speaking you only want to call this to initialize an object.
+   * Access may change in the future so don't rely on this as an easy
+   * replacement to setState.
+   * @param obj The set of fields to load for this component.
    */
-  load(obj: ComponentFields<SerializableFields<T>>): this {
+  load(obj: Partial<SerializableFields<T>>): this {
     for (const key of Object.keys(obj) as Array<keyof SerializableFields<T>>) {
-      this.parameters[key] = (obj as SerializableFields<T>)[key];
+      this._parameters[key] = (obj as SerializableFields<T>)[key];
+    }
+
+    return this;
+  }
+
+  /**
+   * Morphs the state of this component. This is an asynchronous function that
+   * requires a valid content due to the future implementation plan for
+   * serialization and time travel.
+   * @param ctx The content being used to modify this component.
+   * @param obj The set of fields to load for this component.
+   */
+  async setState(ctx: Core.Context, obj: Partial<SerializableFields<T>>):
+      Promise<this> {
+    for (const key of Object.keys(obj) as Array<keyof SerializableFields<T>>) {
+      this._parameters[key] = (obj as SerializableFields<T>)[key];
     }
 
     return this;

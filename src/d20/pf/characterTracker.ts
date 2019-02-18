@@ -42,7 +42,7 @@ export class CharacterTracker extends
 
           const newMaxHPValue = toNumber(newMaxHP);
 
-          this.parameters.maxHitPoints = newMaxHPValue;
+          await this.setState(ctx, {maxHitPoints: newMaxHPValue});
         });
 
     this.addRPCMarshal(
@@ -52,9 +52,11 @@ export class CharacterTracker extends
 
           const hpChangeValue = toNumber(hpChange);
 
-          this.parameters.currentHitPoints = Math.min(
-              this.parameters.currentHitPoints + hpChangeValue,
-              this.parameters.maxHitPoints);
+          await this.setState(ctx, {
+            currentHitPoints: Math.min(
+                this.parameters.currentHitPoints + hpChangeValue,
+                this.parameters.maxHitPoints)
+          });
 
           await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
               this.parameters.maxHitPoints}`);
