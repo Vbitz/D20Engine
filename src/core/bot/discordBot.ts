@@ -393,7 +393,7 @@ export class Bot extends CommandHandler {
     if (_message.startsWith(this.config.prefix)) {
       const message = _message.substr(this.config.prefix.length);
 
-      const split = this.splitMessage(_message);
+      const split = this.splitMessage(message);
 
       if (split === undefined) {
         return;
