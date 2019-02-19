@@ -118,7 +118,7 @@ export abstract class Component<T extends ComponentParameters> extends
   // TODO(joshua): No hacking allowed this will freeze parameters in the future.
   // Looks like adding that will require using a proxy.
   get parameters(): Readonly<SerializableFields<T>> {
-    return this._parameters;
+    return this._parameters as unknown as Readonly<SerializableFields<T>>;
   }
 
   /**

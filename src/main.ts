@@ -8,6 +8,7 @@ import {frontendGeneratorTest} from 'tools/frontendGeneratorTest';
 import {diceMain} from 'core/dice.main';
 import {replMain} from 'tools/repl';
 import {botReplMain} from 'core/bot/repl';
+import {monsterImportMain} from 'd20/pf/monster';
 
 async function main(args: string[]) {
   if (args[0] === 'test:ecs') {
@@ -24,6 +25,8 @@ async function main(args: string[]) {
     return await replMain(args.slice(2));
   } else if (args[0] === 'bot:repl') {
     return await botReplMain(args.slice(2));
+  } else if (args[0] === 'pf:monster:import') {
+    return await monsterImportMain(args.slice(2));
   } else {
     throw new Error('Invalid Entry Point');
   }
