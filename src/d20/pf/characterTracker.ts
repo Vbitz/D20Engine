@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import * as Game from 'libgame';
 
 export class CharacterTrackerParameters extends Core.ComponentParameters {
   maxHitPoints: number;
@@ -24,6 +25,8 @@ function toNumber(value: Core.Value): number {
 
 export class CharacterTracker extends
     Core.Component<CharacterTrackerParameters> {
+  static currentHitPoints = Game.Property<number>();
+
   constructor() {
     super(new CharacterTrackerParameters());
   }
@@ -61,5 +64,8 @@ export class CharacterTracker extends
           await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
               this.parameters.maxHitPoints}`);
         });
+
+    Game.propertyImplementation(
+        ctx, this, CharacterTracker.currentHitPoints, 'currentHitPoints');
   }
 }

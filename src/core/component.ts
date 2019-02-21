@@ -4,16 +4,16 @@ import * as Core from 'core';
 
 import {ComponentSpecification, PublicFieldDescription, PublicFieldType} from './frontendCommon/renderer';
 
-interface ComponentPublicFields {
+export interface ComponentPublicFields {
   __publicFields?: Map<string, PublicFieldDescription>;
 }
 
-type SerializableFieldNames<T> = {
+export type SerializableFieldNames<T> = {
   [K in keyof T]: T[K] extends Core.Value ? K : never
 }[keyof T];
 
 // Get all fields that derive from Core.Value (can be serialized).
-type SerializableFields<T> = Pick<T, SerializableFieldNames<T>>;
+export type SerializableFields<T> = Pick<T, SerializableFieldNames<T>>;
 
 function getTypeFromConstructor(
     type: NumberConstructor|StringConstructor|BooleanConstructor) {
