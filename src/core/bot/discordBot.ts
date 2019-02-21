@@ -276,7 +276,7 @@ export class DiscordBot extends BotBackend {
           message.substring(i, Math.min(message.length, i + 2000));
       if (sendString.lastIndexOf('\n') > 1800) {
         const lastIndex = sendString.lastIndexOf('\n');
-        toSend = message.substring(i, Math.min(message.length, lastIndex));
+        toSend = message.substring(i, Math.min(message.length, i + lastIndex));
         i += lastIndex;
       } else {
         toSend = sendString;
