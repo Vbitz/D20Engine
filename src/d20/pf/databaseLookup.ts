@@ -4,7 +4,7 @@ import * as PF from 'd20/pf';
 import * as path from 'path';
 import TurndownService from 'turndown';
 
-export class DatabaseLookupParameters extends Core.ComponentParameters {}
+class DatabaseLookupParameters extends Core.ComponentParameters {}
 
 enum RenderType {
   List,
@@ -36,6 +36,8 @@ const FEATS_TABLE = {
 };
 
 export class DatabaseLookup extends Core.Component<DatabaseLookupParameters> {
+  static readonly Parameters = DatabaseLookupParameters;
+
   private db = new Core.Database.Database();
 
   static readonly getSpells = new Core.Event<() => PF.Database.Spell[]>();

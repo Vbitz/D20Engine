@@ -1,7 +1,7 @@
 import * as Core from 'core';
 import * as Game from 'libgame';
 
-export class CharacterTrackerParameters extends Core.ComponentParameters {
+class CharacterTrackerParameters extends Core.ComponentParameters {
   maxHitPoints: number;
   currentHitPoints: number;
 
@@ -25,6 +25,8 @@ function toNumber(value: Core.Value): number {
 
 export class CharacterTracker extends
     Core.Component<CharacterTrackerParameters> {
+  static readonly Parameters = CharacterTrackerParameters;
+
   static currentHitPoints = Game.Property<number>();
 
   constructor() {

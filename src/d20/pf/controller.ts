@@ -1,13 +1,15 @@
 import * as Core from 'core';
 import * as PF from 'd20/pf';
 
-export class ControllerParameters extends Core.ComponentParameters {}
+class ControllerParameters extends Core.ComponentParameters {}
 
 function forceSign(v: number|null) {
   return (v || 0) > 0 ? '+' + (v || 0).toString(10) : (v || 0).toString(10);
 }
 
 export class Controller extends Core.Component<ControllerParameters> {
+  static readonly Parameters = ControllerParameters;
+
   private databaseLookup: Core.Entity|null = null;
 
   private characterList: Map<string, Core.Entity> = new Map();
