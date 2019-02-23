@@ -24,7 +24,9 @@ function getTypeFromConstructor(
   } else if (type === Boolean) {
     return PublicFieldType.Boolean;
   } else {
-    throw new Error('Unknown publicField type');
+    console.warn('Unknown publicField type', type);
+
+    return PublicFieldType.Unknown;
   }
 }
 

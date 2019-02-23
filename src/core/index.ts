@@ -1,7 +1,7 @@
 // TODO(joshua): The exported items here need to be refactored.
 
 import {Action} from './action';
-import {AbstractEventController, EventController, GameLike, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
+import {AbstractEventController, asString, EventController, GameLike, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
 import * as Common from './common';
 import {Component, ComponentParameters, SerializableFields} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
@@ -9,14 +9,15 @@ import * as Database from './database';
 import * as Dice from './dice';
 import {DiceGenerator, DiceSpecification} from './dice';
 import {Entity} from './entity';
-import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback} from './event';
-import {Game} from './game';
+import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback, NonNullableEventReturnValue} from './event';
+import {Game, GraphInterface} from './game';
 import {Module} from './module';
 import * as RPC from './rpc';
 
 export {
   AbstractEventController,
   Action,
+  asString,
   Common,
   Component,
   ComponentParameters,
@@ -41,11 +42,13 @@ export {
   getResourcePath,
   getSavePath,
   getVersion,
+  GraphInterface,
   HandlerCallback,
   Module,
   ModuleContext,
+  NonNullableEventReturnValue,
   NonNullableValue,
   RPC,
   SerializableFields as ComponentSerializableFields,
-  Value,
+  Value
 };

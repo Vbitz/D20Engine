@@ -53,6 +53,6 @@ propertyImplementation<Parameters extends Core.ComponentParameters>(
 
   ctx.registerComponentHandler(component, prop.set, async (ctx, value) => {
     await component.setState(
-        ctx, {[key]: value} as Partial<ReadableFields<Parameters>>);
+        ctx, {[key]: value} as unknown as Partial<ReadableFields<Parameters>>);
   });
 }

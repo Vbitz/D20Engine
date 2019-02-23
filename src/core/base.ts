@@ -29,6 +29,16 @@ export type NonNullableValue =
 
 export type Value = JSONObject<PrimitiveValue>|PrimitiveValue;
 
+export function asString(value: Core.Value): string {
+  if (typeof (value) === 'string') {
+    return value;
+  } else if (typeof (value) === 'number') {
+    return value.toString(10);
+  } else {
+    throw new Error('Not Implemented');
+  }
+}
+
 export interface EventController {
   _registerHandler<T extends Core.EventDeclaration>(
       evt: T, cb: Core.HandlerCallback<T>): void;
@@ -93,6 +103,12 @@ export class AbstractEventController {
 
   protected _hasRPCMarshal(chain: Core.Value[]) {
     return this.rpcController.hasMarshal(chain);
+  }
+
+  protected _generateGraph(
+      entityId: string|symbol, graphInterface: Core.GraphInterface) {
+    this.eventController.generateGraph(entityId, graphInterface);
+    this.rpcController.generateGraph(entityId, graphInterface);
   }
 }
 

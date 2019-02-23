@@ -496,6 +496,8 @@ export class D20Bot extends Bot {
   async init() {
     const PF = await import('d20/pf');
 
+    await this.game.registerModule(new PF.StatisticsBlock.Module());
+
     this.rpcServer = await this.game.contextCall(async (ctx) => {
       const controllerEntity = ctx.createEntity();
 

@@ -120,6 +120,14 @@ export class Context extends Core.AbstractEventController {
     return this.game.createEntity(this);
   }
 
+  createTransientEntity() {
+    return this.game.createTransientEntity(this);
+  }
+
+  isTransient(ent: Core.Entity) {
+    return this.game.isTransient(ent);
+  }
+
   addChildContext(ctx: Context) {
     this.children.add(ctx);
   }

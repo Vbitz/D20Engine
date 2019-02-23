@@ -68,6 +68,11 @@ export class Entity extends Core.AbstractEventController {
     return this._hasRPCMarshal(chain);
   }
 
+  generateGraph(graphInterface: Core.GraphInterface) {
+    graphInterface.addNode(this.uuid);
+    this._generateGraph(this.uuid, graphInterface);
+  }
+
   async addComponent(
       ctx: Core.Context, comp: Core.Component<Core.ComponentParameters>) {
     this.componentList.push(comp);

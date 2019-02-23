@@ -2,6 +2,7 @@ import {CharacterTracker, CharacterTrackerParameters} from './characterTracker';
 import {Controller, ControllerParameters} from './controller';
 import * as Database from './database';
 import {DatabaseLookup, DatabaseLookupParameters} from './databaseLookup';
+import {StatisticsBlock} from './statisticBlock';
 
 export {
   CharacterTracker,
@@ -10,5 +11,6 @@ export {
   ControllerParameters,
   Database,
   DatabaseLookup,
-  DatabaseLookupParameters
+  DatabaseLookupParameters,
+  StatisticsBlock
 };

@@ -58,6 +58,9 @@ type EventPublicReturnValueInternal<T extends EventSignature> =
 export type EventPublicReturnValue<T extends EventDeclaration> =
     EventPublicReturnValueInternal<GetEventSignature<T>>;
 
+export type NonNullableEventReturnValue<T extends EventDeclaration> =
+    ReturnType<GetEventSignature<T>>;
+
 /**
  *
  */
@@ -70,6 +73,8 @@ export class EventCancel<T extends EventReturnType> {
 
 // It's assumed that validation happens in user code.
 class EventHandlerList {
+  id = Symbol();
+
   // tslint:disable-next-line:no-any
   private handlers: Array<HandlerCallback<any>> = [];
 
@@ -159,6 +164,14 @@ export class EventControllerImpl implements Core.EventController {
     return new Core.Action(ctx, async () => {
       return await this._callHandlersInternal(ctx, handlers, args);
     });
+  }
+
+  generateGraph(entityId: string|symbol, graphInterface: Core.GraphInterface) {
+    for (const [key, marshal] of this.handlerList) {
+      graphInterface.addNode(
+          marshal.id, typeof (key) === 'symbol' ? undefined : key);
+      graphInterface.addEdge(entityId, marshal.id);
+    }
   }
 
   private async _callHandlersInternal<T extends EventDeclaration>(

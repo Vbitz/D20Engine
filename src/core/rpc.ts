@@ -35,6 +35,8 @@ export abstract class Context {
 }
 
 class Marshal {
+  id = Symbol();
+
   constructor(
       readonly marshalCallback: Core.RPC.MarshalCallback,
       readonly helpText: string) {}
@@ -114,6 +116,18 @@ export class ControllerImpl {
     }
   }
 
+  generateGraph(entityId: string|symbol, graphInterface: Core.GraphInterface) {
+    for (const [key, marshal] of this.marshals) {
+      graphInterface.addNode(marshal.id, key);
+      graphInterface.addEdge(entityId, marshal.id);
+    }
+  }
+
+  /**
+   * Replies through a RPCContext a markdown description of all registered RPCs.
+   * @param ctx
+   * @param rpcCtx
+   */
   private async printHelp(ctx: Core.Context, rpcCtx: Core.RPC.Context) {
     let ret = ``;
     for (const [name, marshal] of this.marshals) {

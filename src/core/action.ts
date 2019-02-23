@@ -20,4 +20,14 @@ export class Action<T extends Core.EventDeclaration> {
   call(): Promise<Core.EventPublicReturnValue<T>> {
     return this.dispatch();
   }
+
+  async callChecked(): Promise<Core.NonNullableEventReturnValue<T>> {
+    const returnValue = await this.call();
+
+    if (returnValue === undefined) {
+      throw new Error('Action.callChecked failed');
+    }
+
+    return returnValue;
+  }
 }
