@@ -23,7 +23,7 @@ export interface DamageArguments {
 export const doDamage =
     new Core.Event<(args: DamageArguments) => Core.Dice.DiceResults>();
 
-export class CreatureParameters extends Core.ComponentParameters {
+export class CreatureParameters extends Core.StatefulObject {
   @publicEnumField(Fifth.Size) size: Fifth.Size;
   @publicEnumField(Fifth.CreatureType) type: Fifth.CreatureType;
 

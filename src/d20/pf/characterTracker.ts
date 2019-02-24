@@ -1,7 +1,7 @@
 import * as Core from 'core';
 import * as Game from 'libgame';
 
-class CharacterTrackerParameters extends Core.ComponentParameters {
+class CharacterTrackerParameters extends Core.StatefulObject {
   maxHitPoints: number;
   currentHitPoints: number;
 
@@ -36,8 +36,8 @@ export class CharacterTracker extends
   async onCreate(ctx: Core.Context) {
     this.addRPCMarshal(
         'hp', ' : Get current hitpoints value.', async (ctx, rpcCtx, chain) => {
-          await rpcCtx.reply(`Current HP: ${this.parameters.currentHitPoints}/${
-              this.parameters.maxHitPoints}`);
+          await rpcCtx.reply(`Current HP: ${this.state.currentHitPoints}/${
+              this.state.maxHitPoints}`);
         });
 
     this.addRPCMarshal(
@@ -59,12 +59,12 @@ export class CharacterTracker extends
 
           await this.setState(ctx, {
             currentHitPoints: Math.min(
-                this.parameters.currentHitPoints + hpChangeValue,
-                this.parameters.maxHitPoints)
+                this.state.currentHitPoints + hpChangeValue,
+                this.state.maxHitPoints)
           });
 
-          await rpcCtx.reply(`New HP: ${this.parameters.currentHitPoints}/${
-              this.parameters.maxHitPoints}`);
+          await rpcCtx.reply(`New HP: ${this.state.currentHitPoints}/${
+              this.state.maxHitPoints}`);
         });
 
     Game.propertyImplementation(

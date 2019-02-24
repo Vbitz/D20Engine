@@ -3,7 +3,7 @@
 import {Action} from './action';
 import {AbstractEventController, asString, EventController, GameLike, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
 import * as Common from './common';
-import {Component, ComponentParameters, SerializableFields} from './component';
+import {Component, SerializableFields, StatefulObject} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
 import * as Database from './database';
 import * as Dice from './dice';
@@ -20,7 +20,6 @@ export {
   asString,
   Common,
   Component,
-  ComponentParameters,
   Context,
   Database,
   Dice,
@@ -49,6 +48,7 @@ export {
   NonNullableEventReturnValue,
   NonNullableValue,
   RPC,
-  SerializableFields as ComponentSerializableFields,
+  SerializableFields as ObjectSerializableFields,
+  StatefulObject,
   Value
 };

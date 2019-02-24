@@ -26,8 +26,8 @@ export function Property<T>(): Property<T> {
   };
 }
 
-type ReadableFields<Properties extends Core.ComponentParameters> =
-    Core.ComponentSerializableFields<Properties>;
+type ReadableFields<Properties extends Core.StatefulObject> =
+    Core.ObjectSerializableFields<Properties>;
 
 /**
  * Implements a property as a getter setter pair for component. Parameters
@@ -38,7 +38,7 @@ type ReadableFields<Properties extends Core.ComponentParameters> =
  * @param key The key of the component's parameters to use for storage.
  */
 export async function
-propertyImplementation<Parameters extends Core.ComponentParameters>(
+propertyImplementation<Parameters extends Core.StatefulObject>(
     ctx: Core.Context, component: Core.Component<Parameters>,
     prop: Property<Parameters[keyof ReadableFields<Parameters>]>,
     key: keyof ReadableFields<Parameters>) {
@@ -48,7 +48,7 @@ propertyImplementation<Parameters extends Core.ComponentParameters>(
   // TODO(joshua): It may be possible to make this a decorator.
 
   ctx.registerComponentHandler(component, prop.get, async (ctx) => {
-    return component.parameters[key];
+    return component.state[key];
   });
 
   ctx.registerComponentHandler(component, prop.set, async (ctx, value) => {

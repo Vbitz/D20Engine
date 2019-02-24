@@ -1,7 +1,7 @@
 import * as Core from 'core';
 import * as Fifth from 'd20/fifth';
 
-export class BasicMonsterAIParameters extends Core.ComponentParameters {
+export class BasicMonsterAIParameters extends Core.StatefulObject {
   action: string[];
 
   constructor() {

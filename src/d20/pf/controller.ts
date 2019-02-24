@@ -1,7 +1,7 @@
 import * as Core from 'core';
 import * as PF from 'd20/pf';
 
-class ControllerParameters extends Core.ComponentParameters {}
+class ControllerParameters extends Core.StatefulObject {}
 
 function forceSign(v: number|null) {
   return (v || 0) > 0 ? '+' + (v || 0).toString(10) : (v || 0).toString(10);
@@ -34,7 +34,8 @@ export class Controller extends Core.Component<ControllerParameters> {
         'rollStats',
         '<roll> : Roll a set of character statistics using dice roll <roll>',
         async (ctx, rpcCtx, chain) => {
-            return await this.rollStats(ctx, rpcCtx, chain)});
+          return await this.rollStats(ctx, rpcCtx, chain);
+        });
 
     this.addRPCMarshal(
         'lookup', ' : Database Lookup', async (ctx, rpcCtx, chain) => {
@@ -81,7 +82,7 @@ export class Controller extends Core.Component<ControllerParameters> {
 
   async rollStats(
       ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
-    let [roll, ...rest] = chain;
+    let [roll] = chain;
 
     if (roll === undefined) {
       roll = 'drop(4d6,-1)';

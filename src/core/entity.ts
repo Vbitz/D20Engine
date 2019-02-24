@@ -3,7 +3,7 @@ import * as Core from 'core';
 export class Entity extends Core.AbstractEventController {
   readonly uuid = Core.Common.createUUID();
 
-  private componentList: Array<Core.Component<Core.ComponentParameters>> = [];
+  private componentList: Array<Core.Component<Core.StatefulObject>> = [];
 
   get components() {
     // Shallow copy the components array.
@@ -79,7 +79,7 @@ export class Entity extends Core.AbstractEventController {
   }
 
   async addComponent(
-      ctx: Core.Context, comp: Core.Component<Core.ComponentParameters>) {
+      ctx: Core.Context, comp: Core.Component<Core.StatefulObject>) {
     this.componentList.push(comp);
 
     comp.setOwner(this);

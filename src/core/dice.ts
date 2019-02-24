@@ -7,8 +7,9 @@
  * - `repeat(d20, 6)` Like a for loop. Useful for random characters.
  */
 
-import * as Core from 'core';
+// import * as Core from 'core';
 
+import {expect, RandomFunction} from './common';
 import * as DiceParser from './dice.parser';
 
 export const enum DiceType {
@@ -109,7 +110,7 @@ export class SpecificationCompiler {
 export type CompilerCallback = (_: SpecificationCompiler) => DiceSpecification;
 
 export class DiceGenerator {
-  constructor(private randomProvider: Core.Common.RandomFunction) {}
+  constructor(private randomProvider: RandomFunction) {}
 
   execute(spec: DiceSpecification): DiceResults {
     const rolledSpec = this._execute(spec);
@@ -199,11 +200,11 @@ export class DiceGenerator {
             keptDice[keptDice.length - 1]}**,~~${droppedDice.join('~~,~~')}~~}`;
       }
 
-      return Core.Common.expect();
+      return expect();
     } else if (spec.kind === 'const') {
       return spec.value.toString(10);
     } else {
-      return Core.Common.expect();
+      return expect();
     }
   }
 

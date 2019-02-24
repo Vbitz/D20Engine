@@ -2,9 +2,9 @@ import 'reflect-metadata';
 
 import * as Core from 'core';
 
-import {ComponentSpecification, PublicFieldDescription, PublicFieldType} from './frontendCommon/renderer';
+import {ComponentSpecification as ObjectSpecification, PublicFieldDescription, PublicFieldType} from './frontendCommon/renderer';
 
-export interface ComponentPublicFields {
+export interface ObjectPublicFields {
   __publicFields?: Map<string, PublicFieldDescription>;
 }
 
@@ -30,9 +30,9 @@ function getTypeFromConstructor(
   }
 }
 
-function attachField<T extends ComponentParameters>(
+function attachField<T extends StatefulObject>(
     target: T, key: string, type: PublicFieldDescription) {
-  const fieldsObject = (target.constructor as ComponentPublicFields);
+  const fieldsObject = (target.constructor as ObjectPublicFields);
 
   if (fieldsObject.__publicFields === undefined) {
     fieldsObject.__publicFields = new Map();
@@ -42,7 +42,7 @@ function attachField<T extends ComponentParameters>(
 }
 
 // TODO(joshua): This should support better documentation.
-export function publicField<T extends ComponentParameters>(
+export function publicField<T extends StatefulObject>(
     target: T, propertyKey: string) {
   // target is a lie and doesn't really exist.
   const type = getTypeFromConstructor(
@@ -65,15 +65,14 @@ type EnumDeclaration = any;
  * @param enumDeclaration
  */
 export function publicEnumField(enumDeclaration: EnumDeclaration) {
-  return function t<T extends ComponentParameters>(
-      target: T, propertyKey: string) {
+  return function t<T extends StatefulObject>(target: T, propertyKey: string) {
     attachField(
         target, propertyKey,
         {type: PublicFieldType.Enum, members: enumDeclaration});
   };
 }
 
-export function publicDiceRollField<T extends ComponentParameters>(
+export function publicDiceRollField<T extends StatefulObject>(
     target: T, propertyKey: string) {
   // target is a lie and doesn't really exist.
   const type = getTypeFromConstructor(
@@ -86,9 +85,9 @@ export function publicDiceRollField<T extends ComponentParameters>(
   attachField(target, propertyKey, {type: PublicFieldType.DiceRoll});
 }
 
-export class ComponentParameters {
+export class StatefulObject {
   getPublicFields() {
-    const fieldsObject = (this.constructor as ComponentPublicFields);
+    const fieldsObject = (this.constructor as ObjectPublicFields);
 
     if (fieldsObject.__publicFields !== undefined) {
       return [...fieldsObject.__publicFields.entries()].map(([name, type]) => {
@@ -99,7 +98,7 @@ export class ComponentParameters {
     }
   }
 
-  getRendererSpecification(): ComponentSpecification {
+  getRendererSpecification(): ObjectSpecification {
     return {name: this.constructor.name, fields: this.getPublicFields()};
   }
 }
@@ -109,20 +108,20 @@ export class ComponentParameters {
  * ComponentParameters. Components can morph the state of ComponentParameters
  * though calls to setState.
  */
-export abstract class Component<T extends ComponentParameters> extends
+export abstract class Component<T extends StatefulObject> extends
     Core.AbstractEventController {
   readonly uuid = Core.Common.createUUID();
 
   private owner: Core.Entity|undefined = undefined;
 
-  constructor(private _parameters: T) {
+  constructor(private _state: T) {
     super();
   }
 
   // TODO(joshua): No hacking allowed this will freeze parameters in the future.
   // Looks like adding that will require using a proxy.
-  get parameters(): Readonly<SerializableFields<T>> {
-    return this._parameters as unknown as Readonly<SerializableFields<T>>;
+  get state(): Readonly<SerializableFields<T>> {
+    return this._state as unknown as Readonly<SerializableFields<T>>;
   }
 
   /**
@@ -133,7 +132,7 @@ export abstract class Component<T extends ComponentParameters> extends
    */
   load(obj: Partial<SerializableFields<T>>): this {
     for (const key of Object.keys(obj) as Array<keyof SerializableFields<T>>) {
-      this._parameters[key] = (obj as SerializableFields<T>)[key];
+      this._state[key] = (obj as SerializableFields<T>)[key];
     }
 
     return this;
@@ -149,7 +148,7 @@ export abstract class Component<T extends ComponentParameters> extends
   async setState(ctx: Core.Context, obj: Partial<SerializableFields<T>>):
       Promise<this> {
     for (const key of Object.keys(obj) as Array<keyof SerializableFields<T>>) {
-      this._parameters[key] = (obj as SerializableFields<T>)[key];
+      this._state[key] = (obj as SerializableFields<T>)[key];
     }
 
     return this;
@@ -191,7 +190,7 @@ export abstract class Component<T extends ComponentParameters> extends
     this.addRPCMarshal(name, helpText, async (ctx, rpcCtx, chain) => {
       return await rpcCtx.chainRPC(
           // tslint:disable-next-line:no-any
-          ctx, this as any as Core.Component<Core.ComponentParameters>,
+          ctx, this as any as Core.Component<Core.StatefulObject>,
           [...alias, ...chain]);
     });
   }

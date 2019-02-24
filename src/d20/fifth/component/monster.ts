@@ -3,7 +3,7 @@ import * as Fifth from 'd20/fifth';
 
 export const getChallenge = new Core.Event<() => Fifth.Challenge>();
 
-export class MonsterParameters extends Core.ComponentParameters {
+export class MonsterParameters extends Core.StatefulObject {
   challenge: Fifth.Challenge;
 
   constructor() {

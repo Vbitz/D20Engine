@@ -13,7 +13,7 @@ export const getEncounter = new Core.Event<() => Core.Entity>();
 
 export const getParticipants = new Core.Event<() => Core.Entity[]>();
 
-export class EncounterParameters extends Core.ComponentParameters {}
+export class EncounterParameters extends Core.StatefulObject {}
 
 class EncounterCreature {
   initiative: number|undefined = undefined;

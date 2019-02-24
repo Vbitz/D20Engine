@@ -28,7 +28,7 @@ export class EncounterTestModule extends Core.Module {
   }
 }
 
-export class TestCreatureParameters extends Core.ComponentParameters {}
+export class TestCreatureParameters extends Core.StatefulObject {}
 
 export class TestCreature extends Core.Component<TestCreatureParameters> {
   private weapon: Core.Entity|undefined = undefined;
@@ -149,7 +149,7 @@ export class TestCreature extends Core.Component<TestCreatureParameters> {
   }
 }
 
-export class TestWeaponParameters extends Core.ComponentParameters {}
+export class TestWeaponParameters extends Core.StatefulObject {}
 
 export class TestWeapon extends Core.Component<TestWeaponParameters> {
   constructor() {

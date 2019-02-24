@@ -13,7 +13,7 @@ export interface StatisticsGenerationResult {
   charismaRoll: Core.Dice.DiceResults;
 }
 
-class StatisticsBlockParameters extends Core.ComponentParameters {
+class StatisticsBlockParameters extends Core.StatefulObject {
   @publicField strength: number|null;
   @publicField dexterity: number|null;
   @publicField constitution: number|null;

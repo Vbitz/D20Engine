@@ -61,7 +61,7 @@ export class Context extends Core.AbstractEventController {
    * @param evt The event to attach a handler to.
    * @param cb The callback for the handler.
    */
-  registerComponentHandler<Params extends Core.ComponentParameters,
+  registerComponentHandler<Params extends Core.StatefulObject,
                                           T extends Core.EventDeclaration>(
       comp: Core.Component<Params>, evt: T, cb: Core.HandlerCallback<T>) {
     comp.registerHandler(evt, cb);

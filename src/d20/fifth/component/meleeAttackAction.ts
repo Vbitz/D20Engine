@@ -6,7 +6,7 @@ export const getAttackRoll = new Core.Event<() => Core.DiceSpecification>();
 
 export const getDamageRoll = new Core.Event<() => Core.DiceSpecification>();
 
-export class MeleeAttackActionParameters extends Core.ComponentParameters {
+export class MeleeAttackActionParameters extends Core.StatefulObject {
   @publicField name: string;
   @publicField hitBonus: number;
   @publicField reach: number;

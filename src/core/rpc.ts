@@ -23,7 +23,7 @@ export abstract class Context {
 
   async chainRPC(
       ctx: Core.Context,
-      entity: Core.Entity|Core.Component<Core.ComponentParameters>,
+      entity: Core.Entity|Core.Component<Core.StatefulObject>,
       chain: Core.Value[]): Promise<void> {
     return await entity.executeRPC(ctx, this, chain);
   }

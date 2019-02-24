@@ -1,5 +1,9 @@
 - [ ] Add previous parameter to event callbacks and convert event calls into a reduce type pattern.
-- [ ] Rename `ComponentParameters` to `Object` and `Component.parameters` to `Component.state`.
+- [x] Rename `ComponentParameters` to `Object` and `Component.parameters` to `Component.state`.
+  - Name collisions turn out to be non trivial to resolve.
+  - `StatefulObject` instead.
 - [ ] Add saving system.
 - [x] Add graph renderer.
 - [ ] Add `GameState` to keep track of the current context object.
+- [ ] Add Testing framework for RPCs.
+- [ ] Add RPC Response system and start working on game user interface.

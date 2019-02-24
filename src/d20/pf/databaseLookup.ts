@@ -4,7 +4,7 @@ import * as PF from 'd20/pf';
 import * as path from 'path';
 import TurndownService from 'turndown';
 
-class DatabaseLookupParameters extends Core.ComponentParameters {}
+class DatabaseLookupParameters extends Core.StatefulObject {}
 
 enum RenderType {
   List,
