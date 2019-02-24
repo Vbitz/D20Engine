@@ -2,6 +2,8 @@
 
 [Prototype](./prototype.md)
 
+[PF Component Stack Proposal](./d20/pf/ComponentStack.md)
+
 ## Goals
 
 - Implement D20 based rulesets in an extendable way.
