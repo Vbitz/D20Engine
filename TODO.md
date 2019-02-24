@@ -1,5 +1,5 @@
-- Add previous parameter to event callbacks and convert event calls into a reduce type pattern.
-- Rename `ComponentParameters` to `Object` and `Component.parameters` to `Component.state`.
-- Add saving system.
-- Add graph renderer.
-- Add `GameState` to keep track of the current context object.
+- [ ] Add previous parameter to event callbacks and convert event calls into a reduce type pattern.
+- [ ] Rename `ComponentParameters` to `Object` and `Component.parameters` to `Component.state`.
+- [ ] Add saving system.
+- [x] Add graph renderer.
+- [ ] Add `GameState` to keep track of the current context object.

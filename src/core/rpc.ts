@@ -118,7 +118,7 @@ export class ControllerImpl {
 
   generateGraph(entityId: string|symbol, graphInterface: Core.GraphInterface) {
     for (const [key, marshal] of this.marshals) {
-      graphInterface.addNode(marshal.id, key);
+      graphInterface.addNode(marshal.id, 'RPCMarshal', key);
       graphInterface.addEdge(entityId, marshal.id);
     }
   }

@@ -5,16 +5,17 @@ export class GraphInterface {
 
   private declarations: string[] = [];
 
-  addNode(id: string|symbol, label?: string) {
+  addNode(id: string|symbol, type: string, label?: string) {
     if (label === undefined) {
       label = this.getSymbol(id);
     }
-    this.declarations.push(
-        `${this.getSymbol(id)} [label=${JSON.stringify(label)}];`);
+    this.declarations.push(`${JSON.stringify(this.getSymbol(id))} [label=${
+        JSON.stringify(`[${type}] ${label}`)}];`);
   }
 
   addEdge(a: string|symbol, b: string|symbol) {
-    this.declarations.push(`${this.getSymbol(a)} -> ${this.getSymbol(b)};`);
+    this.declarations.push(`${JSON.stringify(this.getSymbol(a))} -> ${
+        JSON.stringify(this.getSymbol(b))};`);
   }
 
   export(): string {
@@ -141,16 +142,26 @@ export class Game extends Core.AbstractEventController {
   generateEventGraph(): string {
     const graphInterface = new GraphInterface();
 
+    const gameNode = this.id;
+
+    graphInterface.addNode(gameNode, 'Game');
+
     this._generateGraph(this.id, graphInterface);
 
     for (const mod of this.moduleList) {
-      graphInterface.addNode(mod.uuid);
+      graphInterface.addNode(mod.uuid, 'Module', mod.constructor.name);
+      graphInterface.addEdge(gameNode, mod.uuid);
     }
 
     for (const entity of this.entityList) {
-      graphInterface.addNode(entity.uuid);
+      graphInterface.addNode(entity.uuid, 'Entity');
       entity.generateGraph(graphInterface);
+      graphInterface.addEdge(gameNode, entity.uuid);
     }
+
+    const rootContext = this.context.generateGraph(graphInterface);
+
+    graphInterface.addEdge(gameNode, rootContext);
 
     return graphInterface.export();
   }

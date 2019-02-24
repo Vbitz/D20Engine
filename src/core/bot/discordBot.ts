@@ -491,6 +491,7 @@ export class D20Bot extends Bot {
     this.addCommand(
         'randchar', 'Rolls a random character', this.commandRandChar);
     this.addCommand('pf', '(BETA) Pathfinder Tools', this.commandPf, true);
+    this.addCommand('graph', undefined, this.commandGraph);
   }
 
   async init() {
@@ -573,5 +574,13 @@ export class D20Bot extends Bot {
         this.reportError(err);
       }
     }
+  }
+
+  async commandGraph(from: MessageFrom, message: string) {
+    this.validateAdmin(from);
+
+    this.reply(
+        from, `\`\`\`\n${this.game.generateEventGraph()}\n\`\`\``,
+        ReplyTarget.User);
   }
 }

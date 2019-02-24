@@ -111,6 +111,8 @@ export class ComponentParameters {
  */
 export abstract class Component<T extends ComponentParameters> extends
     Core.AbstractEventController {
+  readonly uuid = Core.Common.createUUID();
+
   private owner: Core.Entity|undefined = undefined;
 
   constructor(private _parameters: T) {
@@ -200,6 +202,13 @@ export abstract class Component<T extends ComponentParameters> extends
 
   setOwner(owner: Core.Entity) {
     this.owner = owner;
+  }
+
+  generateGraph(graphInterface: Core.GraphInterface) {
+    graphInterface.addNode(this.uuid, 'Component');
+    this._generateGraph(this.uuid, graphInterface);
+
+    return this.uuid;
   }
 
   abstract async onCreate(ctx: Core.Context): Promise<void>;

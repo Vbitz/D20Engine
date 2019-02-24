@@ -69,8 +69,13 @@ export class Entity extends Core.AbstractEventController {
   }
 
   generateGraph(graphInterface: Core.GraphInterface) {
-    graphInterface.addNode(this.uuid);
+    graphInterface.addNode(this.uuid, 'Entity');
     this._generateGraph(this.uuid, graphInterface);
+
+    for (const component of this.componentList) {
+      const componentId = component.generateGraph(graphInterface);
+      graphInterface.addEdge(this.uuid, componentId);
+    }
   }
 
   async addComponent(

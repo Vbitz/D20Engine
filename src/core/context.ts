@@ -140,6 +140,19 @@ export class Context extends Core.AbstractEventController {
     return new Core.EventCancel(value);
   }
 
+  generateGraph(graphInterface: Core.GraphInterface): string {
+    graphInterface.addNode(this.uuid, this.constructor.name);
+    this._generateGraph(this.uuid, graphInterface);
+
+    for (const child of this.children) {
+      const childNode = child.generateGraph(graphInterface);
+
+      graphInterface.addEdge(this.uuid, childNode);
+    }
+
+    return this.uuid;
+  }
+
   protected _getEntity(): Core.Entity {
     throw new Error('Not Implemented');
   }

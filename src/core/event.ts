@@ -169,7 +169,7 @@ export class EventControllerImpl implements Core.EventController {
   generateGraph(entityId: string|symbol, graphInterface: Core.GraphInterface) {
     for (const [key, marshal] of this.handlerList) {
       graphInterface.addNode(
-          marshal.id, typeof (key) === 'symbol' ? undefined : key);
+          marshal.id, 'Handler', typeof (key) === 'symbol' ? undefined : key);
       graphInterface.addEdge(entityId, marshal.id);
     }
   }
