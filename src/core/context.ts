@@ -170,6 +170,10 @@ export class Context extends Core.AbstractEventController {
     return this.uuid;
   }
 
+  async registerModule(mod: Core.Module) {
+    return await this.game.registerModule(mod);
+  }
+
   protected _getEntity(): Core.Entity {
     throw new Error('Not Implemented');
   }

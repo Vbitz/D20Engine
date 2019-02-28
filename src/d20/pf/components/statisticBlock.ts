@@ -13,7 +13,7 @@ export interface StatisticsGenerationResult {
   charismaRoll: Core.Dice.DiceResults;
 }
 
-class StatisticsBlockParameters extends Core.StatefulObject {
+class StatisticsBlockState extends Core.StatefulObject {
   @publicField strength: number|null;
   @publicField dexterity: number|null;
   @publicField constitution: number|null;
@@ -39,8 +39,8 @@ export class StatisticsBlockModule extends Core.Module {
   }
 }
 
-export class StatisticsBlock extends Core.Component<StatisticsBlockParameters> {
-  static Parameters = StatisticsBlockParameters;
+export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
+  static State = StatisticsBlockState;
   static Module = StatisticsBlockModule;
 
   // Global event declarations.
@@ -64,7 +64,7 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockParameters> {
   static charismaModifier = new Core.Event<() => (number | null)>();
 
   constructor() {
-    super(new StatisticsBlockParameters());
+    super(new StatisticsBlockState());
   }
 
   static registerGenerator(ctx: Core.Context) {

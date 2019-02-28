@@ -97,7 +97,8 @@ export class Controller extends Core.Component<ControllerParameters> {
     const newCharacter = ctx.createTransientEntity();
 
     const generationResults =
-        await ctx.callRootEvent(PF.StatisticsBlock.generate, parsed).call();
+        await ctx.callRootEvent(PF.Components.StatisticsBlock.generate, parsed)
+            .call();
 
     if (generationResults === undefined) {
       throw new Error('Could not call StatisticsBlock.generate');
@@ -106,16 +107,21 @@ export class Controller extends Core.Component<ControllerParameters> {
     await newCharacter.addComponent(ctx, generationResults.newStatisticsBlock);
 
     const [str, dex, con, int, wis, cha] = await Promise.all([
-      PF.StatisticsBlock.strength.get, PF.StatisticsBlock.dexterity.get,
-      PF.StatisticsBlock.constitution.get, PF.StatisticsBlock.intelligence.get,
-      PF.StatisticsBlock.wisdom.get, PF.StatisticsBlock.charisma.get
+      PF.Components.StatisticsBlock.strength.get,
+      PF.Components.StatisticsBlock.dexterity.get,
+      PF.Components.StatisticsBlock.constitution.get,
+      PF.Components.StatisticsBlock.intelligence.get,
+      PF.Components.StatisticsBlock.wisdom.get,
+      PF.Components.StatisticsBlock.charisma.get
     ].map((ev) => ctx.callEvent(newCharacter, ev).callChecked()));
 
     const [strMod, dexMod, conMod, intMod, wisMod, chaMod] = await Promise.all([
-      PF.StatisticsBlock.strengthModifier, PF.StatisticsBlock.dexterityModifier,
-      PF.StatisticsBlock.constitutionModifier,
-      PF.StatisticsBlock.intelligenceModifier,
-      PF.StatisticsBlock.wisdomModifier, PF.StatisticsBlock.charismaModifier
+      PF.Components.StatisticsBlock.strengthModifier,
+      PF.Components.StatisticsBlock.dexterityModifier,
+      PF.Components.StatisticsBlock.constitutionModifier,
+      PF.Components.StatisticsBlock.intelligenceModifier,
+      PF.Components.StatisticsBlock.wisdomModifier,
+      PF.Components.StatisticsBlock.charismaModifier
     ].map((ev) => ctx.callEvent(newCharacter, ev).callChecked()));
 
     const modifierTotal =
