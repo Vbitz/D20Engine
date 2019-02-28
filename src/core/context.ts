@@ -7,6 +7,7 @@ export class Context extends Core.AbstractEventController {
   readonly uuid = Core.Common.createUUID();
 
   private children = new Set<Context>();
+  private interactionInterface: Core.InteractionInterface|null = null;
 
   constructor(private game: Core.Game, private parent: Core.Context|null) {
     super();
@@ -113,6 +114,10 @@ export class Context extends Core.AbstractEventController {
     return eventResult;
   }
 
+  setInteractionInterface(ii: Core.InteractionInterface|null) {
+    this.interactionInterface = ii;
+  }
+
   createEntity() {
     /**
      * TODO(joshua): Expand this method.
@@ -130,6 +135,18 @@ export class Context extends Core.AbstractEventController {
 
   addChildContext(ctx: Context) {
     this.children.add(ctx);
+  }
+
+  createChildContext() {
+    const newContext = new Context(this.game, this);
+
+    this.addChildContext(newContext);
+
+    return newContext;
+  }
+
+  async callInteraction(interaction: Core.Interaction): Promise<void> {
+    return await this._callInteraction(this, interaction);
   }
 
   /**
@@ -167,6 +184,17 @@ export class Context extends Core.AbstractEventController {
     this.addChildContext(newContext);
 
     return newContext;
+  }
+
+  private async _callInteraction(ctx: Context, interaction: Core.Interaction):
+      Promise<void> {
+    if (this.interactionInterface !== null) {
+      return await this.interactionInterface(ctx, interaction);
+    } else if (this.parent !== null) {
+      return await this.parent._callInteraction(ctx, interaction);
+    } else {
+      throw new Error('No Interaction Interface to serve interaction');
+    }
   }
 }
 

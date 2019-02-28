@@ -14,6 +14,11 @@ export class Action<T extends Core.EventDeclaration> {
     return this;
   }
 
+  overrideInteractionInterface(ii: Core.InteractionInterface): this {
+    this.ctx.setInteractionInterface(ii);
+    return this;
+  }
+
   /**
    *
    */

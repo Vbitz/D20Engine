@@ -138,12 +138,26 @@ export class ControllerImpl {
 }
 
 export class Server {
+  // TODO(joshua): Add map of currently interacting users to keep track of there
+  // current interaction.
+
   constructor(
       private owner: Core.Game, private rootEntity: Core.Entity,
       private rpcContext: Core.Context) {}
 
   async execute(ctx: Context, chain: Core.Value[]) {
     ctx.initServer(this, this.owner);
-    await this.rootEntity.executeRPC(this.rpcContext, ctx, chain);
+
+    const rpcExecutionContext = this.rpcContext.createChildContext();
+
+    rpcExecutionContext.setInteractionInterface(
+        this.onInteraction.bind(this, ctx));
+
+    await this.rootEntity.executeRPC(rpcExecutionContext, ctx, chain);
+  }
+
+  private async onInteraction(
+      rpcContext: Context, ctx: Core.Context, interaction: Core.Interaction) {
+    // Extract documentation and current user for interaction.
   }
 }

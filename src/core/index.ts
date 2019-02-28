@@ -11,6 +11,7 @@ import {DiceGenerator, DiceSpecification} from './dice';
 import {Entity} from './entity';
 import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback, NonNullableEventReturnValue} from './event';
 import {Game, GraphInterface} from './game';
+import {Interaction, InteractionInterface} from './interaction';
 import {Module} from './module';
 import * as RPC from './rpc';
 
@@ -44,6 +45,8 @@ export {
   getVersion,
   GraphInterface,
   HandlerCallback,
+  Interaction,
+  InteractionInterface,
   Module,
   ModuleContext,
   NonNullableEventReturnValue,
