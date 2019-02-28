@@ -7,3 +7,10 @@
 - [ ] Add `GameState` to keep track of the current context object.
 - [ ] Add Testing framework for RPCs.
 - [ ] Add RPC Response system and start working on game user interface.
+  - How is this system going to be stubbed for testing and AI?
+- [ ] Add test cases for Pathfinder Character Tracking
+    - [ ] Fighter/Barbarian (Not sure which one first)
+- [ ] `d20 version` should link to github.
+- [ ] Start adding aliases for commands. `?` would be a good one for `help`.
+- [ ] Add `Entity.clone()` (Soft requires save and load system.)
+- [ ] `PF.StatisticsBlock` should have a roll stats method.
