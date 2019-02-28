@@ -11,6 +11,7 @@ const CONFIG_FILENAME = 'd20Engine.config.json';
 
 const SAVE_DIRECTORY = 'save';
 const RESOURCE_DIRECTORY = 'res';
+const CONFIG_DIRECTORY = 'config';
 
 export interface GameLike {
   readonly game: Core.Game;
@@ -132,6 +133,12 @@ export async function getResourcePath(): Promise<string> {
   const rootPath = await getRootPath(__dirname);
 
   return path.join(rootPath, RESOURCE_DIRECTORY);
+}
+
+export async function getConfigPath(): Promise<string> {
+  const rootPath = await getRootPath(__dirname);
+
+  return path.join(rootPath, CONFIG_DIRECTORY);
 }
 
 export async function getVersion(): Promise<string> {
