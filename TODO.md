@@ -13,4 +13,7 @@
 - [ ] `d20 version` should link to github.
 - [ ] Start adding aliases for commands. `?` would be a good one for `help`.
 - [ ] Add `Entity.clone()` (Soft requires save and load system.)
-- [ ] `PF.StatisticsBlock` should have a roll stats method.
+- [x] `PF.StatisticsBlock` should have a roll stats method.
+  - Also added a reroll method and tracking of how many rolls were done.
+- [ ] `Game.Property` should be split into a getter and setter implementation.
+- [ ] Transition all Discord commands to the new RPC system. This meens the RPC server will be the top level.

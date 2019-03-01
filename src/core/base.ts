@@ -1,6 +1,5 @@
 import * as Core from 'core';
 
-
 import {exists as _exists} from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
@@ -19,7 +18,9 @@ export interface GameLike {
 
 type PrimitiveValue = string|boolean|number|null|undefined;
 
-type NonNullablePrimitive = string|boolean|number;
+type ComplexPrimativeValue = PrimitiveValue|Core.DiceResults;
+
+type NonNullablePrimitive = Exclude<ComplexPrimativeValue, null|undefined>;
 
 interface JSONObject<T> {
   [s: string]: T|JSONObject<T>|Array<JSONObject<T>>;
@@ -28,7 +29,7 @@ interface JSONObject<T> {
 export type NonNullableValue =
     JSONObject<NonNullablePrimitive>|NonNullablePrimitive;
 
-export type Value = JSONObject<PrimitiveValue>|PrimitiveValue;
+export type Value = JSONObject<ComplexPrimativeValue>|ComplexPrimativeValue;
 
 export function asString(value: Core.Value): string {
   if (typeof (value) === 'string') {

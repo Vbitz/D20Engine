@@ -96,15 +96,11 @@ export class Controller extends Core.Component<ControllerParameters> {
 
     const newCharacter = ctx.createTransientEntity();
 
-    const generationResults =
-        await ctx.callRootEvent(PF.Components.StatisticsBlock.generate, parsed)
-            .call();
+    await newCharacter.addComponent(ctx, new PF.Components.StatisticsBlock());
 
-    if (generationResults === undefined) {
-      throw new Error('Could not call StatisticsBlock.generate');
-    }
-
-    await newCharacter.addComponent(ctx, generationResults.newStatisticsBlock);
+    await ctx
+        .callEvent(newCharacter, PF.Components.StatisticsBlock.roll, parsed)
+        .call();
 
     const [str, dex, con, int, wis, cha] = await Promise.all([
       PF.Components.StatisticsBlock.strength.get,
@@ -114,6 +110,12 @@ export class Controller extends Core.Component<ControllerParameters> {
       PF.Components.StatisticsBlock.wisdom.get,
       PF.Components.StatisticsBlock.charisma.get
     ].map((ev) => ctx.callEvent(newCharacter, ev).callChecked()));
+
+    if (typeof (str) === 'number' || typeof (dex) === 'number'
+        || typeof (con) === 'number' || typeof (int) === 'number'
+        || typeof (wis) === 'number' || typeof (cha) === 'number') {
+      throw new Error('Not Implemented');
+    }
 
     const [strMod, dexMod, conMod, intMod, wisMod, chaMod] = await Promise.all([
       PF.Components.StatisticsBlock.strengthModifier,
@@ -129,30 +131,18 @@ export class Controller extends Core.Component<ControllerParameters> {
             (a, b) => (a || 0) + (b || 0), 0);
 
     await rpcCtx.reply(`
-**Strength**:         {${
-                           Core.DiceGenerator.explain(
-                               generationResults.strengthRoll)}} + {} = **${
-                           str}** (${forceSign(strMod)})
-**Dexterity**:        {${
-                           Core.DiceGenerator.explain(
-                               generationResults.dexterityRoll)}} + {} = **${
-                           dex}** (${forceSign(dexMod)})
-**Constitution**:     {${
-                           Core.DiceGenerator.explain(
-                               generationResults.constitutionRoll)}} + {} = **${
-                           con}** (${forceSign(conMod)})
-**Intelligence**:     {${
-                           Core.DiceGenerator.explain(
-                               generationResults.intelligenceRoll)}} + {} = **${
-                           int}** (${forceSign(intMod)})
-**Wisdom**:           {${
-                           Core.DiceGenerator.explain(
-                               generationResults.wisdomRoll)}} + {} = **${
-                           wis}** (${forceSign(wisMod)})
-**Charisma**:         {${
-                           Core.DiceGenerator.explain(
-                               generationResults.charismaRoll)}} + {} = **${
-                           cha}** (${forceSign(chaMod)})
+**Strength**:         {${Core.DiceGenerator.explain(str)}} + {} = **${
+                           str.value}** (${forceSign(strMod)})
+**Dexterity**:        {${Core.DiceGenerator.explain(dex)}} + {} = **${
+                           dex.value}** (${forceSign(dexMod)})
+**Constitution**:     {${Core.DiceGenerator.explain(con)}} + {} = **${
+                           con.value}** (${forceSign(conMod)})
+**Intelligence**:     {${Core.DiceGenerator.explain(int)}} + {} = **${
+                           int.value}** (${forceSign(intMod)})
+**Wisdom**:           {${Core.DiceGenerator.explain(wis)}} + {} = **${
+                           wis.value}** (${forceSign(wisMod)})
+**Charisma**:         {${Core.DiceGenerator.explain(cha)}} + {} = **${
+                           cha.value}** (${forceSign(chaMod)})
 **Total Modifiers**:  ${forceSign(modifierTotal)}
     `.trim());
   }

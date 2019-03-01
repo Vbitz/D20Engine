@@ -7,7 +7,7 @@ import {Component, SerializableFields, StatefulObject} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
 import * as Database from './database';
 import * as Dice from './dice';
-import {DiceGenerator, DiceSpecification} from './dice';
+import {DiceGenerator, DiceResults, DiceSpecification} from './dice';
 import {Entity} from './entity';
 import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback, NonNullableEventReturnValue} from './event';
 import {Game, GraphInterface} from './game';
@@ -25,6 +25,7 @@ export {
   Database,
   Dice,
   DiceGenerator,
+  DiceResults,
   DiceSpecification,
   Entity,
   EntityContext,

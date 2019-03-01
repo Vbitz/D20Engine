@@ -2,58 +2,45 @@ import * as Core from 'core';
 import {publicField} from 'core/component';
 import * as Game from 'libgame';
 
-export interface StatisticsGenerationResult {
-  newStatisticsBlock: StatisticsBlock;
-
-  strengthRoll: Core.Dice.DiceResults;
-  dexterityRoll: Core.Dice.DiceResults;
-  constitutionRoll: Core.Dice.DiceResults;
-  intelligenceRoll: Core.Dice.DiceResults;
-  wisdomRoll: Core.Dice.DiceResults;
-  charismaRoll: Core.Dice.DiceResults;
-}
-
 class StatisticsBlockState extends Core.StatefulObject {
-  @publicField strength: number|null;
-  @publicField dexterity: number|null;
-  @publicField constitution: number|null;
-  @publicField intelligence: number|null;
-  @publicField wisdom: number|null;
-  @publicField charisma: number|null;
+  @publicField strength: Core.DiceResults;
+  @publicField dexterity: Core.DiceResults;
+  @publicField constitution: Core.DiceResults;
+  @publicField intelligence: Core.DiceResults;
+  @publicField wisdom: Core.DiceResults;
+  @publicField charisma: Core.DiceResults;
+
+  @publicField totalRolls: number;
 
   constructor() {
     super();
 
-    this.strength = 10;
-    this.dexterity = 10;
-    this.constitution = 10;
-    this.intelligence = 10;
-    this.wisdom = 10;
-    this.charisma = 10;
+    this.strength = Core.DiceGenerator.constantResult(10);
+    this.dexterity = Core.DiceGenerator.constantResult(10);
+    this.constitution = Core.DiceGenerator.constantResult(10);
+    this.intelligence = Core.DiceGenerator.constantResult(10);
+    this.wisdom = Core.DiceGenerator.constantResult(10);
+    this.charisma = Core.DiceGenerator.constantResult(10);
+
+    this.totalRolls = 0;
   }
 }
 
 export class StatisticsBlockModule extends Core.Module {
-  async onCreate(ctx: Core.Context) {
-    StatisticsBlock.registerGenerator(ctx);
-  }
+  async onCreate(ctx: Core.Context) {}
 }
 
 export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
   static State = StatisticsBlockState;
   static Module = StatisticsBlockModule;
 
-  // Global event declarations.
-  static readonly generate = new Core.Event<
-      (roll?: Core.DiceSpecification) => StatisticsGenerationResult>();
-
   // Property declarations.
-  static strength = Game.Property<number|null>();
-  static dexterity = Game.Property<number|null>();
-  static constitution = Game.Property<number|null>();
-  static intelligence = Game.Property<number|null>();
-  static wisdom = Game.Property<number|null>();
-  static charisma = Game.Property<number|null>();
+  static strength = Game.Property<Core.DiceResults|number>();
+  static dexterity = Game.Property<Core.DiceResults|number>();
+  static constitution = Game.Property<Core.DiceResults|number>();
+  static intelligence = Game.Property<Core.DiceResults|number>();
+  static wisdom = Game.Property<Core.DiceResults|number>();
+  static charisma = Game.Property<Core.DiceResults|number>();
 
   // Event declarations.
   static strengthModifier = new Core.Event<() => (number | null)>();
@@ -63,59 +50,35 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
   static wisdomModifier = new Core.Event<() => (number | null)>();
   static charismaModifier = new Core.Event<() => (number | null)>();
 
+  // Method declarations
+  static roll = new Core.Event<(roll?: Core.DiceSpecification) => void>();
+  static reroll = new Core.Event<() => void>();
+
   constructor() {
     super(new StatisticsBlockState());
   }
 
-  static registerGenerator(ctx: Core.Context) {
-    ctx.registerRootHandler(StatisticsBlock.generate, async (ctx, roll?) => {
-      const newStatisticsBlock = new StatisticsBlock();
-
-      if (roll === undefined) {
-        roll = Core.DiceGenerator.parse('drop(4d6,-1)');
-      }
-
-      const strengthRoll = ctx.diceGenerator.execute(roll);
-      const dexterityRoll = ctx.diceGenerator.execute(roll);
-      const constitutionRoll = ctx.diceGenerator.execute(roll);
-      const intelligenceRoll = ctx.diceGenerator.execute(roll);
-      const wisdomRoll = ctx.diceGenerator.execute(roll);
-      const charismaRoll = ctx.diceGenerator.execute(roll);
-
-      newStatisticsBlock.load({
-        strength: strengthRoll.value,
-        dexterity: dexterityRoll.value,
-        constitution: constitutionRoll.value,
-        intelligence: intelligenceRoll.value,
-        wisdom: wisdomRoll.value,
-        charisma: charismaRoll.value,
-      });
-
-      return {
-        newStatisticsBlock,
-
-        strengthRoll,
-        dexterityRoll,
-        constitutionRoll,
-        intelligenceRoll,
-        wisdomRoll,
-        charismaRoll
-      };
-    });
-  }
-
   async onCreate(ctx: Core.Context) {
     async function getModifier(
-        this: StatisticsBlock, event: Core.EventDeclaration,
-        ctx: Core.Context) {
+        this: StatisticsBlock,
+        event: Core.Event<() => Core.DiceResults | number>, ctx: Core.Context) {
       const value = await ctx.callEvent(ctx.entity, event).call();
 
       if (value !== undefined) {
-        return this.getModifier(value);
+        if (typeof (value) === 'number') {
+          return this.getModifier(value);
+        } else {
+          return this.getModifier(value.value);
+        }
       } else {
         return null;
       }
     }
+
+    ctx.registerComponentHandler(
+        this, StatisticsBlock.roll, this.roll.bind(this));
+    ctx.registerComponentHandler(
+        this, StatisticsBlock.reroll, this.reroll.bind(this));
 
     ctx.registerComponentHandler(
         this, StatisticsBlock.strengthModifier,
@@ -136,6 +99,8 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
         this, StatisticsBlock.charismaModifier,
         getModifier.bind(this, StatisticsBlock.charisma.get));
 
+    // TODO(joshua): Where did number|DiceResults come from? This seems wierd
+    // and may be a compiler bug.
     Game.propertyImplementation(
         ctx, this, StatisticsBlock.strength, 'strength');
     Game.propertyImplementation(
@@ -147,6 +112,43 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
     Game.propertyImplementation(ctx, this, StatisticsBlock.wisdom, 'wisdom');
     Game.propertyImplementation(
         ctx, this, StatisticsBlock.charisma, 'charisma');
+  }
+
+  private async roll(ctx: Core.Context, roll?: Core.DiceSpecification) {
+    if (roll === undefined) {
+      roll = Core.DiceGenerator.parse('drop(4d6,-1)');
+    }
+
+    const strengthRoll = ctx.diceGenerator.execute(roll);
+    const dexterityRoll = ctx.diceGenerator.execute(roll);
+    const constitutionRoll = ctx.diceGenerator.execute(roll);
+    const intelligenceRoll = ctx.diceGenerator.execute(roll);
+    const wisdomRoll = ctx.diceGenerator.execute(roll);
+    const charismaRoll = ctx.diceGenerator.execute(roll);
+
+    this.setState(ctx, {
+      totalRolls: this.state.totalRolls + 1,
+
+      strength: strengthRoll,
+      dexterity: dexterityRoll,
+      constitution: constitutionRoll,
+      intelligence: intelligenceRoll,
+      wisdom: wisdomRoll,
+      charisma: charismaRoll,
+    });
+  }
+
+  private async reroll(ctx: Core.Context) {
+    this.setState(ctx, {
+      totalRolls: this.state.totalRolls + 1,
+
+      strength: ctx.diceGenerator.rerollAll(this.state.strength),
+      dexterity: ctx.diceGenerator.rerollAll(this.state.dexterity),
+      constitution: ctx.diceGenerator.rerollAll(this.state.constitution),
+      intelligence: ctx.diceGenerator.rerollAll(this.state.intelligence),
+      wisdom: ctx.diceGenerator.rerollAll(this.state.wisdom),
+      charisma: ctx.diceGenerator.rerollAll(this.state.charisma),
+    })
   }
 
   private getModifier(value: number|null) {

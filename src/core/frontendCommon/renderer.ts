@@ -6,12 +6,13 @@ export enum PublicFieldType {
   Number,
   Enum,
   DiceRoll,
+  DiceResults,
   Unknown
 }
 
 export interface PublicBasicFieldDescription {
   type: PublicFieldType.String|PublicFieldType.Number|PublicFieldType
-      .Boolean|PublicFieldType.Unknown;
+      .Boolean|PublicFieldType.Unknown|PublicFieldType.DiceResults;
 }
 
 export interface PublicEnumFieldDescription {

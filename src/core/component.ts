@@ -15,14 +15,21 @@ export type SerializableFieldNames<T> = {
 // Get all fields that derive from Core.Value (can be serialized).
 export type SerializableFields<T> = Pick<T, SerializableFieldNames<T>>;
 
+interface DiceResultsConstructor {
+  new(): Core.DiceResults;
+}
+
 function getTypeFromConstructor(
-    type: NumberConstructor|StringConstructor|BooleanConstructor) {
+    type:
+        NumberConstructor|StringConstructor|BooleanConstructor|DiceResultsConstructor) {
   if (type === Number) {
     return PublicFieldType.Number;
   } else if (type === String) {
     return PublicFieldType.String;
   } else if (type === Boolean) {
     return PublicFieldType.Boolean;
+  } else if (type === Core.DiceResults) {
+    return PublicFieldType.DiceResults;
   } else {
     console.warn('Unknown publicField type', type);
 

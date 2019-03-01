@@ -77,9 +77,8 @@ export type DiceSpecification =
 export type RolledSpecification =
     RolledDice|RolledDiceOp|RolledDiceDrop|DiceRollConstant;
 
-export interface DiceResults {
-  rolledSpec: RolledSpecification;
-  value: number;
+export class DiceResults {
+  constructor(public rolledSpec: RolledSpecification, public value: number) {}
 }
 
 export class SpecificationCompiler {
@@ -114,7 +113,7 @@ export class DiceGenerator {
 
   execute(spec: DiceSpecification): DiceResults {
     const rolledSpec = this._execute(spec);
-    return {rolledSpec, value: rolledSpec.value};
+    return new DiceResults(rolledSpec, rolledSpec.value);
   }
 
   compileAndExecute(cb: CompilerCallback): DiceResults {
@@ -143,6 +142,10 @@ export class DiceGenerator {
 
   static constant(value: number): DiceSpecification {
     return {kind: 'const', value};
+  }
+
+  static constantResult(value: number): DiceResults {
+    return new DiceResults({kind: 'const', value}, value);
   }
 
   static getComplexity(spec: DiceSpecification): number {
