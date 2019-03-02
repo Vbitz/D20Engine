@@ -42,6 +42,12 @@ export class Controller extends Core.Component<ControllerParameters> {
           return await rpcCtx.chainRPC(ctx, this.databaseLookup!, chain);
         });
 
+    this.addRPCMarshal(
+        'createCharacter', ' : Create a New Character',
+        async (ctx, rpcCtx, chain) => {
+          return await this.createCharacter(ctx, rpcCtx, chain);
+        });
+
     this.addRPCAlias(
         'findSpell', '<searchTerm> : Search for a spell.',
         ['lookup', 'spell', 'search']);
@@ -80,6 +86,26 @@ export class Controller extends Core.Component<ControllerParameters> {
         ['lookup', 'feat', 'get']);
   }
 
+  async createCharacter(
+      ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
+    const newCharacter = ctx.createEntity();
+
+    // Make sure the user is not currently in a interaction flow (like
+    // CharacterGenerator). This should be done with
+    // rpcCtx.hasInteractionFlow().
+
+    // Entities should more more opaque and components should be added though
+    // Context rather then the other way round.
+    await newCharacter.addComponent(
+        ctx, new PF.Components.CharacterGenerator());
+
+    // Call top level generate event to trigger character generation.
+    // This will also trigger the chain of interactions used for character
+    // generation.
+    await ctx.callEvent(newCharacter, PF.Components.CharacterGenerator.generate)
+        .callChecked();
+  }
+
   async rollStats(
       ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
     let [roll] = chain;
@@ -100,7 +126,7 @@ export class Controller extends Core.Component<ControllerParameters> {
 
     await ctx
         .callEvent(newCharacter, PF.Components.StatisticsBlock.roll, parsed)
-        .call();
+        .callChecked();
 
     const [str, dex, con, int, wis, cha] = await Promise.all([
       PF.Components.StatisticsBlock.strength.get,

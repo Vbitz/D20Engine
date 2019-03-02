@@ -12,5 +12,9 @@ export class Creature extends Core.Component<CreatureState> {
   static State = CreatureState;
   static Module = CreatureModule;
 
+  constructor() {
+    super(new CreatureState());
+  }
+
   async onCreate(ctx: Core.Context) {}
 }

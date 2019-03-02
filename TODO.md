@@ -17,3 +17,8 @@
   - Also added a reroll method and tracking of how many rolls were done.
 - [ ] `Game.Property` should be split into a getter and setter implementation.
 - [ ] Transition all Discord commands to the new RPC system. This meens the RPC server will be the top level.
+- [ ] Lock down public interfaces.
+  - `Entity.addComponent(ctx, comp)` should turn into `Context.addComponent(ent, comp)`.
+- [ ] Add global describe event.
+- [ ] There should be differentiation between global events and entity events. It's too easy to mix up the method calls.
+- [ ] `Core.StatefulObject` should be another `ComplexPrimitiveValue` as they can be serialized.
