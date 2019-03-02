@@ -102,7 +102,10 @@ export class Controller extends Core.Component<ControllerParameters> {
     // Call top level generate event to trigger character generation.
     // This will also trigger the chain of interactions used for character
     // generation.
-    await ctx.callEvent(newCharacter, PF.Components.CharacterGenerator.generate)
+    await ctx
+        .callEvent(
+            newCharacter, PF.Components.CharacterGenerator.generate,
+            new PF.Components.CharacterGenerator.GenerateArguments())
         .callChecked();
   }
 

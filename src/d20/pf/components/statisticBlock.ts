@@ -148,7 +148,7 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
       intelligence: ctx.diceGenerator.rerollAll(this.state.intelligence),
       wisdom: ctx.diceGenerator.rerollAll(this.state.wisdom),
       charisma: ctx.diceGenerator.rerollAll(this.state.charisma),
-    })
+    });
   }
 
   private getModifier(value: number|null) {
