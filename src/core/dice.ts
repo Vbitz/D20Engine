@@ -22,7 +22,9 @@ export const enum DiceType {
   D100 = 100
 }
 
-interface BaseDiceSpec {}
+interface BaseDiceSpec {
+  __diceSpecificationTag?: unknown;
+}
 
 export interface DiceRoll extends BaseDiceSpec {
   kind: 'roll';
@@ -78,6 +80,8 @@ export type RolledSpecification =
     RolledDice|RolledDiceOp|RolledDiceDrop|DiceRollConstant;
 
 export class DiceResults {
+  private __diceResultsTag = 0;
+
   constructor(public rolledSpec: RolledSpecification, public value: number) {}
 }
 

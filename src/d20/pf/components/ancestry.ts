@@ -4,7 +4,7 @@ import * as PF from 'd20/pf';
 import * as Game from 'libgame';
 
 export class AbilityScoreBonus extends Core.StatefulObject {
-  @publicEnumField(PF.AbilityScore) type: PF.AbilityScore;
+  type: PF.AbilityScore;
 
   constructor() {
     super();
@@ -14,11 +14,11 @@ export class AbilityScoreBonus extends Core.StatefulObject {
 }
 
 export class AncestryState extends Core.StatefulObject {
-  @publicField abilityScoreBonuses: AbilityScoreBonus[];
-  @publicEnumField(PF.Size) size: PF.Size;
-  @publicField speed: number;
-  @publicField bonusFeats: number;
-  @publicField languages: PF.Language[];
+  abilityScoreBonuses: AbilityScoreBonus[];
+  size: PF.Size;
+  speed: number;
+  bonusFeats: number;
+  languages: PF.Language[];
 
   constructor() {
     super();
@@ -45,3 +45,5 @@ export class Ancestry extends Core.Component<AncestryState> {
 
   async onCreate(ctx: Core.Context) {}
 }
+
+Core.Reflect.embed(module);

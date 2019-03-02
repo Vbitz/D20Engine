@@ -2,28 +2,15 @@ import * as Core from 'core';
 import {publicField} from 'core/component';
 import * as Game from 'libgame';
 
-class StatisticsBlockState extends Core.StatefulObject {
-  @publicField strength: Core.DiceResults;
-  @publicField dexterity: Core.DiceResults;
-  @publicField constitution: Core.DiceResults;
-  @publicField intelligence: Core.DiceResults;
-  @publicField wisdom: Core.DiceResults;
-  @publicField charisma: Core.DiceResults;
+export class StatisticsBlockState extends Core.StatefulObject {
+  strength = Core.DiceGenerator.constantResult(10);
+  dexterity = Core.DiceGenerator.constantResult(10);
+  constitution = Core.DiceGenerator.constantResult(10);
+  intelligence = Core.DiceGenerator.constantResult(10);
+  wisdom = Core.DiceGenerator.constantResult(10);
+  charisma = Core.DiceGenerator.constantResult(10);
 
-  @publicField totalRolls: number;
-
-  constructor() {
-    super();
-
-    this.strength = Core.DiceGenerator.constantResult(10);
-    this.dexterity = Core.DiceGenerator.constantResult(10);
-    this.constitution = Core.DiceGenerator.constantResult(10);
-    this.intelligence = Core.DiceGenerator.constantResult(10);
-    this.wisdom = Core.DiceGenerator.constantResult(10);
-    this.charisma = Core.DiceGenerator.constantResult(10);
-
-    this.totalRolls = 0;
-  }
+  totalRolls = 0;
 }
 
 export class StatisticsBlockModule extends Core.Module {
@@ -159,3 +146,5 @@ export class StatisticsBlock extends Core.Component<StatisticsBlockState> {
     }
   }
 }
+
+Core.Reflect.embed(module);

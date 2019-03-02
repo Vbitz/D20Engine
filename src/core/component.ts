@@ -93,6 +93,8 @@ export function publicDiceRollField<T extends StatefulObject>(
 }
 
 export class StatefulObject {
+  private __statefulObjectTag = 0;
+
   getPublicFields() {
     const fieldsObject = (this.constructor as ObjectPublicFields);
 

@@ -4,7 +4,7 @@ import * as PF from 'd20/pf';
 import * as Game from 'libgame';
 
 export class ClassState extends Core.StatefulObject {
-  @publicField hitDice: string;
+  hitDice: string;
 
   constructor() {
     super();
