@@ -48,50 +48,6 @@ function attachField<T extends StatefulObject>(
   fieldsObject.__publicFields.set(key, type);
 }
 
-// TODO(joshua): This should support better documentation.
-export function publicField<T extends StatefulObject>(
-    target: T, propertyKey: string) {
-  // target is a lie and doesn't really exist.
-  const type = getTypeFromConstructor(
-      Reflect.getMetadata('design:type', target, propertyKey));
-
-  attachField(target, propertyKey, {type});
-}
-
-// I'm not sure if enums have a type that can be generalized.
-// tslint:disable-next-line:no-any
-type EnumDeclaration = any;
-
-/**
- * Enums need to have explicit values and not be const.
- * ```typescript
- * enum TestEnum {
- *  hello = "world"
- * }
- * ```
- * @param enumDeclaration
- */
-export function publicEnumField(enumDeclaration: EnumDeclaration) {
-  return function t<T extends StatefulObject>(target: T, propertyKey: string) {
-    attachField(
-        target, propertyKey,
-        {type: PublicFieldType.Enum, members: enumDeclaration});
-  };
-}
-
-export function publicDiceRollField<T extends StatefulObject>(
-    target: T, propertyKey: string) {
-  // target is a lie and doesn't really exist.
-  const type = getTypeFromConstructor(
-      Reflect.getMetadata('design:type', target, propertyKey));
-
-  if (type !== PublicFieldType.String) {
-    throw new Error('Not Implemented');
-  }
-
-  attachField(target, propertyKey, {type: PublicFieldType.DiceRoll});
-}
-
 export class StatefulObject {
   private __statefulObjectTag = 0;
 

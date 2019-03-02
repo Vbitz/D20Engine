@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 
 import {RandomFunction} from './common';
-import {CompilerCallback, DiceGenerator, DiceType} from './dice';
+import {DiceGenerator, DiceType} from './dice';
 
 function createStaticRandom(values: number[]): RandomFunction {
   const generator = function*() {
@@ -20,9 +20,9 @@ function staticGenerator(values: number[]) {
   return new DiceGenerator(createStaticRandom(values));
 }
 
-function simpleTest(values: number[], cb: CompilerCallback) {
+function simpleTest(values: number[], roll: string) {
   const gen = staticGenerator(values);
-  return gen.compileAndExecute(cb).value;
+  return gen.parseAndExecute(roll).value;
 }
 
 describe('DiceGenerator', () => {
@@ -34,67 +34,52 @@ describe('DiceGenerator', () => {
 
   test('DiceRoll_Simple', () => {
     const gen = staticGenerator([1 / 6]);
-    assert.strictEqual(gen.compileAndExecute((_) => _.d(DiceType.D6)).value, 2);
+    assert.strictEqual(gen.parseAndExecute('d6').value, 2);
 
-    assert.notStrictEqual(
-        gen.compileAndExecute((_) => _.d(DiceType.D6)).value, 3);
+    assert.notStrictEqual(gen.parseAndExecute('d6').value, 3);
   });
 
   test('DiceRoll_Advanced', () => {
-    assert.strictEqual(
-        simpleTest([1 / 20, 2 / 20, 3 / 20], (_) => _.d(DiceType.D20, 3)), 9);
+    assert.strictEqual(simpleTest([1 / 20, 2 / 20, 3 / 20], '3d20'), 9);
   });
 
   test('DiceRollConstant', () => {
-    assert.strictEqual(simpleTest([0], (_) => _.c(20)), 20);
+    assert.strictEqual(simpleTest([0], '20'), 20);
   });
 
   test('DiceRollOp_Add', () => {
-    assert.strictEqual(simpleTest([0], (_) => _.add(_.c(2), _.c(2))), 4);
+    assert.strictEqual(simpleTest([0], '2+2'), 4);
   });
 
   test('DiceRollOp_Subtract', () => {
-    assert.strictEqual(simpleTest([0], (_) => _.sub(_.c(10), _.c(2))), 8);
+    assert.strictEqual(simpleTest([0], '10-2'), 8);
   });
 
   test('DiceRollOp_Nested', () => {
-    assert.strictEqual(
-        simpleTest([0], (_) => _.sub(_.c(10), _.add(_.c(2), _.c(2)))), 6);
+    assert.strictEqual(simpleTest([0], '10-2+2'), 10);
   });
 
   test('DiceRollDrop_Trivial', () => {
-    assert.strictEqual(
-        simpleTest([1 / 6], (_) => _.drop(_.d(DiceType.D6, 3), 'low', 1)), 4);
+    assert.strictEqual(simpleTest([1 / 6], 'drop(3d6,-1)'), 4);
   });
 
   test('DiceRollDrop_Basic_Low', () => {
-    assert.strictEqual(
-        simpleTest(
-            [1 / 6, 2 / 6, 3 / 6],
-            (_) => _.drop(_.d(DiceType.D6, 3), 'low', 1)),
-        7);
+    assert.strictEqual(simpleTest([1 / 6, 2 / 6, 3 / 6], 'drop(3d6,-1)'), 7);
   });
 
   test('DiceRollDrop_Basic_High', () => {
-    assert.strictEqual(
-        simpleTest(
-            [1 / 6, 2 / 6, 3 / 6],
-            (_) => _.drop(_.d(DiceType.D6, 3), 'high', 1)),
-        5);
+    assert.strictEqual(simpleTest([1 / 6, 2 / 6, 3 / 6], 'drop(3d6,+1)'), 5);
   });
 
   test('Complex', () => {
     assert.strictEqual(
-        simpleTest(
-            [1 / 6, 2 / 6, 3 / 6, 4 / 6],
-            (_) => _.add(_.drop(_.d(DiceType.D6, 4), 'high', 1), _.c(10))),
-        19);
+        simpleTest([1 / 6, 2 / 6, 3 / 6, 4 / 6], 'drop(4d6,+1)+10'), 19);
   });
 
   test('Reroll_Basic', () => {
     const gen = staticGenerator([1 / 6, 2 / 6]);
 
-    const results = gen.compileAndExecute((_) => _.d(DiceType.D6, 1));
+    const results = gen.parseAndExecute('d6');
 
     assert.strictEqual(results.value, 2);
 
@@ -107,8 +92,7 @@ describe('DiceGenerator', () => {
     const gen = staticGenerator(
         [1 / 6, 2 / 6, 3 / 6, 4 / 6, 6 / 6, 2 / 6, 1 / 6, 6 / 6]);
 
-    const results = gen.compileAndExecute(
-        (_) => _.add(_.drop(_.d(DiceType.D6, 4), 'high', 1), _.c(10)));
+    const results = gen.parseAndExecute('drop(4d6,+1)+10');
 
     assert.strictEqual(results.value, 19);
 

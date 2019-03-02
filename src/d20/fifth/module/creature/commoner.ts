@@ -14,7 +14,7 @@ function createCommoner(ctx: Core.Context) {
     type: Fifth.CreatureType.Humanoid,
 
     armorClass: 10,
-    hitPointsRoll: '1d8',
+    hitPointsRoll: Core.DiceGenerator.parse('1d8'),
     speed: 30,
 
     strength: 10,
@@ -39,7 +39,7 @@ function createCommoner(ctx: Core.Context) {
     // I don't define target count here. After reviewing the SRD it seems
     // like there is always 1 target and special cases will have different
     // components.
-    damageRoll: '1d4',
+    damageRoll: Core.DiceGenerator.parse('1d4'),
     damageType: Fifth.DamageType.Bludgeoning
   }));
 

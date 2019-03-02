@@ -22,9 +22,7 @@ export const enum DiceType {
   D100 = 100
 }
 
-interface BaseDiceSpec {
-  __diceSpecificationTag?: unknown;
-}
+interface BaseDiceSpec {}
 
 export interface DiceRoll extends BaseDiceSpec {
   kind: 'roll';
@@ -35,8 +33,8 @@ export interface DiceRoll extends BaseDiceSpec {
 export interface DiceRollOp extends BaseDiceSpec {
   kind: 'op';
   op: '+'|'-';
-  lhs: DiceSpecification;
-  rhs: DiceSpecification;
+  lhs: DiceNode;
+  rhs: DiceNode;
 }
 
 export interface DiceRollConstant extends BaseDiceSpec {
@@ -61,8 +59,8 @@ export type RolledDice = DiceRoll&{rolls: number[]}&ResultValue;
 export type RolledDiceOp = {
   kind: 'op',
   op: '+'|'-',
-  lhs: RolledSpecification,
-  rhs: RolledSpecification
+  lhs: RolledNode,
+  rhs: RolledNode
 }&ResultValue;
 
 export type RolledDiceDrop = {
@@ -73,55 +71,35 @@ export type RolledDiceDrop = {
   count: number
 }&ResultValue;
 
-export type DiceSpecification =
-    DiceRoll|DiceRollOp|DiceRollConstant|DiceRollDrop;
+export type DiceNode = DiceRoll|DiceRollOp|DiceRollConstant|DiceRollDrop;
 
-export type RolledSpecification =
+export class DiceSpecification {
+  private __diceSpecificationTag = 0;
+
+  constructor(public node: DiceNode) {}
+}
+
+export type RolledNode =
     RolledDice|RolledDiceOp|RolledDiceDrop|DiceRollConstant;
+
+export class RolledSpecification {
+  private __rolledSpecificationTag = 0;
+
+  constructor(public node: RolledNode) {}
+}
 
 export class DiceResults {
   private __diceResultsTag = 0;
 
-  constructor(public rolledSpec: RolledSpecification, public value: number) {}
+  constructor(public rolledSpec: RolledNode, public value: number) {}
 }
-
-export class SpecificationCompiler {
-  /** roll */
-  d(type: DiceType, count = 1): DiceRoll {
-    return {kind: 'roll', type, count};
-  }
-
-  /** constant */
-  c(value: number): DiceRollConstant {
-    return {kind: 'const', value};
-  }
-
-  add(lhs: DiceSpecification, rhs: DiceSpecification): DiceRollOp {
-    return {kind: 'op', op: '+', lhs, rhs};
-  }
-
-  sub(lhs: DiceSpecification, rhs: DiceSpecification): DiceRollOp {
-    return {kind: 'op', op: '-', lhs, rhs};
-  }
-
-  drop(roll: DiceRoll, type: DiceRollDrop['type'], count: number):
-      DiceRollDrop {
-    return {kind: 'drop', roll, type, count};
-  }
-}
-
-export type CompilerCallback = (_: SpecificationCompiler) => DiceSpecification;
 
 export class DiceGenerator {
   constructor(private randomProvider: RandomFunction) {}
 
   execute(spec: DiceSpecification): DiceResults {
-    const rolledSpec = this._execute(spec);
+    const rolledSpec = this._execute(spec.node);
     return new DiceResults(rolledSpec, rolledSpec.value);
-  }
-
-  compileAndExecute(cb: CompilerCallback): DiceResults {
-    return this.execute(DiceGenerator.compile(cb));
   }
 
   parseAndExecute(spec: string): DiceResults {
@@ -132,20 +110,17 @@ export class DiceGenerator {
     return DiceGenerator.explain(this.parseAndExecute(spec));
   }
 
-  rerollAll(results: DiceResults) {
-    return this.execute(results.rolledSpec);
-  }
-
-  static compile(cb: CompilerCallback): DiceSpecification {
-    return cb(new SpecificationCompiler());
+  rerollAll(results: DiceResults): DiceResults {
+    const rolledSpec = this._execute(results.rolledSpec);
+    return new DiceResults(rolledSpec, rolledSpec.value);
   }
 
   static parse(spec: string): DiceSpecification {
-    return DiceParser.parse(spec) as DiceSpecification;
+    return new DiceSpecification(DiceParser.parse(spec));
   }
 
   static constant(value: number): DiceSpecification {
-    return {kind: 'const', value};
+    return new DiceSpecification({kind: 'const', value});
   }
 
   static constantResult(value: number): DiceResults {
@@ -153,14 +128,18 @@ export class DiceGenerator {
   }
 
   static getComplexity(spec: DiceSpecification): number {
+    return this._getComplexity(spec.node);
+  }
+
+  private static _getComplexity(spec: DiceNode): number {
     if (spec.kind === 'const') {
       return 1;
     } else if (spec.kind === 'drop') {
-      return 2 * DiceGenerator.getComplexity(spec.roll);
+      return 2 * DiceGenerator._getComplexity(spec.roll);
     } else if (spec.kind === 'op') {
       return 2
-          + (DiceGenerator.getComplexity(spec.lhs)
-             + DiceGenerator.getComplexity(spec.rhs));
+          + (DiceGenerator._getComplexity(spec.lhs)
+             + DiceGenerator._getComplexity(spec.rhs));
     } else if (spec.kind === 'roll') {
       return spec.count;
     } else {
@@ -176,7 +155,7 @@ export class DiceGenerator {
     return `${this._explain(results.rolledSpec)} = **${results.value}**`;
   }
 
-  private static _explain(spec: RolledSpecification): string {
+  private static _explain(spec: RolledNode): string {
     if (spec.kind === 'roll') {
       const roll = spec.rolls.slice().sort((a, b) => a - b);
       return `{${roll.slice(0, roll.length - 1).join(',')},**${
@@ -215,7 +194,7 @@ export class DiceGenerator {
     }
   }
 
-  private _execute(spec: DiceSpecification): RolledSpecification {
+  private _execute(spec: DiceNode): RolledNode {
     if (spec.kind === 'const') {
       return {kind: spec.kind, value: spec.value};
     } else if (spec.kind === 'roll') {

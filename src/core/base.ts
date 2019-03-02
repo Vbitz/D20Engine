@@ -18,7 +18,8 @@ export interface GameLike {
 
 type PrimitiveValue = string|boolean|number|null|undefined;
 
-type ComplexPrimativeValue = PrimitiveValue|Core.DiceResults;
+type ComplexPrimativeValue =
+    PrimitiveValue|Core.DiceResults|Core.DiceSpecification|Core.StatefulObject;
 
 type NonNullablePrimitive = Exclude<ComplexPrimativeValue, null|undefined>;
 

@@ -18,3 +18,5 @@ export class BasicMonsterAI extends Core.Component<BasicMonsterAIParameters> {
 
   async onCreate(ctx: Core.Context): Promise<void> {}
 }
+
+Core.Reflect.embed(module);

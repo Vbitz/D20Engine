@@ -1,5 +1,4 @@
 import * as Core from 'core';
-import {publicDiceRollField, publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
 export const getInitiativeRoll = new Core.Event<() => Core.DiceSpecification>();
@@ -24,21 +23,21 @@ export const doDamage =
     new Core.Event<(args: DamageArguments) => Core.Dice.DiceResults>();
 
 export class CreatureParameters extends Core.StatefulObject {
-  @publicEnumField(Fifth.Size) size: Fifth.Size;
-  @publicEnumField(Fifth.CreatureType) type: Fifth.CreatureType;
+  size: Fifth.Size;
+  type: Fifth.CreatureType;
 
-  @publicField armorClass: number;
-  @publicDiceRollField hitPointsRoll: string;
-  @publicField speed: number;
+  armorClass: number;
+  hitPointsRoll: Core.DiceSpecification;
+  speed: number;
 
-  @publicField strength: number;
-  @publicField dexterity: number;
-  @publicField constitution: number;
-  @publicField intelligence: number;
-  @publicField wisdom: number;
-  @publicField charisma: number;
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
 
-  @publicField passivePerception: number;
+  passivePerception: number;
 
   constructor() {
     super();
@@ -47,7 +46,7 @@ export class CreatureParameters extends Core.StatefulObject {
     this.type = Fifth.CreatureType.Humanoid;
 
     this.armorClass = 10;
-    this.hitPointsRoll = '2d6';
+    this.hitPointsRoll = Core.DiceGenerator.parse('2d6');
 
     this.speed = 30;
 
@@ -71,3 +70,5 @@ export class Creature extends Core.Component<CreatureParameters> {
     throw new Error('Method not implemented.');
   }
 }
+
+Core.Reflect.embed(module);

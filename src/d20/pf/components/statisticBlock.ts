@@ -1,5 +1,4 @@
 import * as Core from 'core';
-import {publicField} from 'core/component';
 import * as Game from 'libgame';
 
 export class StatisticsBlockState extends Core.StatefulObject {

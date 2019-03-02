@@ -1,5 +1,4 @@
 import * as Core from 'core';
-import {publicField} from 'core/component';
 import * as PF from 'd20/pf';
 import * as Game from 'libgame';
 

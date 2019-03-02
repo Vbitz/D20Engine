@@ -1,5 +1,4 @@
 import * as Core from 'core';
-import {publicEnumField, publicField} from 'core/component';
 import * as Fifth from 'd20/fifth';
 
 export const getAttackRoll = new Core.Event<() => Core.DiceSpecification>();
@@ -7,11 +6,11 @@ export const getAttackRoll = new Core.Event<() => Core.DiceSpecification>();
 export const getDamageRoll = new Core.Event<() => Core.DiceSpecification>();
 
 export class MeleeAttackActionParameters extends Core.StatefulObject {
-  @publicField name: string;
-  @publicField hitBonus: number;
-  @publicField reach: number;
-  @publicField damageRoll: string;
-  @publicEnumField(Fifth.DamageType) damageType: Fifth.DamageType;
+  name: string;
+  hitBonus: number;
+  reach: number;
+  damageRoll: Core.DiceSpecification;
+  damageType: Fifth.DamageType;
 
   constructor() {
     super();
@@ -19,7 +18,7 @@ export class MeleeAttackActionParameters extends Core.StatefulObject {
     this.name = '';
     this.hitBonus = 2;
     this.reach = 5;
-    this.damageRoll = 'd4';
+    this.damageRoll = Core.DiceGenerator.parse('d6');
     this.damageType = Fifth.DamageType.Bludgeoning;
   }
 }
@@ -34,3 +33,5 @@ export class MeleeAttackAction extends
     throw new Error('Method not implemented.');
   }
 }
+
+Core.Reflect.embed(module);

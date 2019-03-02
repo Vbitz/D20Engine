@@ -154,16 +154,7 @@ class ReflectionMetadata {
     } else if (memberType.flags & ts.TypeFlags.Object) {
       const objectType = memberType as ts.ObjectType;
 
-      if (this.isStatefulObjectCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'statefulObject');
-      } else if (this.isDiceResultsCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'diceResults');
-      } else if (this.isDiceSpecCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'diceSpecification');
-      } else if (this.isArrayCompileTime(memberType)) {
+      if (this.isArrayCompileTime(memberType)) {
         console.log('embedMetadataToField', filename, memberName, 'array');
 
         if (!(objectType.objectFlags & ts.ObjectFlags.Reference)) {
@@ -174,16 +165,25 @@ class ReflectionMetadata {
 
         const typeArguments = referenceType.typeArguments;
 
+        // Arrays should have a single type paramter containing the real type.
+
         if (typeArguments === undefined || typeArguments.length !== 1) {
-          throw new Error('Not Implemented');
+          throw new Error('Arrays should always have 1 type argument');
         }
 
         const typeArgument = typeArguments[0];
 
         this.embedMetadataToField(
             filename, runtimeClass, memberName + '#array', typeArgument);
-
-        // Arrays should have a single type paramter containing the real type.
+      } else if (this.isStatefulObjectCompileTime(memberType)) {
+        console.log(
+            'embedMetadataToField', filename, memberName, 'statefulObject');
+      } else if (this.isDiceResultsCompileTime(memberType)) {
+        console.log(
+            'embedMetadataToField', filename, memberName, 'diceResults');
+      } else if (this.isDiceSpecCompileTime(memberType)) {
+        console.log(
+            'embedMetadataToField', filename, memberName, 'diceSpecification');
       } else {
         throw new Error('Could not determine type (Maybe not serializable');
       }
@@ -194,7 +194,7 @@ class ReflectionMetadata {
         console.log(memberType.types.length);
 
         if (memberType.types.length !== 2) {
-          throw new Error('Not Implemented');
+          throw new Error('Only unions with 2 types are supported (type|null)');
         }
 
         const [type, nullType] = memberType.types;
