@@ -25,30 +25,32 @@ export class CharacterGeneratorInteraction extends Core.Interaction {
   }
 
   startStage1() {
-    this.addMarshal(
-        'ancestry', 'Select a Player Ancestry for the new Character',
-        this.selectAncestry.bind(this));
+    // this.addMarshal(
+    //     'ancestry', 'Select a Player Ancestry for the new Character',
+    //     this.selectAncestry.bind(this));
 
-    this.addMarshal(
-        'class', 'Select a Player Class for the new Character',
-        this.selectClass.bind(this));
+    // this.addMarshal(
+    //     'class', 'Select a Player Class for the new Character',
+    //     this.selectClass.bind(this));
 
     // TODO(joshua): Add alias for `race` to `ancestry`.
   }
 
   startStage2() {
-    this.addMarshal(
-        'addSkill', 'Add a skill to the new Character',
-        this.addSkill.bind(this));
+    // this.addMarshal(
+    //     'addSkill', 'Add a skill to the new Character',
+    //     this.addSkill.bind(this));
 
-    this.addMarshal(
-        'addFeat', 'Add a feat to the new Character', this.addFeat.bind(this));
+    // this.addMarshal(
+    //     'addFeat', 'Add a feat to the new Character',
+    //     this.addFeat.bind(this));
 
-    // TODO(joshua): Figure out if the character has a spell-casting component
-    // before adding this command.
-    this.addMarshal(
-        'addSpell', 'Add a spell to the new Character',
-        this.addSpell.bind(this));
+    // // TODO(joshua): Figure out if the character has a spell-casting
+    // component
+    // // before adding this command.
+    // this.addMarshal(
+    //     'addSpell', 'Add a spell to the new Character',
+    //     this.addSpell.bind(this));
   }
 
   private async selectAncestry(

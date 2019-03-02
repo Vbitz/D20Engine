@@ -1,8 +1,17 @@
 import * as Core from 'core';
+import {publicField} from 'core/component';
 import * as PF from 'd20/pf';
 import * as Game from 'libgame';
 
-export class ClassState extends Core.StatefulObject {}
+export class ClassState extends Core.StatefulObject {
+  @publicField hitDice: string;
+
+  constructor() {
+    super();
+
+    this.hitDice = 'd10';
+  }
+}
 
 export class ClassModule extends Core.Module {
   async onCreate(ctx: Core.Context) {}
@@ -18,3 +27,5 @@ export class Class extends Core.Component<ClassState> {
 
   async onCreate(ctx: Core.Context) {}
 }
+
+Core.Reflect.embed(module);

@@ -12,7 +12,7 @@ export type InteractionInterface =
  *
  * Interactions should also be able to be nested.
  */
-export class Interaction extends Core.RPC.ControllerImpl {
+export class Interaction {
   // It should be safe to derive directly from Core.RPC.ControllerImpl but this
   // is not really how that class was originally intended.
 }

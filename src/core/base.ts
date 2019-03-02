@@ -120,7 +120,7 @@ async function getRootPath(dirname: string): Promise<string> {
   if (await exists(path.join(dirname, CONFIG_FILENAME))) {
     return dirname;
   } else {
-    return await getRootPath(await path.resolve(dirname, '..'));
+    return await getRootPath(path.resolve(dirname, '..'));
   }
 }
 

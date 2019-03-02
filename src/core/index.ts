@@ -13,6 +13,7 @@ import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, Ev
 import {Game, GraphInterface} from './game';
 import {Interaction, InteractionInterface} from './interaction';
 import {Module} from './module';
+import {Reflect} from './reflect';
 import * as RPC from './rpc';
 
 export {
@@ -52,6 +53,7 @@ export {
   ModuleContext,
   NonNullableEventReturnValue,
   NonNullableValue,
+  Reflect,
   RPC,
   SerializableFields as ObjectSerializableFields,
   StatefulObject,
