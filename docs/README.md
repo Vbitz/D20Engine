@@ -1,5 +1,7 @@
 # D20 Engine
 
+**CircleCI:** [![CircleCI](https://circleci.com/gh/Vbitz/D20Engine/tree/master.svg?style=svg)](https://circleci.com/gh/Vbitz/D20Engine/tree/master)
+
 [Prototype](./prototype.md)
 
 [PF Component Stack Proposal](./d20/pf/ComponentStack.md)
