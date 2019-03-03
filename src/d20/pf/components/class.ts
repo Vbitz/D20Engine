@@ -3,13 +3,7 @@ import * as PF from 'd20/pf';
 import * as Game from 'libgame';
 
 export class ClassState extends Core.StatefulObject {
-  hitDice: string;
-
-  constructor() {
-    super();
-
-    this.hitDice = 'd10';
-  }
+  hitDice = 'd10';
 }
 
 export class ClassModule extends Core.Module {

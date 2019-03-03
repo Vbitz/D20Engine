@@ -3,6 +3,55 @@ import {existsSync, readFileSync} from 'fs';
 import * as path from 'path';
 import ts from 'typescript';
 
+interface BaseObjectField {}
+
+export interface BasicField extends BaseObjectField {
+  type: 'string'|'number'|'boolean';
+}
+
+export interface StatefulObjectField extends BaseObjectField {
+  type: 'object';
+
+  sourceFilename: string;
+
+  name: string;
+}
+
+export interface DiceSpecificationField extends BaseObjectField {
+  type: 'diceSpecification';
+}
+
+export interface DiceResultField extends BaseObjectField {
+  type: 'diceResult';
+}
+
+export interface EnumField extends BaseObjectField {
+  type: 'enum';
+
+  name: string;
+
+  values: Core.Common.Bag<string>;
+}
+
+export interface ArrayField extends BaseObjectField {
+  type: 'array';
+
+  valueType: ObjectField;
+}
+
+export interface NullableField extends BaseObjectField {
+  type: 'nullable';
+
+  valueType: ObjectField;
+}
+
+export type ObjectField =
+    BasicField|StatefulObjectField|DiceSpecificationField|DiceResultField|EnumField|ArrayField|NullableField;
+
+interface StatefulObjectMetadata {
+  __fields?: Core.Common.Bag<ObjectField>;
+}
+
 // This code is copied from base.ts
 
 const CONFIG_FILENAME = 'd20Engine.config.json';
@@ -94,19 +143,25 @@ class ReflectionMetadata {
         return;
       }
 
-      this.embedMetadata(fileModule.filename, node, runtimeClass);
+      this.embedMetadata(fileModule.filename, className, node, runtimeClass);
     }
 
     ts.forEachChild(node, this.walkSourceTree.bind(this, fileModule));
   }
 
   private embedMetadata(
-      filename: string, node: ts.ClassDeclaration,
+      filename: string, className: string, node: ts.ClassDeclaration,
       runtimeClass: Core.StatefulObject) {
+    const fields: Core.Common.Bag<ObjectField> = {};
+
     for (const member of node.members) {
       const memberName = getName(member.name);
 
       if (!ts.isPropertyDeclaration(member) || memberName === undefined) {
+        continue;
+      }
+
+      if (this.isMemberPrivate(member)) {
         continue;
       }
 
@@ -127,38 +182,39 @@ class ReflectionMetadata {
         throw new Error('Could not determine type for member');
       }
 
-      this.embedMetadataToField(filename, runtimeClass, memberName, memberType);
+      const fieldDescription =
+          this.getMetadataField(filename, runtimeClass, memberName, memberType);
+
+      fields[memberName] = fieldDescription;
     }
+
+    this.setStatefulObjectMetadata(runtimeClass, fields);
   }
 
-  // This method should really turn into a getType method.
-  private embedMetadataToField(
+  private getMetadataField(
       filename: string, runtimeClass: Core.StatefulObject, memberName: string,
-      memberType: ts.Type) {
+      memberType: ts.Type): ObjectField {
     if (memberType.flags & ts.TypeFlags.Enum
         || memberType.flags & ts.TypeFlags.EnumLiteral) {
-      console.log('embedMetadataToField', filename, memberName, 'enum');
+      return this.getEnumMetadataField(memberType);
     } else if (
         memberType.flags & ts.TypeFlags.String
         || memberType.flags & ts.TypeFlags.StringLiteral) {
-      // Add Type Metadata for String
-      console.log('embedMetadataToField', filename, memberName, 'string');
+      return {type: 'string'};
     } else if (
         memberType.flags & ts.TypeFlags.Number
         || memberType.flags & ts.TypeFlags.NumberLiteral) {
-      console.log('embedMetadataToField', filename, memberName, 'number');
+      return {type: 'number'};
     } else if (
         memberType.flags & ts.TypeFlags.Boolean
         || memberType.flags & ts.TypeFlags.BooleanLiteral) {
-      console.log('embedMetadataToField', filename, memberName, 'boolean');
+      return {type: 'boolean'};
     } else if (memberType.flags & ts.TypeFlags.Object) {
       const objectType = memberType as ts.ObjectType;
 
       if (this.isArrayCompileTime(memberType)) {
-        console.log('embedMetadataToField', filename, memberName, 'array');
-
         if (!(objectType.objectFlags & ts.ObjectFlags.Reference)) {
-          throw new Error('Not Implemented');
+          throw new Error('Array is not a reference type');
         }
 
         const referenceType = objectType as ts.TypeReference;
@@ -173,17 +229,16 @@ class ReflectionMetadata {
 
         const typeArgument = typeArguments[0];
 
-        this.embedMetadataToField(
+        const valueType = this.getMetadataField(
             filename, runtimeClass, memberName + '#array', typeArgument);
+
+        return {type: 'array', valueType};
       } else if (this.isStatefulObjectCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'statefulObject');
+        return this.getObjectMetadataField(memberType);
       } else if (this.isDiceResultsCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'diceResults');
+        return {type: 'diceResult'};
       } else if (this.isDiceSpecCompileTime(memberType)) {
-        console.log(
-            'embedMetadataToField', filename, memberName, 'diceSpecification');
+        return {type: 'diceSpecification'};
       } else {
         throw new Error('Could not determine type (Maybe not serializable');
       }
@@ -203,8 +258,10 @@ class ReflectionMetadata {
             || nullType.getFlags() && ts.TypeFlags.Undefined) {
         }
 
-        this.embedMetadataToField(
-            filename, runtimeClass, memberName + '#nullUnion', type);
+        const valueType =
+            this.getMetadataField(filename, runtimeClass, memberName, type);
+
+        return {type: 'nullable', valueType};
       } else if (memberType.isIntersection()) {
         console.log(
             'embedMetadataToField', filename, memberName, 'intersection');
@@ -220,6 +277,94 @@ class ReflectionMetadata {
 
       throw new Error('Could not determine type');
     }
+  }
+
+  private getEnumMetadataField(type: ts.Type): EnumField {
+    const symbol = type.getSymbol();
+
+    if (symbol === undefined) {
+      throw new Error('Could not get symbol for enum');
+    }
+
+    const declarations = symbol.getDeclarations();
+
+    if (declarations === undefined || declarations.length !== 1) {
+      throw new Error('Could not get declaration from symbol');
+    }
+
+    let enumNode = declarations[0];
+
+    if (ts.isEnumMember(enumNode)) {
+      enumNode = enumNode.parent;
+    }
+
+    if (!ts.isEnumDeclaration(enumNode)) {
+      throw new Error(
+          `Node is no an enum node: node.kind=${ts.SyntaxKind[enumNode.kind]}`);
+    }
+
+    const values: Core.Common.Bag<string> = {};
+
+    for (const member of enumNode.members) {
+      if (member.initializer === undefined
+          || !ts.isStringLiteral(member.initializer)) {
+        throw new Error(
+            'StatefulObject enum members should be declared with a string initializer');
+      }
+
+      const description = getName(member.name);
+
+      if (description === undefined) {
+        throw new Error('Could not get enum member name');
+      }
+
+      const key = member.initializer.text;
+
+      values[key] = description;
+    }
+
+    return {type: 'enum', name: getName(enumNode.name) || 'unknown', values};
+  }
+
+  private getObjectMetadataField(type: ts.Type): StatefulObjectField {
+    const symbol = type.getSymbol();
+
+    if (symbol === undefined) {
+      throw new Error('Could not get symbol for object');
+    }
+
+    const declarations = symbol.getDeclarations();
+
+    if (declarations === undefined || declarations.length !== 1) {
+      throw new Error('Could not get declaration from symbol');
+    }
+
+    const objectNode = declarations[0];
+
+    if (!ts.isClassDeclaration(objectNode)) {
+      throw new Error(`Node is no an class node: node.kind=${
+          ts.SyntaxKind[objectNode.kind]}`);
+    }
+
+    return {
+      type: 'object',
+      name: getName(objectNode.name) || Core.Common.expect(),
+      sourceFilename: objectNode.getSourceFile().fileName
+    };
+  }
+
+  private isMemberPrivate(member: ts.PropertyDeclaration) {
+    if (member.modifiers === undefined) {
+      return false;
+    }
+
+    for (const modifier of member.modifiers) {
+      if (modifier.kind === ts.SyntaxKind.PrivateKeyword) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private isStatefulObjectCompileTime(type: ts.Type) {
@@ -304,6 +449,17 @@ class ReflectionMetadata {
     }
 
     return false;
+  }
+
+  private setStatefulObjectMetadata(
+      obj: Core.StatefulObject, fields: Core.Common.Bag<ObjectField>) {
+    const objMetadata = obj as StatefulObjectMetadata;
+
+    if (objMetadata.__fields !== undefined) {
+      throw new Error('Object already has metadata set.');
+    }
+
+    objMetadata.__fields = fields;
   }
 
   private getTypescriptSourceFile(filename: string) {
