@@ -12,6 +12,7 @@ import {Entity} from './entity';
 import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback, NonNullableEventReturnValue} from './event';
 import {Game, GraphInterface} from './game';
 import {Interaction, InteractionInterface} from './interaction';
+import * as Metadata from './metadata';
 import {Module} from './module';
 import {Reflect} from './reflect';
 import * as RPC from './rpc';
@@ -49,6 +50,7 @@ export {
   HandlerCallback,
   Interaction,
   InteractionInterface,
+  Metadata,
   Module,
   ModuleContext,
   NonNullableEventReturnValue,

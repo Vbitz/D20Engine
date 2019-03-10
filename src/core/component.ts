@@ -48,23 +48,159 @@ function attachField<T extends StatefulObject>(
   fieldsObject.__publicFields.set(key, type);
 }
 
+export interface ComponentSave {
+  engineVersion: string;
+  constructorId: string;
+  state: StatefulObjectSave;
+}
+
+export interface StatefulObjectSave {
+  constructorId: string;
+  fields: Core.Common.Bag<Core.Value>;
+}
+
 export class StatefulObject {
   private __statefulObjectTag = 0;
 
-  getPublicFields() {
-    const fieldsObject = (this.constructor as ObjectPublicFields);
+  save(): StatefulObjectSave {
+    const constructorId = '';
+    const fields: Core.Common.Bag<Core.Value> = {};
 
-    if (fieldsObject.__publicFields !== undefined) {
-      return [...fieldsObject.__publicFields.entries()].map(([name, type]) => {
-        return {name, type};
-      });
-    } else {
-      return [];
+    console.log(this.constructor);
+
+    const fieldList = Core.Reflect.getFields(this.constructor);
+
+    if (fieldList === undefined) {
+      throw new Error(
+          `Reflection metadata does not exist for: ${constructorId}`);
+    }
+
+    for (const [name, field] of Object.entries(fieldList)) {
+      // tslint:disable-next-line: no-any
+      fields[name] = this.serializeField((this as any)[name], field);
+    }
+
+    return {constructorId, fields};
+  }
+
+  load(saveObject: StatefulObjectSave) {
+    // TODO(joshua): Assert that the constructorId is correct.
+
+    console.log(this.constructor);
+
+    const fieldList = Core.Reflect.getFields(this.constructor);
+
+    if (fieldList === undefined) {
+      throw new Error(`Reflection metadata does not exist for: ${
+          saveObject.constructorId}`);
+    }
+
+    for (const [name, field] of Object.entries(fieldList)) {
+      // tslint:disable-next-line: no-any
+      (this as any)[name] =
+          this.deserilizeField(saveObject.fields[name], field);
     }
   }
 
-  getRendererSpecification(): ObjectSpecification {
-    return {name: this.constructor.name, fields: this.getPublicFields()};
+  private serializeField(
+      // tslint:disable-next-line: no-any
+      field: any, fieldDescription: Core.Metadata.ObjectField): Core.Value {
+    if (fieldDescription.type === 'string') {
+      if (typeof field !== 'string') {
+        throw new Error(`Type mismatch on ${name}. Should be string.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'boolean') {
+      if (typeof field !== 'boolean') {
+        throw new Error(`Type mismatch on ${name}. Should be boolean.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'number') {
+      if (typeof field !== 'number') {
+        throw new Error(`Type mismatch on ${name}. Should be number.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'array') {
+      throw new Error('Array Not Implemented');
+    } else if (fieldDescription.type === 'diceResult') {
+      if (!(field instanceof Core.DiceResults)) {
+        throw new Error(`Type mismatch on ${name}. Should be DiceResult.`);
+      } else {
+        // TODO(joshua): Does this work?
+
+        // tslint:disable-next-line: no-any
+        return {value: field.value, rolledSpec: field.rolledSpec as any};
+      }
+    } else if (fieldDescription.type === 'diceSpecification') {
+      if (!(field instanceof Core.DiceSpecification)) {
+        throw new Error(
+            `Type mismatch on ${name}. Should be DiceSpecification.`);
+      } else {
+        // TODO(joshua): Does this work?
+
+        // tslint:disable-next-line: no-any
+        return {node: field.node as any};
+      }
+    } else if (fieldDescription.type === 'nullable') {
+      throw new Error('Nullable Not Implemented');
+    } else if (fieldDescription.type === 'enum') {
+      throw new Error('Enum Not Implemented');
+    } else if (fieldDescription.type === 'object') {
+      throw new Error('Object Not Implemented');
+    } else {
+      return Core.Common.assertNever(fieldDescription.type);
+    }
+  }
+
+  private deserilizeField(
+      // tslint:disable-next-line: no-any
+      field: any, fieldDescription: Core.Metadata.ObjectField) {
+    if (fieldDescription.type === 'string') {
+      if (typeof field !== 'string') {
+        throw new Error(`Type mismatch on ${name}. Should be string.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'boolean') {
+      if (typeof field !== 'boolean') {
+        throw new Error(`Type mismatch on ${name}. Should be boolean.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'number') {
+      if (typeof field !== 'number') {
+        throw new Error(`Type mismatch on ${name}. Should be number.`);
+      } else {
+        return field;
+      }
+    } else if (fieldDescription.type === 'array') {
+      throw new Error('Array Not Implemented');
+    } else if (fieldDescription.type === 'diceResult') {
+      if (field.rolledSpec === undefined || field.value === undefined) {
+        throw new Error(
+            'Type mismatch. Could not find rolledSpec and value fields.')
+      }
+
+      return new Core.DiceResults(field.rolledSpec, field.value);
+    } else if (fieldDescription.type === 'diceSpecification') {
+      if (field.rolledSpec === undefined || field.value === undefined) {
+        throw new Error(
+            'Type mismatch. Could not find rolledSpec and value fields.')
+      }
+
+      return new Core.DiceResults(field.rolledSpec, field.value);
+    } else if (fieldDescription.type === 'nullable') {
+      throw new Error('Nullable Not Implemented');
+    } else if (fieldDescription.type === 'enum') {
+      throw new Error('Enum Not Implemented');
+    } else if (fieldDescription.type === 'object') {
+      throw new Error('Object Not Implemented');
+    } else {
+      return Core.Common.assertNever(fieldDescription.type);
+    }
   }
 }
 
@@ -87,20 +223,6 @@ export abstract class Component<T extends StatefulObject> extends
   // Looks like adding that will require using a proxy.
   get state(): Readonly<SerializableFields<T>> {
     return this._state as unknown as Readonly<SerializableFields<T>>;
-  }
-
-  /**
-   * Generally speaking you only want to call this to initialize an object.
-   * Access may change in the future so don't rely on this as an easy
-   * replacement to setState.
-   * @param obj The set of fields to load for this component.
-   */
-  load(obj: Partial<SerializableFields<T>>): this {
-    for (const key of Object.keys(obj) as Array<keyof SerializableFields<T>>) {
-      this._state[key] = (obj as SerializableFields<T>)[key];
-    }
-
-    return this;
   }
 
   /**

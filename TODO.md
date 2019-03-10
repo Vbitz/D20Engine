@@ -21,4 +21,5 @@
   - `Entity.addComponent(ctx, comp)` should turn into `Context.addComponent(ent, comp)`.
 - [ ] Add global describe event.
 - [ ] There should be differentiation between global events and entity events. It's too easy to mix up the method calls.
-- [ ] `Core.StatefulObject` should be another `ComplexPrimitiveValue` as they can be serialized.
+- [x] `Core.StatefulObject` should be another `ComplexPrimitiveValue` as they can be serialized.
+- [ ] Write `Core.StatefulObject.inspect` which uses reflection metadata.

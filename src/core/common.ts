@@ -1,5 +1,5 @@
 import * as Core from 'core';
-import {createCipher, createHash, randomBytes} from 'crypto';
+import {createHash, randomBytes} from 'crypto';
 import {exists as _exists, mkdir as _mkdir, readFile as _readFile, writeFile as _writeFile} from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
@@ -10,6 +10,10 @@ const readFile = promisify(_readFile);
 const writeFile = promisify(_writeFile);
 
 import {Bag, expect} from './frontendCommon/common';
+
+export function assertNever(value: never): never {
+  throw new Error('assertNever called');
+}
 
 export function createUUID() {
   const randomString = randomBytes(8);

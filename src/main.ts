@@ -9,6 +9,7 @@ import {diceMain} from 'core/dice.main';
 import {replMain} from 'tools/repl';
 import {botReplMain} from 'core/bot/repl';
 import {monsterImportMain} from 'd20/pf/monster';
+import {saveTestMain} from 'tools/saveTest';
 
 async function main(args: string[]) {
   if (args[0] === 'test:ecs') {
@@ -17,6 +18,8 @@ async function main(args: string[]) {
     return await combatTestMain(args.slice(1));
   } else if (args[0] === 'test:frontend') {
     return await frontendGeneratorTest(args.slice(1));
+  } else if (args[0] === 'test:save') {
+    return await saveTestMain(args.slice(1));
   } else if (args[0] === 'bot') {
     return await botMain(args.slice(1));
   } else if (args[0] === 'dice') {

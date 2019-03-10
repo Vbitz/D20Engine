@@ -3,59 +3,6 @@ import {existsSync, readFileSync} from 'fs';
 import * as path from 'path';
 import ts from 'typescript';
 
-interface BaseObjectField {}
-
-export interface BasicField extends BaseObjectField {
-  type: 'string'|'number'|'boolean';
-}
-
-export interface StatefulObjectField extends BaseObjectField {
-  type: 'object';
-
-  sourceFilename: string;
-
-  name: string;
-}
-
-export interface DiceSpecificationField extends BaseObjectField {
-  type: 'diceSpecification';
-}
-
-export interface DiceResultField extends BaseObjectField {
-  type: 'diceResult';
-}
-
-export interface EnumField extends BaseObjectField {
-  type: 'enum';
-
-  name: string;
-
-  values: Core.Common.Bag<string>;
-}
-
-export interface ArrayField extends BaseObjectField {
-  type: 'array';
-
-  valueType: ObjectField;
-}
-
-export interface NullableField extends BaseObjectField {
-  type: 'nullable';
-
-  valueType: ObjectField;
-}
-
-export type ObjectField =
-    BasicField|StatefulObjectField|DiceSpecificationField|DiceResultField|EnumField|ArrayField|NullableField;
-
-/**
- * The StatefulObject's constructor is casted to this type to add the metadata
- * as a static field.
- */
-interface StatefulObjectMetadata {
-  __fields?: Core.Common.Bag<ObjectField>;
-}
-
 // This code is copied from base.ts
 
 const CONFIG_FILENAME = 'd20Engine.config.json';
@@ -152,6 +99,11 @@ class ReflectionMetadata {
     this.walkSourceTree(fileModule, sourceFile);
   }
 
+  getFields(statefulObjectConstructor: Function):
+      Core.Metadata.StatefulObjectFields|undefined {
+    return this.getStatefulObjectMetadata(statefulObjectConstructor);
+  }
+
   private walkSourceTree(fileModule: NodeModule, node: ts.Node) {
     // This method only looks for class declarations
 
@@ -192,7 +144,7 @@ class ReflectionMetadata {
   private embedMetadata(
       filename: string, node: ts.ClassDeclaration,
       runtimeClass: Core.StatefulObject) {
-    const fields: Core.Common.Bag<ObjectField> = {};
+    const fields: Core.Metadata.StatefulObjectFields = {};
 
     // TODO(joshua): Handle inheritance. Right now this will only extract
     // members from the top level class declaration.
@@ -241,7 +193,7 @@ class ReflectionMetadata {
 
   private getMetadataField(
       filename: string, runtimeClass: Core.StatefulObject, memberName: string,
-      memberType: ts.Type): ObjectField {
+      memberType: ts.Type): Core.Metadata.ObjectField {
     if (memberType.flags & ts.TypeFlags.Enum
         || memberType.flags & ts.TypeFlags.EnumLiteral) {
       // Enum is handled first as depending on the initializers enums could be
@@ -363,7 +315,7 @@ class ReflectionMetadata {
     return declarations[0];
   }
 
-  private getEnumMetadataField(type: ts.Type): EnumField {
+  private getEnumMetadataField(type: ts.Type): Core.Metadata.EnumField {
     let enumNode = this.getDeclarationFromSymbol(type);
 
     // If the enum only contains one member than the declaration node could be
@@ -408,7 +360,8 @@ class ReflectionMetadata {
    * StatefulObjects are centrally registered so the details can be looked up at
    * runtime.
    */
-  private getObjectMetadataField(type: ts.Type): StatefulObjectField {
+  private getObjectMetadataField(type: ts.Type):
+      Core.Metadata.StatefulObjectField {
     const objectNode = this.getDeclarationFromSymbol(type);
 
     if (!ts.isClassDeclaration(objectNode)) {
@@ -540,14 +493,26 @@ class ReflectionMetadata {
   }
 
   private setStatefulObjectMetadata(
-      obj: Core.StatefulObject, fields: Core.Common.Bag<ObjectField>) {
-    const objMetadata = obj as StatefulObjectMetadata;
+      obj: Core.StatefulObject,
+      fields: Core.Common.Bag<Core.Metadata.ObjectField>) {
+    const objMetadata = obj as Core.Metadata.StatefulObjectMetadata;
 
     if (objMetadata.__fields !== undefined) {
       throw new Error('Object already has metadata set.');
     }
 
     objMetadata.__fields = fields;
+  }
+
+  private getStatefulObjectMetadata(obj: Function):
+      Core.Metadata.StatefulObjectFields|undefined {
+    const objMetadata = obj as Core.Metadata.StatefulObjectMetadata;
+
+    if (objMetadata.__fields === undefined) {
+      return undefined;
+    }
+
+    return objMetadata.__fields;
   }
 
   /**
