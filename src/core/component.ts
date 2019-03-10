@@ -181,14 +181,14 @@ export class StatefulObject {
     } else if (fieldDescription.type === 'diceResult') {
       if (field.rolledSpec === undefined || field.value === undefined) {
         throw new Error(
-            'Type mismatch. Could not find rolledSpec and value fields.')
+            'Type mismatch. Could not find rolledSpec and value fields.');
       }
 
       return new Core.DiceResults(field.rolledSpec, field.value);
     } else if (fieldDescription.type === 'diceSpecification') {
       if (field.rolledSpec === undefined || field.value === undefined) {
         throw new Error(
-            'Type mismatch. Could not find rolledSpec and value fields.')
+            'Type mismatch. Could not find rolledSpec and value fields.');
       }
 
       return new Core.DiceResults(field.rolledSpec, field.value);
