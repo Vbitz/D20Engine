@@ -297,5 +297,21 @@ export abstract class Component<T extends StatefulObject> extends
     return this.uuid;
   }
 
+  async save(): Promise<ComponentSave> {
+    const engineVersion = await Core.getVersion();
+
+    const constructorId = Core.Reflect.getName(this.constructor);
+
+    console.log(constructorId);
+
+    return {engineVersion, constructorId, state: this._state.save()};
+  }
+
+  async load(saveObject: ComponentSave) {
+    // TODO(joshua): Validate engine version.
+
+    this._state.load(saveObject.state);
+  }
+
   abstract async onCreate(ctx: Core.Context): Promise<void>;
 }

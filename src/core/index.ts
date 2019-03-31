@@ -3,12 +3,12 @@
 import {Action} from './action';
 import {AbstractEventController, asString, EventController, GameLike, getConfigPath, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
 import * as Common from './common';
-import {Component, SerializableFields, StatefulObject} from './component';
+import {Component, ComponentSave, SerializableFields, StatefulObject, StatefulObjectSave} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
 import * as Database from './database';
 import * as Dice from './dice';
 import {DiceGenerator, DiceResults, DiceSpecification} from './dice';
-import {Entity} from './entity';
+import {Entity, EntitySave} from './entity';
 import {Event, EventArgs, EventCancel, EventControllerImpl, EventDeclaration, EventPublicReturnValue, EventReturnType, EventSignature, HandlerCallback, NonNullableEventReturnValue} from './event';
 import {Game, GraphInterface} from './game';
 import {Interaction, InteractionInterface} from './interaction';
@@ -23,6 +23,7 @@ export {
   asString,
   Common,
   Component,
+  ComponentSave,
   Context,
   Database,
   Dice,
@@ -31,6 +32,7 @@ export {
   DiceSpecification,
   Entity,
   EntityContext,
+  EntitySave,
   Event,
   EventArgs,
   EventCancel,
@@ -59,5 +61,6 @@ export {
   RPC,
   SerializableFields as ObjectSerializableFields,
   StatefulObject,
+  StatefulObjectSave,
   Value
 };

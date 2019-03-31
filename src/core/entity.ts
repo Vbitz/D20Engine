@@ -1,5 +1,10 @@
 import * as Core from 'core';
 
+export interface EntitySave {
+  engineVersion: string;
+  components: Core.ComponentSave[];
+}
+
 export class Entity extends Core.AbstractEventController {
   readonly uuid = Core.Common.createUUID();
 
@@ -85,5 +90,37 @@ export class Entity extends Core.AbstractEventController {
     comp.setOwner(this);
 
     await comp.onCreate(ctx);
+  }
+
+  async save(): Promise<EntitySave> {
+    const engineVersion = await Core.getVersion();
+
+    const components: Core.ComponentSave[] = [];
+
+    for (const component of this.componentList) {
+      components.push(await component.save());
+    }
+
+    return {components, engineVersion};
+  }
+
+  async load(ctx: Core.Context, save: EntitySave) {
+    const currentEngineVersion = await Core.getVersion();
+
+    if (save.engineVersion !== currentEngineVersion) {
+      // TODO(joshua): Fix this. This will get really annoying.
+      throw new Error(`Engine Version mismatch: (Save: ${
+          save.engineVersion}, Current ${currentEngineVersion})`);
+    }
+
+    for (const component of save.components) {
+      const loadedComponent = await ctx.loadComponentFromSave(component);
+
+      this.componentList.push(loadedComponent);
+
+      loadedComponent.setOwner(this);
+
+      await loadedComponent.onCreate(ctx);
+    }
   }
 }

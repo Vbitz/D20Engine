@@ -125,6 +125,35 @@ export class Context extends Core.AbstractEventController {
     return this.game.createEntity(this);
   }
 
+  async loadEntityFromTemplate(savePath: string) {
+    const newEntity = this.game.createEntity(this);
+
+    const saveFile = await this.game.loadResource<Core.EntitySave>(savePath);
+
+    await newEntity.load(this, saveFile);
+
+    return newEntity;
+  }
+
+  async loadComponentFromTemplate(savePath: string):
+      Promise<Core.Component<Core.StatefulObject>> {
+    const componentSave =
+        await this.game.loadResource<Core.ComponentSave>(savePath);
+
+    return await this.loadComponentFromSave(componentSave);
+  }
+
+  async loadComponentFromSave(componentSave: Core.ComponentSave):
+      Promise<Core.Component<Core.StatefulObject>> {
+    const componentInstance =
+        Core.Reflect.create(componentSave.constructorId) as
+        Core.Component<Core.StatefulObject>;
+
+    await componentInstance.load(componentSave);
+
+    return componentInstance;
+  }
+
   createTransientEntity() {
     return this.game.createTransientEntity(this);
   }

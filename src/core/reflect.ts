@@ -29,12 +29,19 @@ function getName(name: ts.PropertyName|undefined): string|undefined {
   }
 }
 
+interface Constructor {
+  // tslint:disable-next-line: no-any
+  new(): any;
+}
+
 class ReflectionMetadata {
   private config: ts.CompilerOptions;
 
   private program: ts.Program;
 
   private typeChecker: ts.TypeChecker;
+
+  private constructors: Map<string, Constructor> = new Map();
 
   constructor() {
     // I've added console logging to this to get a indication of how much time
@@ -104,6 +111,30 @@ class ReflectionMetadata {
     return this.getStatefulObjectMetadata(statefulObjectConstructor);
   }
 
+  // tslint:disable-next-line: no-any
+  getName(obj: any): string {
+    const objMetadata = obj as Core.Metadata.StatefulObjectMetadata;
+
+    console.log('getName', objMetadata.__name, objMetadata.__fields);
+
+    if (objMetadata.__name === undefined) {
+      return obj.name;
+    }
+
+    return objMetadata.__name;
+  }
+
+  // tslint:disable-next-line: no-any
+  create(constructorId: string): any {
+    const constructor = this.constructors.get(constructorId);
+
+    if (constructor === undefined) {
+      throw new Error(`Constructor ${constructorId} not found.`);
+    }
+
+    return new constructor();
+  }
+
   private walkSourceTree(fileModule: NodeModule, node: ts.Node) {
     // This method only looks for class declarations
 
@@ -131,6 +162,11 @@ class ReflectionMetadata {
       // are no non-trivial classes in between this class and StatefulObject
       // since no metadata is added for other classes in the chain.
 
+      if (this.isComponent(runtimeClass)) {
+        this.embedComponentMetadata(fileModule.filename, node, runtimeClass);
+        return;
+      }
+
       if (!this.isStatefulObject(runtimeClass)) {
         return;
       }
@@ -144,6 +180,10 @@ class ReflectionMetadata {
   private embedMetadata(
       filename: string, node: ts.ClassDeclaration,
       runtimeClass: Core.StatefulObject) {
+    const nodeName = getName(node.name);
+
+    const fullName = filename + '#' + nodeName;
+
     const fields: Core.Metadata.StatefulObjectFields = {};
 
     // TODO(joshua): Handle inheritance. Right now this will only extract
@@ -187,8 +227,25 @@ class ReflectionMetadata {
       fields[memberName] = fieldDescription;
     }
 
+    this.constructors.set(fullName, runtimeClass as unknown as Constructor);
+
     // Set the metadata on the StatefulObject.
-    this.setStatefulObjectMetadata(runtimeClass, fields);
+    this.setStatefulObjectMetadata(runtimeClass, fullName, fields);
+  }
+
+
+  private embedComponentMetadata(
+      filename: string, node: ts.ClassDeclaration,
+      runtimeClass: Core.StatefulObject) {
+    const nodeName = getName(node.name);
+
+    const fullName = filename + '#' + nodeName;
+
+    this.constructors.set(fullName, runtimeClass as unknown as Constructor);
+
+    // Set the metadata on the Component.
+    // TODO(joshua): This should be setComponentMetadata
+    this.setStatefulObjectMetadata(runtimeClass, fullName, {});
   }
 
   private getMetadataField(
@@ -475,6 +532,19 @@ class ReflectionMetadata {
     }
   }
 
+  // tslint:disable-next-line: no-any
+  private isComponent(obj: any): boolean {
+    const superConstructor = Object.getPrototypeOf(obj);
+
+    if (superConstructor === Core.Component) {
+      return true;
+    } else if (superConstructor === null) {
+      return false;
+    } else {
+      return this.isComponent(superConstructor);
+    }
+  }
+
   /**
    * Check if a class is exported by looking for an export keyword.
    */
@@ -493,7 +563,7 @@ class ReflectionMetadata {
   }
 
   private setStatefulObjectMetadata(
-      obj: Core.StatefulObject,
+      obj: Core.StatefulObject, name: string,
       fields: Core.Common.Bag<Core.Metadata.ObjectField>) {
     const objMetadata = obj as Core.Metadata.StatefulObjectMetadata;
 
@@ -501,6 +571,9 @@ class ReflectionMetadata {
       throw new Error('Object already has metadata set.');
     }
 
+    console.log('Registering', name);
+
+    objMetadata.__name = name;
     objMetadata.__fields = fields;
   }
 

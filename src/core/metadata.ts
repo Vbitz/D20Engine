@@ -50,6 +50,7 @@ export type ObjectField =
  * as a static field.
  */
 export interface StatefulObjectMetadata {
+  __name?: string;
   __fields?: StatefulObjectFields;
 }
 

@@ -149,5 +149,5 @@ export async function getVersion(): Promise<string> {
   // TODO(joshua): This assumes deployments are happening from master.
   const refHashFile = path.join(rootPath, '.git', 'refs', 'heads', 'master');
 
-  return await Core.Common.readFile(refHashFile, 'utf8');
+  return (await Core.Common.readFile(refHashFile, 'utf8')).trim();
 }

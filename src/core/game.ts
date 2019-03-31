@@ -1,4 +1,5 @@
 import * as Core from 'core';
+import {join} from 'path';
 
 export class GraphInterface {
   private symbolMap: Map<symbol, string> = new Map();
@@ -62,6 +63,22 @@ export class Game extends Core.AbstractEventController {
     this.entityList.add(newEntity);
 
     return newEntity;
+  }
+
+  async loadResource<T>(savePath: string): Promise<T> {
+    const saveBasePath = await Core.getSavePath();
+
+    const filename = join(saveBasePath, savePath);
+
+    const fileContent = await Core.Common.readFile(filename, 'utf8');
+
+    const content = JSON.parse(fileContent);
+
+    return content as T;
+  }
+
+  async saveResource<T>(savePath: string, obj: T) {
+    throw new Error('Not Implemented');
   }
 
   /**
