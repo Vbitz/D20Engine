@@ -1,6 +1,6 @@
 import * as Core from 'core';
 
-import {exists as _exists} from 'fs';
+import {exists as _exists, existsSync} from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
 
@@ -115,36 +115,36 @@ export class AbstractEventController {
   }
 }
 
-async function getRootPath(dirname: string): Promise<string> {
+export function getRootPath(dirname: string): string {
   // TODO(joshua): Handle if CONFIG_FILENAME does not exist up the tree.
 
-  if (await exists(path.join(dirname, CONFIG_FILENAME))) {
+  if (existsSync(path.join(dirname, CONFIG_FILENAME))) {
     return dirname;
   } else {
-    return await getRootPath(path.resolve(dirname, '..'));
+    return getRootPath(path.resolve(dirname, '..'));
   }
 }
 
 export async function getSavePath(): Promise<string> {
-  const rootPath = await getRootPath(__dirname);
+  const rootPath = getRootPath(__dirname);
 
   return path.join(rootPath, SAVE_DIRECTORY);
 }
 
 export async function getResourcePath(): Promise<string> {
-  const rootPath = await getRootPath(__dirname);
+  const rootPath = getRootPath(__dirname);
 
   return path.join(rootPath, RESOURCE_DIRECTORY);
 }
 
 export async function getConfigPath(): Promise<string> {
-  const rootPath = await getRootPath(__dirname);
+  const rootPath = getRootPath(__dirname);
 
   return path.join(rootPath, CONFIG_DIRECTORY);
 }
 
 export async function getVersion(): Promise<string> {
-  const rootPath = await getRootPath(__dirname);
+  const rootPath = getRootPath(__dirname);
 
   // TODO(joshua): This assumes deployments are happening from master.
   const refHashFile = path.join(rootPath, '.git', 'refs', 'heads', 'master');

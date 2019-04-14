@@ -36,7 +36,7 @@ export async function botReplMain(args: string[]) {
       return 'Console';
     }
     getUserId(): string {
-      return '1';
+      return '125800047173566464';
     }
     getChannelId(): string {
       return '';

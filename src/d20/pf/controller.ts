@@ -11,6 +11,7 @@ export class Controller extends Core.Component<ControllerParameters> {
   static readonly Parameters = ControllerParameters;
 
   private databaseLookup: Core.Entity|null = null;
+  private devCommands: Core.Entity|null = null;
 
   private characterList: Map<string, Core.Entity> = new Map();
 
@@ -22,6 +23,10 @@ export class Controller extends Core.Component<ControllerParameters> {
     this.databaseLookup = ctx.createEntity();
 
     await this.databaseLookup.addComponent(ctx, new PF.DatabaseLookup());
+
+    this.devCommands = ctx.createEntity();
+
+    await this.devCommands.addComponent(ctx, new PF.DeveloperCommands());
 
     this.addRPCMarshal(
         'ct', ' : (BETA) Character Tracker', async (ctx, rpcCtx, chain) => {
@@ -46,6 +51,11 @@ export class Controller extends Core.Component<ControllerParameters> {
         'createCharacter', ' : Create a New Character',
         async (ctx, rpcCtx, chain) => {
           return await this.createCharacter(ctx, rpcCtx, chain);
+        });
+
+    this.addRPCMarshal(
+        'dev', ' : Developer Commands', async (ctx, rpcCtx, chain) => {
+          return await this.devCommand(ctx, rpcCtx, chain);
         });
 
     this.addRPCAlias(
@@ -187,5 +197,16 @@ export class Controller extends Core.Component<ControllerParameters> {
     }
 
     return this.characterList.get(id)!;
+  }
+
+  private async devCommand(
+      ctx: Core.Context, rpcCtx: Core.RPC.Context, chain: Core.Value[]) {
+    rpcCtx.validateAdmin();
+
+    if (this.devCommands === null) {
+      return;
+    }
+
+    await rpcCtx.chainRPC(ctx, this.devCommands, chain);
   }
 }

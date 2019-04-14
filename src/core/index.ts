@@ -1,7 +1,7 @@
 // TODO(joshua): The exported items here need to be refactored.
 
 import {Action} from './action';
-import {AbstractEventController, asString, EventController, GameLike, getConfigPath, getResourcePath, getSavePath, getVersion, NonNullableValue, Value} from './base';
+import {AbstractEventController, asString, EventController, GameLike, getConfigPath, getResourcePath, getRootPath, getSavePath, getVersion, NonNullableValue, Value} from './base';
 import * as Common from './common';
 import {Component, ComponentSave, SerializableFields, StatefulObject, StatefulObjectSave} from './component';
 import {Context, EntityContext, ModuleContext} from './context';
@@ -46,6 +46,7 @@ export {
   GameLike,
   getConfigPath,
   getResourcePath,
+  getRootPath,
   getSavePath,
   getVersion,
   GraphInterface,

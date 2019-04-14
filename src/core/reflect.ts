@@ -111,6 +111,10 @@ class ReflectionMetadata {
     return this.getStatefulObjectMetadata(statefulObjectConstructor);
   }
 
+  getConstructors(): string[] {
+    return [...this.constructors.keys()];
+  }
+
   // tslint:disable-next-line: no-any
   getName(obj: any): string {
     const objMetadata = obj as Core.Metadata.StatefulObjectMetadata;
@@ -124,6 +128,20 @@ class ReflectionMetadata {
     return objMetadata.__name;
   }
 
+  hasConstructor(constructorId: string): boolean {
+    return this.constructors.has(constructorId);
+  }
+
+  isComponentConstructor(constructorId: string): boolean {
+    const constructor = this.constructors.get(constructorId);
+
+    if (constructor === undefined) {
+      throw new Error(`Constructor ${constructorId} not found.`);
+    }
+
+    return this.isComponent(constructor);
+  }
+
   // tslint:disable-next-line: no-any
   create(constructorId: string): any {
     const constructor = this.constructors.get(constructorId);
@@ -135,6 +153,12 @@ class ReflectionMetadata {
     return new constructor();
   }
 
+  private getFullName(filename: string, nodeName: string) {
+    const rootPath = Core.getRootPath(__dirname);
+    const relPath = path.relative(rootPath, filename);
+    return `${relPath}#${nodeName}`;
+  }
+
   private walkSourceTree(fileModule: NodeModule, node: ts.Node) {
     // This method only looks for class declarations
 
@@ -144,9 +168,9 @@ class ReflectionMetadata {
       }
 
       // This approach only works for exported classes since otherwise there's
-      // no easy way to automatically enumerate class declarations. I also don't
-      // assume there are any major use cases that would benefit from adding
-      // metadata to non-exported classes.
+      // no easy way to automatically enumerate class declarations. I also
+      // don't assume there are any major use cases that would benefit from
+      // adding metadata to non-exported classes.
       if (!this.isClassExported(node)) {
         return;
       }
@@ -182,7 +206,7 @@ class ReflectionMetadata {
       runtimeClass: Core.StatefulObject) {
     const nodeName = getName(node.name);
 
-    const fullName = filename + '#' + nodeName;
+    const fullName = this.getFullName(filename, nodeName || 'unknown');
 
     const fields: Core.Metadata.StatefulObjectFields = {};
 
@@ -191,8 +215,8 @@ class ReflectionMetadata {
     for (const member of node.members) {
       const memberName = getName(member.name);
 
-      // Only add metadata for properties. Methods are not exported or otherwise
-      // exposed outside the declaration of a StatefulObject.
+      // Only add metadata for properties. Methods are not exported or
+      // otherwise exposed outside the declaration of a StatefulObject.
       if (!ts.isPropertyDeclaration(member) || memberName === undefined) {
         continue;
       }
@@ -204,8 +228,8 @@ class ReflectionMetadata {
 
       let memberType: ts.Type|undefined = undefined;
 
-      // Get the type from either the explicit type or the inferred type in the
-      // initializer.
+      // Get the type from either the explicit type or the inferred type in
+      // the initializer.
       if (member.type === undefined) {
         if (member.initializer !== undefined) {
           const initializerType =
@@ -239,7 +263,7 @@ class ReflectionMetadata {
       runtimeClass: Core.StatefulObject) {
     const nodeName = getName(node.name);
 
-    const fullName = filename + '#' + nodeName;
+    const fullName = this.getFullName(filename, nodeName || 'unknown');
 
     this.constructors.set(fullName, runtimeClass as unknown as Constructor);
 
@@ -260,8 +284,8 @@ class ReflectionMetadata {
     } else if (
         memberType.flags & ts.TypeFlags.String
         || memberType.flags & ts.TypeFlags.StringLiteral) {
-      // Due to the way types are determined literals are grouped together. This
-      // could be a limitation or source of bugs.
+      // Due to the way types are determined literals are grouped together.
+      // This could be a limitation or source of bugs.
 
       return {type: 'string'};
     } else if (
@@ -275,7 +299,8 @@ class ReflectionMetadata {
     } else if (memberType.flags & ts.TypeFlags.Object) {
       const objectType = memberType as ts.ObjectType;
 
-      // Try to determine if the object is an array by looking at the reference.
+      // Try to determine if the object is an array by looking at the
+      // reference.
       if (this.isArrayCompileTime(memberType)) {
         if (!(objectType.objectFlags & ts.ObjectFlags.Reference)) {
           throw new Error('Array is not a reference type');
@@ -414,8 +439,8 @@ class ReflectionMetadata {
   /**
    * StatefulObject metadata is implemented as a reference rather than the
    * literal to avoid circular dependencies. The indentation is that
-   * StatefulObjects are centrally registered so the details can be looked up at
-   * runtime.
+   * StatefulObjects are centrally registered so the details can be looked up
+   * at runtime.
    */
   private getObjectMetadataField(type: ts.Type):
       Core.Metadata.StatefulObjectField {

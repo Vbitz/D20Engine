@@ -18,6 +18,7 @@ export abstract class Context {
 
   abstract reply(text: string): Promise<void>;
   abstract replyUser(text: string): Promise<void>;
+  abstract validateAdmin(): Promise<void>;
 
   abstract getUserID(): string;
 

@@ -473,6 +473,10 @@ export class D20RPCContext extends Core.RPC.Context {
   getUserID(): string {
     return this.from.getUserId();
   }
+
+  async validateAdmin(): Promise<void> {
+    this.bot.validateAdmin(this.from);
+  }
 }
 
 export class D20Bot extends Bot {
